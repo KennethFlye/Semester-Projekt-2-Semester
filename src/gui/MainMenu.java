@@ -6,5 +6,6 @@ public class MainMenu {
 		System.out.println("test");
 		System.out.println("test2");
 		System.out.println("another one");
+		System.out.println("Test Kenneth");
 	}
 }
