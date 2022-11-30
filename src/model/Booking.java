@@ -1,12 +1,11 @@
 package model;
 
 //time, customer, catering
-
-
+	
 public class Booking {
 	Customer customer;
 	BookingTime bookingTime;
-	
+	CateringMenu cateringMenu;
 	
 	public Booking() {
 		System.out.println(this + " created");
@@ -20,6 +19,10 @@ public class Booking {
 	public void addTime(BookingTime bt) {
 		bookingTime = bt;
 		System.out.println("Time " + bookingTime + " added");
+	}
+
+	public boolean hasCateringMenu() {
+		return cateringMenu!=null;
 	}
 	
 }
