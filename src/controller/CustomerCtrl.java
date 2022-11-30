@@ -1,15 +1,19 @@
 package controller;
 
+import database.CustomerDB;
+import database.CustomerDBIF;
+import database.DataAccessException;
 import model.Customer;
 
 public class CustomerCtrl {
+	private CustomerDBIF customerDBIF;
 
-	public Customer findCustomer(String phoneNo) {
-		// TODO Auto-generated method stub
-		//STUB
-		return new Customer("Lars", "45702312", "lrl@ucn.dk");
-		
-		//return null;
+	public CustomerCtrl() throws DataAccessException {
+		customerDBIF = new CustomerDB();
+	}
+	
+	public Customer findCustomer(String phoneNo) throws DataAccessException {
+		return customerDBIF.findCustomer(phoneNo);
 	}
 
 }
