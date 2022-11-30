@@ -49,10 +49,10 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots();
 	}
 	
-	public void addTime(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
+	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
 		//TODO add param eventype to new bookingtime
 		BookingTime bt = new BookingTime(startTime,finishTime);
-		newBooking.addTime(bt);
+		newBooking.addTimeslot(bt);
 //		newBooking.addEvent(eventType); TODO
 	}
 	
@@ -65,8 +65,8 @@ public class BookingCtrl {
 		return true;
 	}
 	
-	public void addCatering(int cateringMenu) {
-		newBooking.addCatering(cateringCtrl.findCatering(cateringMenu));
+	public void addCateringMenu(int cateringMenu) {
+		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
 	public void finishBooking() {

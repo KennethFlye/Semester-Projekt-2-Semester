@@ -21,14 +21,14 @@ public class CateringMenuDB implements CateringMenuDBIF {
 	}
 
 	
-	public CateringMenu findCatering(int menuId) throws DataAccessException {
+	public CateringMenu findCateringMenu(int cmId) throws DataAccessException {
 		ResultSet rs;
 		CateringMenu foundCateringMenu = null;
 		try {
 			String name = "";
 			double price = 0;
 			
-			getCateringInfo.setInt(1, menuId);
+			getCateringInfo.setInt(1, cmId);
 			rs = getCateringInfo.executeQuery();
 			name = rs.getString("foodName");
 			price = rs.getDouble("price");

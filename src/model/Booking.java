@@ -30,9 +30,14 @@ public class Booking {
 		System.out.println("Customer " + c + " added");
 	}
 	
-	public void addTime(BookingTime bt) {
+	public void addTimeslot(BookingTime bt) {
 		bookingTime.add(bt);
-		System.out.println("Time " + bookingTime + " added");
+		System.out.println("Time " + bt + " added");
+	}
+	
+	public void addCateringMenu(CateringMenu cm) {
+		cateringMenu = cm;
+		System.out.println("Cateringmenu " + cm + " added");
 	}
 
 	
