@@ -5,10 +5,19 @@ public abstract class Contact {
 	private String name, phoneNo, email, address, city, country;
 	private int zipCode;
 	
-	public Contact(String name, String phoneNo, String email) {
+	public Contact(String name, String phoneNo) {
+		this.name = name;
+		this.phoneNo = phoneNo;
+	}
+	
+	public Contact(String name, String phoneNo, String email, String address, int zipCode, String city, String country) {
 		this.name = name;
 		this.phoneNo = phoneNo;
 		this.email = email;
+		this.address = address;
+		this.zipCode = zipCode;
+		this.city = city;
+		this.country = country;
 	}
 	
 	public void setName(String name) {
