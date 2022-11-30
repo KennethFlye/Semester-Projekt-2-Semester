@@ -6,7 +6,7 @@ import model.CateringMenu;
 
 public interface CateringMenuDBIF {
 	
-	public CateringMenu findCatering(int menuId) throws SQLException;
+	public CateringMenu findCatering(int menuId) throws DataAccessException;
 	
 
 }
