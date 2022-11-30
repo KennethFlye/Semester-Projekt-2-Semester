@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -45,22 +46,35 @@ public class BookingDB implements BookingDBIF {
 		try {
 			
 			//Total price
-			ps.setInt(1, 0);
-			//Creation date
-			ps.setString(2, "");
-			//Amount of people
-			ps.setString(3, "");
-			//Is paid?
-			ps.setString(4, "");
-			//Customer id
+			ps.setFloat(1, newBooking.getPrice());
 			
+			//Creation date
+			ps.setDate(2, Date.valueOf(newBooking.getCreationDate().toLocalDate()));
+			
+			//Amount of people
+			ps.setInt(3, newBooking.amountOfPeople());
+			
+			//Is paid?
+			ps.setInt(4, newBooking.isPaid()?1:0);
+			
+			//Customer id
+			//ps.setInt(5, newBooking.getCustomer().getId());// ToDo
+			ps.setInt(5, 1);
+			
+			//Employee id
+			//ps.setInt(6, newBooking.getEmployee().getId());// Outside use case
+			//ps.setInt(6, 1);
+			
+			/* TODO uncomment when getID() is made
 			//Menu id
 			if(newBooking.hasCateringMenu())
-				ps.setInt(5, 0);
+				ps.setInt(7, newBooking.getCatering().getID());
+			//else
+				//ps.setInt();
+			*/
 			
-			
-			
-			
+			ps.execute();
+			ps.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
