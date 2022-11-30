@@ -67,7 +67,7 @@ public class BookingCtrl {
 	}
 	
 	public void finishBooking() {
-		
+		bookingDatabase.insertBooking(newBooking);
 	}
 	
 }
