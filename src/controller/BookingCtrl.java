@@ -56,9 +56,8 @@ public class BookingCtrl {
 //		newBooking.addEvent(eventType); TODO
 	}
 	
-	public void addCustomer(String phoneNo) {
-		Customer c = customerCtrl.findCustomer(phoneNo);
-		newBooking.addCustomer(c);
+	public void addCustomer(String phoneNo) throws DataAccessException {
+		newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
 	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) {
@@ -66,8 +65,8 @@ public class BookingCtrl {
 		return true;
 	}
 	
-	public void addCatering(CateringMenu cateringMenu) {
-		
+	public void addCatering(int cateringMenu) {
+		newBooking.addCatering(cateringCtrl.findCatering(cateringMenu));
 	}
 	
 	public void finishBooking() {
