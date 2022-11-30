@@ -50,11 +50,31 @@ public class BookingCtrl {
 	}
 	
 	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
+		/*pseudo
+		 * get bookingdb
+		 * get call a method like checkTimeslot with event and localdatetime
+		 * if timeslot is not occupied - add timeslot to newbooking, and add event to newbooking
+		 * ---
+		 * BookingTime bt = null;
+		 * eventtype et = null;
+		 * if(startTime != findBookedTimeslots() && finish != findbookedslots){
+		 * 	bt = new bookingtime(start, finish);
+		 *  TODO somehow convert string eventtype to enum -> new methodcall maybe
+		 *  newBooking.addTimeslot(bt, et); ? or .addevent(et)
+		 *  
+		 * }
+		 */
+		
+		
 		//TODO add param eventype to new bookingtime
 		BookingTime bt = new BookingTime(startTime,finishTime);
 		newBooking.addTimeslot(bt);
 //		newBooking.addEvent(eventType); TODO
 	}
+	
+//	private EventType getEventType(String eventType) {
+//		TODO ifm ovenstående
+//	}
 	
 	public void addCustomer(String phoneNo) throws DataAccessException {
 		newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
