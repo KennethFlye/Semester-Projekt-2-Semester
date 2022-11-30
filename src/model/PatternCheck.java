@@ -66,7 +66,7 @@ public boolean checkSignedInteger(String check) {
 	
 	public boolean checkEmail(String check) {
 		
-		String emailPattern = "^([a-zA-Z0-9_.])+\\@([a-zA-Z0-9_.])+\\.([a-zA-Z])$";
+		String emailPattern = "^([a-zA-Z0-9_.])+\\@([a-zA-Z0-9_.])+\\.([a-zA-Z])+$";
 		
 		Pattern pattern = Pattern.compile(emailPattern);
 		
