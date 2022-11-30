@@ -13,9 +13,8 @@ public class CateringCtrl {
 	}
 	
 	
-	public CateringMenu findCatering(int cateringId) throws DataAccessException {
-		
-		return cateringMenuDB.findCatering(cateringId);
+	public CateringMenu findCateringMenu(int cmId) throws DataAccessException {
+		return cateringMenuDB.findCateringMenu(cmId);
 		
 	}
 	
