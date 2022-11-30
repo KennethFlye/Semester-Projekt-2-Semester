@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,25 +13,28 @@ import database.BookingDB;
 import database.BookingDBIF;
 import database.BookingTimeDB;
 import database.BookingTimeDBIF;
+import database.DataAccessException;
 
 public class BookingCtrl {
 	
 	//Fields -----------------------------------------------------------------------------------------------
-	
-	private CateringCtrl cateringCtrl;
-	private CustomerCtrl customerCtrl = new CustomerCtrl();
-	private EventTypeCtrl eventTypeCtrl;
-	private GokartCtrl gokartCtrl = new GokartCtrl();
-	
-	private BookingDBIF bookingDatabase = new BookingDB();
-	private List<LocalDateTime> listTs = new ArrayList<>();
-	private BookingTimeDBIF bookingTimeDatabase = new BookingTimeDB();
-	
 	private Booking newBooking;
+	private List<LocalDateTime> listTs;
+	private BookingTimeDBIF bookingTimeDatabase;
+	private CustomerCtrl customerCtrl;
+	private GokartCtrl gokartCtrl;
+	private CateringCtrl cateringCtrl;
+	private EventTypeCtrl eventTypeCtrl;
+	private BookingDBIF bookingDatabase;
 	
 	//Constructor/init -----------------------------------------------------------------------------------------------
-	public BookingCtrl() {
-		
+	public BookingCtrl() throws DataAccessException {
+		listTs = new ArrayList<>();
+		bookingTimeDatabase = new BookingTimeDB();
+		customerCtrl = new CustomerCtrl();
+		gokartCtrl = new GokartCtrl();
+		cateringCtrl = new CateringCtrl();
+		bookingDatabase = new BookingDB();
 	}
 	
 	
@@ -45,25 +49,27 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots();
 	}
 	
-	public void addTime(LocalDateTime startTime,LocalDateTime finishTime,String eventType) {
+	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
+		//TODO add param eventype to new bookingtime
 		BookingTime bt = new BookingTime(startTime,finishTime);
-		
-		newBooking.addTime(bt);
+		newBooking.addTimeslot(bt);
+//		newBooking.addEvent(eventType); TODO
 	}
 	
-	public void addCustomer(String phoneNo) {
-		Customer c = customerCtrl.findCustomer(phoneNo);
-		newBooking.addCustomer(c);
+	public void addCustomer(String phoneNo) throws DataAccessException {
+		newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
-	public boolean addAmountOfPeople(int amount) {
-		//Todo fix this its just a half stub rn
-		gokartCtrl.checkGokarts(amount);
-		return true;
+	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) {
+//		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
+//			newBooking.setAmountOfPeople(amount);
+//		}
+//		return gokartCtrl.checkGokarts(amount, startTime, finishTime);
+		return true; //temp
 	}
 	
-	public void addCatering(CateringMenu cateringMenu) {
-		
+	public void addCateringMenu(int cateringMenu) throws DataAccessException {
+		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
 	public void finishBooking() {

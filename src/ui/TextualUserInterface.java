@@ -1,11 +1,16 @@
 package ui;
 
 import java.io.Console;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
 import controller.BookingCtrl;
+import database.DBConnection;
 import model.CateringMenu;
 
 /**TUI - Testing class, not for standard use
@@ -83,7 +88,7 @@ public class TextualUserInterface {
 				System.out.println(l);
 				
 				System.out.println("\nadded time");
-				bookingCtrl.addTime(null, null, input); count++;
+				bookingCtrl.addTime(LocalDateTime.of(2022, 11, 30, 10, 55), LocalDateTime.of(2022, 12, 1, 14, 30), input); count++;
 				
 				System.out.println("\nadded customer"); count++;
 				bookingCtrl.addCustomer("45702312");
@@ -101,9 +106,38 @@ public class TextualUserInterface {
 				
 				break;
 				
+			//Outside tests
+			case "PrintAllBookings":
+					try {
+						PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from Booking");
+						ResultSet rs = psTst.executeQuery();
+						
+						int width = rs.getMetaData().getColumnCount();
+						
+						int adjustmentSize=20;
+						
+						for (int i = 1; i < width+1; i++) {
+							String s = rs.getMetaData().getColumnName(i);
+						System.out.print(s +" ".repeat(adjustmentSize-s.length()));
+						}
+						System.out.print("\n");
+						while (rs.next()) {
+							for (int i = 1; i < width+1; i++) { //rs.getObject(i).toString().length()
+								System.out.print(
+										rs.getObject(i)+" ".repeat(
+												adjustmentSize - (rs.getObject(i)!=null ? 
+														rs.getObject(i).toString().length() : 4)));
+							}
+							System.out.print("\n");
+						}
+					} catch (SQLException e) {e.printStackTrace();}
+				break;
+				
+				
+				
 			default:
-				throw new IllegalArgumentException("Unexpected value: " + input);
-			
+				//throw new IllegalArgumentException("Unexpected value: " + input);
+				System.out.println("No such command as "+ input);
 			}
 			
 			
