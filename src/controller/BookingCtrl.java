@@ -49,10 +49,11 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots();
 	}
 	
-	public void addTime(LocalDateTime startTime,LocalDateTime finishTime,String eventType) {
+	public void addTime(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
+		//TODO add param eventype to new bookingtime
 		BookingTime bt = new BookingTime(startTime,finishTime);
-		
 		newBooking.addTime(bt);
+//		newBooking.addEvent(eventType); TODO
 	}
 	
 	public void addCustomer(String phoneNo) {
@@ -60,9 +61,8 @@ public class BookingCtrl {
 		newBooking.addCustomer(c);
 	}
 	
-	public boolean addAmountOfPeople(int amount) {
-		//Todo fix this its just a half stub rn
-		gokartCtrl.checkGokarts(amount);
+	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) {
+//		return gokartCtrl.checkGokarts(amount); TODO
 		return true;
 	}
 	

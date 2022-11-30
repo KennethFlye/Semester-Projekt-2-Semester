@@ -1,7 +1,5 @@
 package database;
 
-import java.sql.SQLException;
-
 import model.CateringMenu;
 
 public interface CateringMenuDBIF {
