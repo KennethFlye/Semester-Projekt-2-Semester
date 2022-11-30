@@ -10,33 +10,36 @@ import java.util.ArrayList;
  * */
 public class Booking {
 	private Customer customer;
-	private ArrayList<BookingTime> bookingTime;
+	private ArrayList<BookingTime> bookingTimeslots;
 	private LocalDateTime creationDate;
 	private CateringMenu cateringMenu;
 	private Boolean isPaid;
 	private int amountOfPeople, bookingID;
+	private double totalPrice;
 	
 	public Booking() {
 		System.out.println(this + " created");
-		bookingTime = new ArrayList<>();
+		bookingTimeslots = new ArrayList<>();
 		creationDate = LocalDateTime.now();
 		isPaid = false;
+		totalPrice = 0;
 	}
 	
 	//SET
+	
+	public void addTimeslot(BookingTime bt) {
+		bookingTimeslots.add(bt);
+		System.out.println("Time " + bt + " added");
+	}
 	
 	public void addCustomer(Customer c) {
 		customer=c;
 		System.out.println("Customer " + c + " added");
 	}
 	
-	public void addTimeslot(BookingTime bt) {
-		bookingTime.add(bt);
-		System.out.println("Time " + bt + " added");
-	}
-	
 	public void addCateringMenu(CateringMenu cm) {
 		cateringMenu = cm;
+		totalPrice = cateringMenu.getPrice();
 		System.out.println("Cateringmenu " + cm + " added");
 	}
 
@@ -69,8 +72,8 @@ public class Booking {
 	}
 
 	public float getPrice() { //TODO remove stub when getPrice is made
-		//return cateringMenu.getPrice();
-		return 50; //TODO STUB TODO STUB TODO STUB TODO STUB
+		//return cateringMenu.getPrice() + eventprice;
+		return (float) cateringMenu.getPrice(); //TODO STUB TODO STUB TODO STUB TODO STUB
 	}
 
 	/*public Employee getEmployee() { Outside use case
