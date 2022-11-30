@@ -61,11 +61,14 @@ public class BookingCtrl {
 	}
 	
 	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) {
-//		return gokartCtrl.checkGokarts(amount); TODO
-		return true;
+//		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
+//			newBooking.setAmountOfPeople(amount);
+//		}
+//		return gokartCtrl.checkGokarts(amount, startTime, finishTime);
+		return true; //temp
 	}
 	
-	public void addCateringMenu(int cateringMenu) {
+	public void addCateringMenu(int cateringMenu) throws DataAccessException {
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	

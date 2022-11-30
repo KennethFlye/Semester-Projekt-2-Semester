@@ -15,12 +15,14 @@ public class Booking {
 	private CateringMenu cateringMenu;
 	private Boolean isPaid;
 	private int amountOfPeople, bookingID;
+	private double totalPrice;
 	
 	public Booking() {
 		System.out.println(this + " created");
 		bookingTimeslots = new ArrayList<>();
 		creationDate = LocalDateTime.now();
 		isPaid = false;
+		totalPrice = 0;
 	}
 	
 	//SET
@@ -37,6 +39,7 @@ public class Booking {
 	
 	public void addCateringMenu(CateringMenu cm) {
 		cateringMenu = cm;
+		totalPrice = cateringMenu.getPrice();
 		System.out.println("Cateringmenu " + cm + " added");
 	}
 
@@ -69,7 +72,7 @@ public class Booking {
 	}
 
 	public float getPrice() { //TODO remove stub when getPrice is made
-		//return cateringMenu.getPrice();
+		//return cateringMenu.getPrice() + eventprice;
 		return (float) cateringMenu.getPrice(); //TODO STUB TODO STUB TODO STUB TODO STUB
 	}
 
