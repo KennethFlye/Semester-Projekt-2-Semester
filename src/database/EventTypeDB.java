@@ -11,8 +11,9 @@ public class EventTypeDB implements EventTypeDBIF{
 
 	private static final String findAllQ = "SELECT EventType.type, EventType.price FROM EventType";
 	private static final String findByTypeQ = findAllQ + " WHERE EventType.type = '?'";
+	private static final String findPriceByTypeQ = "SELECT EventType.price FROM EventType WHERE EventType.type = ?";
 	
-	private PreparedStatement findAll, findByType;
+	private PreparedStatement findAll, findByType, findPriceByType;
 	
 	public EventTypeDB() throws DataAccessException {
 		
@@ -20,6 +21,7 @@ public class EventTypeDB implements EventTypeDBIF{
 			
 			findAll = DBConnection.getInstance().getConnection().prepareStatement(findAllQ);
 			findByType = DBConnection.getInstance().getConnection().prepareStatement(findByTypeQ);
+			findPriceByType = DBConnection.getInstance().getConnection().prepareStatement(findPriceByTypeQ);
 			
 		} catch (SQLException e) {
 			
@@ -52,6 +54,27 @@ public class EventTypeDB implements EventTypeDBIF{
 		return actualEventType;
 	}
 	
-	
+	public double findPrice(EnumType type) throws DataAccessException{
+		
+		ResultSet rs;
+		double price = 0;
+		
+		try {
+			
+			findByType.setString(1, type.getLabel());
+			rs = findByType.executeQuery();
+			
+			rs.next();
+			price = rs.getInt("price");
+			
+		} catch (SQLException e) {
+			throw new DataAccessException(e, "Could not retrieve EventType");
+		}
+		
+		
+		return price;
+		
+	}
+
 
 }
