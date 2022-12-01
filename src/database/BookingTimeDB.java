@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
 import model.BookingTime;
+import model.EventType;
+import model.EventType.EnumType;
 
 
 
@@ -62,8 +64,9 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	
 		
 		private BookingTime buildObject(ResultSet rs) throws SQLException {
+			EventType tempEvent = new EventType(EnumType.valueOfLabel(rs.getString("eventType")));
 			BookingTime bt = new BookingTime(
-					rs.getString("eventType"),
+					tempEvent,
 					rs.getTimestamp("startTime").toLocalDateTime(),
 					rs.getTimestamp("finishTime").toLocalDateTime());
 			return bt;
