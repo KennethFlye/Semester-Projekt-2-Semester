@@ -1,13 +1,15 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import gui.Receipt;
+import controller.BookingCtrl;
+import database.DataAccessException;
 import model.CateringMenu.EnumMenu;
 import model.EventType.EnumType;
 
@@ -26,6 +28,7 @@ import javax.swing.JDialog;
 import javax.swing.JRadioButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
 
 public class CreateBookingMenu extends JFrame {
 
@@ -41,6 +44,13 @@ public class CreateBookingMenu extends JFrame {
 	private JTextField textFieldCountry;
 	private JTextField textFieldAmountOfPeople;
 	private JTextField textFieldTimeSlotGokart;
+	
+	private JComboBox comboBoxBookingType;
+	private JComboBox comboBoxRaceType;
+	private JComboBox comboBoxEventTime;
+	
+	
+	private BookingCtrl bookingCtrl;
 	
 	private String[] bookingTypes = {"Gokart & Event Pakke", "Gokart", "Event"};
 	private String[] raceTypes = {EnumType.FORMULA_1.getLabel(), EnumType.LARGE_FORMULA_1.getLabel(), EnumType.LE_MANS_1_HOUR.getLabel()};
@@ -68,6 +78,8 @@ public class CreateBookingMenu extends JFrame {
 	 * Create the frame.
 	 */
 	public CreateBookingMenu() {
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 713, 343);
 		contentPane = new JPanel();
@@ -284,7 +296,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblBookingType.gridy = 0;
 		centerPanelEast.add(lblBookingType, gbc_lblBookingType);
 		
-		JComboBox comboBoxBookingType = new JComboBox(bookingTypes);
+		comboBoxBookingType = new JComboBox(bookingTypes);
 		GridBagConstraints gbc_comboBoxBookingType = new GridBagConstraints();
 		gbc_comboBoxBookingType.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxBookingType.fill = GridBagConstraints.HORIZONTAL;
@@ -317,7 +329,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblRaceType.gridy = 2;
 		centerPanelEast.add(lblRaceType, gbc_lblRaceType);
 		
-		JComboBox comboBoxRaceType = new JComboBox(raceTypes);
+		comboBoxRaceType = new JComboBox(raceTypes);
 		GridBagConstraints gbc_comboBoxRaceType = new GridBagConstraints();
 		gbc_comboBoxRaceType.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxRaceType.fill = GridBagConstraints.HORIZONTAL;
@@ -333,7 +345,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblEventTime.gridy = 3;
 		centerPanelEast.add(lblEventTime, gbc_lblEventTime);
 		
-		JComboBox comboBoxEventTime = new JComboBox(eventLength);
+		comboBoxEventTime = new JComboBox(eventLength);
 		GridBagConstraints gbc_comboBoxEventTime = new GridBagConstraints();
 		gbc_comboBoxEventTime.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxEventTime.fill = GridBagConstraints.HORIZONTAL;
@@ -451,55 +463,64 @@ public class CreateBookingMenu extends JFrame {
 		btnAccept.addActionListener((e) -> handleAcceptBookingEvent());
 		btnCancel.addActionListener((e) -> handleCancelBookingEvent());
 		
+				
+		//Use Case
+		try {
+			bookingCtrl = new BookingCtrl();
+			
+			bookingCtrl.createBooking();
+		} catch (DataAccessException e1) {
+			// TODO Giv besked om hvad der gik galt
+			e1.printStackTrace();
+		}
 		
-		//ComboBox Setup
 		
 	}
 
 	private void handleTimeSlotEventEvent() {
-		// TODO Auto-generated method stub
 		
-		TimeSlotWindowEvent dialog = new TimeSlotWindowEvent();
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setVisible(true);
+		TimeSlotWindowEvent dialog = new TimeSlotWindowEvent(bookingCtrl);	
+		LocalDateTime eventStartTime = dialog.showDialog();
+		textFieldTimeSlotEvent.setText(eventStartTime.toString());
 		
 	}
 
 	private void handleTimeSlotEventGokart() {
-		// TODO Auto-generated method stub
 		
-		TimeSlotWindowGokart dialog = new TimeSlotWindowGokart();
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setVisible(true);
+		TimeSlotWindowGokart dialog = new TimeSlotWindowGokart(bookingCtrl);
+		LocalDateTime gokartStartTime = dialog.showDialog();
+		textFieldTimeSlotGokart.setText(gokartStartTime.toString());
+		
+		String eventLabel = (String)comboBoxRaceType.getSelectedItem();
+		
+		bookingCtrl.addTimeslot(eventLabel, gokartStartTime, gokartStartTime);
 	}
 
-	private void handleTimeSlotEvent() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private void handleCancelBookingEvent() {
-		// TODO Auto-generated method stub
+		
+		this.dispose();
 		
 	}
 
 	private void handleAcceptBookingEvent() {
-		// TODO Auto-generated method stub
+		// TODO Implement finishBooking();
 		
+		bookingCtrl.finishBooking();
 	}
 
 	private void handleResetCustomerEvent() {
-		// TODO Auto-generated method stub
+		// TODO Sæt alle tekst felter til at være tomme
 		
 	}
 
 	private void handleAddCustomerEvent() {
-		// TODO Auto-generated method stub
+		// TODO Implent addCustomer();
 		
 	}
 
 	private void handleSearchForCustomerEvent() {
-		// TODO Auto-generated method stub
+		// TODO Implement findCustomer();
 	}
 
 	private void handleExitEvent() {

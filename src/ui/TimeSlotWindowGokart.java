@@ -9,6 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
+import controller.BookingCtrl;
+import database.DataAccessException;
+import model.BookingTime;
+
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
@@ -16,6 +21,10 @@ import javax.swing.JTable;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class TimeSlotWindowGokart extends JDialog {
 
@@ -27,24 +36,29 @@ public class TimeSlotWindowGokart extends JDialog {
 	private String[] columnNames = {"Event type", "Start Tid", "Slut Tid"};
 	private JTextField textFieldChoosenDay;
 	private JButton btnSearchDay, okButton, cancelButton;
+	private LocalDateTime timeStart;
+	private BookingCtrl bookingCtrl;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			TimeSlotWindowGokart dialog = new TimeSlotWindowGokart();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			TimeSlotWindowGokart dialog = new TimeSlotWindowGokart();
+//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//			dialog.setVisible(true);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public TimeSlotWindowGokart() {
+	public TimeSlotWindowGokart(BookingCtrl bookingCtrl) {
+		super((java.awt.Frame) null, true);
+		setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+		this.bookingCtrl = bookingCtrl;
 		setBounds(100, 100, 550, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -182,18 +196,42 @@ public class TimeSlotWindowGokart extends JDialog {
 
 	private void handleOkClickedEvent() {
 		// TODO Implement Send Data Til Tidligere Vindue
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		timeStart = LocalDateTime.parse(textFieldStartTime.getText(), formatter);
+
+		setVisible(false);
+		this.dispose();
 	}
 
 	private void handleSearchDAyEvent() {
-		// TODO Implement Retrieve Booked Times And Add To Table
 		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate searchDate = LocalDate.parse(textFieldStartTime.getText(), formatter);
 		
+		List<BookingTime> bookedTimes = null;
 		
-		//Loop over alle tider der bliver returneret
-		for (String element : columnNames) {
-			dtm.addRow(new Object[] {"Her indsættes Event Type", "Her indsættes Start Tid", "Her Indsættes Slut Tid"});
+		int year = searchDate.getYear();
+		int month = searchDate.getMonthValue();
+		int day = searchDate.getDayOfMonth();
+		
+		try {
+			bookedTimes = bookingCtrl.findBookedTimeslots(year, month, day);
+		} catch (DataAccessException e) {
+			// TODO Vis hvad der gik galt
+			e.printStackTrace();
 		}
 		
+		//Loop over alle tider der bliver returneret
+		for (BookingTime element : bookedTimes) {
+			dtm.addRow(new Object[] {element.getEventType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
+		}
+		
+	}
+	
+	public LocalDateTime showDialog() {
+		setVisible(true);
+		return timeStart;
 	}
 
 }
