@@ -1,14 +1,12 @@
 package model;
 
-import model.EventType.EnumType;
-
 public class CateringMenu {
 	
 	public enum EnumMenu{
 		
-		KYLLING_OG_BACON("Kylling og Bacon Sandwich"),
-		ÆG_OG_REJER("Æg og Rejer Sandwich"),
-		FRIKADELLE("Frikadelle Sandwich");
+		CHICKEN("Kylling og Bacon Sandwich"),
+		EGGS("Æg og Rejer Sandwich"),
+		FRIKADEL("Frikadelle Sandwich");
 		
 		private final String label;
 		
