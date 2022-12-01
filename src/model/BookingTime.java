@@ -9,14 +9,15 @@ public class BookingTime {
 
 	
 	EnumType eventType; 
-	LocalDateTime startTime, finishTime;
+	LocalDateTime startTime, finishTime; 
 	
 	
 
 	public static void main(String[] args) {
 		
 		BookingTime bt = new BookingTime("Formel 1", LocalDateTime.now(), LocalDateTime.now());
-		System.out.println(bt.eventType); }
+		System.out.println(bt.eventType); 
+	}
 	
 	public BookingTime(String type, LocalDateTime startTime, LocalDateTime finishTime) {
 		this.eventType = EnumType.valueOfLabel(type);
@@ -34,11 +35,6 @@ public class BookingTime {
 	public LocalDateTime getFinishTime() {
 		return finishTime;
 	}
-	
-	
-}
-				
-
 	
 	
 }
