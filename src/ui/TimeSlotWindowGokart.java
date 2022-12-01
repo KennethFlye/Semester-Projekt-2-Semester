@@ -224,7 +224,7 @@ public class TimeSlotWindowGokart extends JDialog {
 		
 		//Loop over alle tider der bliver returneret
 		for (BookingTime element : bookedTimes) {
-			dtm.addRow(new Object[] {element.getEventType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
+			dtm.addRow(new Object[] {element.getEventType().getEnumType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
 		}
 		
 	}
