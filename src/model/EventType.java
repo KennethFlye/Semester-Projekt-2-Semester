@@ -43,7 +43,7 @@ public class EventType {
 	/**
 	 * @return the eventType
 	 */
-	public EnumType getEventType() {
+	public EnumType getEnumType() {
 		return eventType;
 	}
 

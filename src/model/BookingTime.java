@@ -8,7 +8,7 @@ import model.EventType.EnumType;
 public class BookingTime {
 
 	
-	EnumType eventType; 
+	EventType eventType; 
 	LocalDateTime startTime, finishTime; 
 	
 	
@@ -20,11 +20,11 @@ public class BookingTime {
 	}
 	
 	public BookingTime(String type, LocalDateTime startTime, LocalDateTime finishTime) {
-		this.eventType = EnumType.valueOfLabel(type);
+		this.eventType = new EventType(EnumType.valueOfLabel(type));
 		this.finishTime=finishTime;
 		this.startTime=startTime;
 	}
-	public EnumType getEventType() {
+	public EventType getEventType() {
 		return eventType;
 	}
 	
