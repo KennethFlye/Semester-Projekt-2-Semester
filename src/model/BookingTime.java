@@ -3,8 +3,6 @@ package model;
 
 import java.time.LocalDateTime;
 
-import model.EventType.EnumType;
-
 public class BookingTime {
 
 	
@@ -13,17 +11,13 @@ public class BookingTime {
 	
 	
 
-	public static void main(String[] args) {
-		
-//		BookingTime bt = new BookingTime("Formel 1", LocalDateTime.now(), LocalDateTime.now());
-//		System.out.println(bt.eventType); 
-	}
+	
 	
 	public BookingTime(EventType et, LocalDateTime startTime, LocalDateTime finishTime) {
 		this.eventType = et;
 		this.finishTime=finishTime;
 		this.startTime=startTime;
-		this.finishTime=startTime.plusMinutes(EnumType.valueOfLabel(type).getLenght());
+		this.finishTime=startTime.plusMinutes(et.getEnumType().getLenght());
 	}
 		
 		
