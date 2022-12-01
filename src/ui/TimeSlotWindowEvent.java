@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -25,6 +27,7 @@ public class TimeSlotWindowEvent extends JDialog {
 	private String[] columnNames = {"Event type", "Start Tid", "Slut Tid"};
 	private JTextField textFieldChoosenDay;
 	private JButton btnSearchDay, okButton, cancelButton;
+	private LocalDateTime timeStart;
 
 	/**
 	 * Launch the application.
@@ -43,6 +46,8 @@ public class TimeSlotWindowEvent extends JDialog {
 	 * Create the dialog.
 	 */
 	public TimeSlotWindowEvent() {
+		super((java.awt.Frame) null, true);
+		setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
 		setBounds(100, 100, 550, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -180,12 +185,18 @@ public class TimeSlotWindowEvent extends JDialog {
 
 	private void handleOkClickedEvent() {
 		// TODO Implement Send Data Til Tidligere Vindue
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		timeStart = LocalDateTime.parse(textFieldStartTime.getText(), formatter);
+
+		setVisible(false);
+		this.dispose();
+		
 	}
 
 	private void handleSearchDAyEvent() {
 		// TODO Implement Retrieve Booked Times And Add To Table
 		
-		
+
 		
 		//Loop over alle tider der bliver returneret
 		for (String element : columnNames) {
@@ -193,6 +204,13 @@ public class TimeSlotWindowEvent extends JDialog {
 		}
 		
 	}
+	
+	public LocalDateTime showDialog() {
+		setVisible(true);
+		return timeStart;
+	}
+	
+	
 	
 	
 

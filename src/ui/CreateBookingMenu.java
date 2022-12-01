@@ -1,13 +1,13 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import gui.Receipt;
 import model.CateringMenu.EnumMenu;
 import model.EventType.EnumType;
 
@@ -26,6 +26,7 @@ import javax.swing.JDialog;
 import javax.swing.JRadioButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
 
 public class CreateBookingMenu extends JFrame {
 
@@ -451,55 +452,48 @@ public class CreateBookingMenu extends JFrame {
 		btnAccept.addActionListener((e) -> handleAcceptBookingEvent());
 		btnCancel.addActionListener((e) -> handleCancelBookingEvent());
 		
-		
-		//ComboBox Setup
-		
+				
 	}
 
 	private void handleTimeSlotEventEvent() {
-		// TODO Auto-generated method stub
 		
-		TimeSlotWindowEvent dialog = new TimeSlotWindowEvent();
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setVisible(true);
+		TimeSlotWindowEvent dialog = new TimeSlotWindowEvent();	
+		LocalDateTime eventStartTime = dialog.showDialog();
+		textFieldTimeSlotEvent.setText(eventStartTime.toString());
 		
 	}
 
 	private void handleTimeSlotEventGokart() {
-		// TODO Auto-generated method stub
 		
 		TimeSlotWindowGokart dialog = new TimeSlotWindowGokart();
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setVisible(true);
+		LocalDateTime gokartStartTime = dialog.showDialog();
+		textFieldTimeSlotGokart.setText(gokartStartTime.toString());
 	}
 
-	private void handleTimeSlotEvent() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private void handleCancelBookingEvent() {
-		// TODO Auto-generated method stub
+		
+		this.dispose();
 		
 	}
 
 	private void handleAcceptBookingEvent() {
-		// TODO Auto-generated method stub
+		// TODO Implement finishBooking();
 		
 	}
 
 	private void handleResetCustomerEvent() {
-		// TODO Auto-generated method stub
+		// TODO Sæt alle tekst felter til at være tomme
 		
 	}
 
 	private void handleAddCustomerEvent() {
-		// TODO Auto-generated method stub
+		// TODO Implent addCustomer();
 		
 	}
 
 	private void handleSearchForCustomerEvent() {
-		// TODO Auto-generated method stub
+		// TODO Implement findCustomer();
 	}
 
 	private void handleExitEvent() {
