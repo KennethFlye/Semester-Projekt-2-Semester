@@ -48,31 +48,24 @@ public class BookingCtrl {
 	}
 	
 	public List<BookingTime> findBookedTimeslots(int year, int month, int day) throws DataAccessException {
-		//TODO convert localdatetime/ints to date in db layer
-		return null; //bookingTimeDatabase.getBookedTimeslots(LocalDateTime.of(year, month, day, 10, 20));
+		//TODO evt convert a string (the param of the method) to ints (the param of the return statement) for easier booking
+		return bookingTimeDatabase.getBookedTimeslots(year, month, day);
 	}
 	
 	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
-		/*pseudo
+		/*pseudo TODO
 		 * get bookingdb
 		 * get call a method like checkTimeslot with event and localdatetime
 		 * if timeslot is not occupied - add timeslot to newbooking, and add event to newbooking
 		 * ---
 		 * BookingTime bt = null;
-		 * eventtype et = null;
 		 * if(startTime != findBookedTimeslots() && finish != findbookedslots){
-		 * 	bt = new bookingtime(start, finish);
-		 *  TODO somehow convert string eventtype to enum -> new methodcall maybe
-		 *  newBooking.addTimeslot(bt, et); ? or .addevent(et)
-		 *  
+		 * 	bt = new bookingtime(et, start, finish);
+		 *  newBooking.addTimeslot(bt);
 		 * }
 		 */
-		
-		
-		//TODO add param eventype to new bookingtime
 		BookingTime bt = new BookingTime(eventType, startTime,finishTime);
 		newBooking.addTimeslot(bt);
-//		newBooking.addEvent(eventType); TODO
 	}
 	
 	public void addCustomer(String phoneNo) throws DataAccessException {
