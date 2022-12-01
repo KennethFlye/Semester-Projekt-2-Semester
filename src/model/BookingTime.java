@@ -23,8 +23,8 @@ public class BookingTime {
 		this.finishTime=finishTime;
 		this.startTime=startTime;
 	}
-	public EnumType getEventType() {
-		return eventType;
+	public EnumType getEventType() { 
+		return eventType; 
 	}
 	
 	public LocalDateTime getStartTime() {
@@ -41,4 +41,4 @@ public class BookingTime {
 
 	
 	
-}
+
