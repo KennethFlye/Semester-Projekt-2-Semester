@@ -3,28 +3,26 @@ package model;
 
 import java.time.LocalDateTime;
 
-import model.EventType.EnumType;
-
 public class BookingTime {
 
 	
-	EnumType eventType; 
+	EventType eventType; 
 	LocalDateTime startTime, finishTime; 
 	
 	
 
-	public static void main(String[] args) {
-		
-		BookingTime bt = new BookingTime("Formel 1", LocalDateTime.now(), LocalDateTime.now());
-		System.out.println(bt.eventType); 
-	}
 	
-	public BookingTime(String type, LocalDateTime startTime, LocalDateTime finishTime) {
-		this.eventType = EnumType.valueOfLabel(type);
+	
+	public BookingTime(EventType et, LocalDateTime startTime, LocalDateTime finishTime) {
+		this.eventType = et;
 		this.finishTime=finishTime;
 		this.startTime=startTime;
+		this.finishTime=startTime.plusMinutes(et.getEnumType().getLenght());
 	}
-	public EnumType getEventType() {
+		
+		
+	
+	public EventType getEventType() {
 		return eventType;
 	}
 	
@@ -34,7 +32,8 @@ public class BookingTime {
 
 	public LocalDateTime getFinishTime() {
 		return finishTime;
-	}
+		}
+	
 	
 	
 }

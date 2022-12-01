@@ -9,6 +9,8 @@ import java.util.List;
 
 import model.CateringMenu;
 import model.Customer;
+import model.EventType;
+import model.EventType.EnumType;
 import model.Booking;
 import model.BookingTime;
 import database.BookingDB;
@@ -52,7 +54,7 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots(year, month, day);
 	}
 	
-	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
+	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
 		/*pseudo TODO
 		 * get bookingdb
 		 * get call a method like checkTimeslot with event and localdatetime
@@ -64,7 +66,8 @@ public class BookingCtrl {
 		 *  newBooking.addTimeslot(bt);
 		 * }
 		 */
-		BookingTime bt = new BookingTime(eventType, startTime,finishTime);
+		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
+		BookingTime bt = new BookingTime(et, startTime,finishTime);
 		newBooking.addTimeslot(bt);
 	}
 	
