@@ -9,6 +9,7 @@ import java.util.List;
 
 import model.CateringMenu;
 import model.Customer;
+import model.EventType;
 import model.EventType.EnumType;
 import model.Booking;
 import model.BookingTime;
@@ -65,13 +66,9 @@ public class BookingCtrl {
 		 *  newBooking.addTimeslot(bt);
 		 * }
 		 */
-		BookingTime bt = new BookingTime(eventType, startTime,finishTime);
-		bt.getEventType().setPrice(getPriceOfEvent(bt.getEventType().getEnumType()));
+		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
+		BookingTime bt = new BookingTime(et, startTime,finishTime);
 		newBooking.addTimeslot(bt);
-	}
-	
-	private double getPriceOfEvent(EnumType typeOfEvent) throws DataAccessException {
-		return eventTypeCtrl.findPrice(typeOfEvent);
 	}
 	
 	public void addCustomer(String phoneNo) throws DataAccessException {

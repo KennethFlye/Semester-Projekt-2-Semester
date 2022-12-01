@@ -15,12 +15,13 @@ public class BookingTime {
 
 	public static void main(String[] args) {
 		
-		BookingTime bt = new BookingTime("Formel 1", LocalDateTime.now(), LocalDateTime.now());
-		System.out.println(bt.eventType); 
+//		BookingTime bt = new BookingTime("Formel 1", LocalDateTime.now(), LocalDateTime.now());
+//		System.out.println(bt.eventType); 
 	}
 	
-	public BookingTime(String type, LocalDateTime startTime, LocalDateTime finishTime) {
-		this.eventType = new EventType(EnumType.valueOfLabel(type));
+	public BookingTime(EventType et, LocalDateTime startTime, LocalDateTime finishTime) {
+		this.eventType = et;
+		this.finishTime=finishTime;
 		this.startTime=startTime;
 		this.finishTime=startTime.plusMinutes(EnumType.valueOfLabel(type).getLenght());
 	}
@@ -29,7 +30,6 @@ public class BookingTime {
 	
 	public EventType getEventType() {
 		return eventType;
-
 	}
 	
 	public LocalDateTime getStartTime() {
@@ -39,6 +39,7 @@ public class BookingTime {
 	public LocalDateTime getFinishTime() {
 		return finishTime;
 		}
+	
 	
 	
 }
