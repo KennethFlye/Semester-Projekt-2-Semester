@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Bjoer/OneDrive/Documents/GitHub/Semester-Projekt-2-Semester/mssql-jdbc-11.2.0.jre17.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Oskar/Desktop/Semester-Projekt-2-Semester/lib/mssql-jdbc-11.2.0.jre17.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
