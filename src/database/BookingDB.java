@@ -35,7 +35,7 @@ public class BookingDB implements BookingDBIF {
 	}
 	
 	@Override
-	public void insertBooking(Booking newBooking) {
+	public void insertBooking(Booking newBooking) throws DataAccessException {
 		PreparedStatement ps;
 		
 		if(newBooking.hasCateringMenu())
@@ -44,6 +44,9 @@ public class BookingDB implements BookingDBIF {
 			ps = insertBookingPSNoFood;
 		
 		try {
+			
+			//Start the transaction, sets autocommit to false
+			DBConnection.getInstance().startTransaction();
 			
 			//Total price
 			ps.setFloat(1, newBooking.getPrice());
@@ -73,11 +76,21 @@ public class BookingDB implements BookingDBIF {
 				//ps.setInt();
 			*/
 			
+			//Commits the transaction and sets autocommit to true
+			DBConnection.getInstance().commitTransaction();
+			
 			ps.execute();
 			ps.close();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			try {
+				//Undoes the changes that were tried to make and sets autocommit true
+				DBConnection.getInstance().rollbackTransaction();
+			}
+			catch(SQLException ex) {
+				throw new DataAccessException(ex, "Transaction cant be rolled back");
+			}
+			throw new DataAccessException(e, "Transaction couldnt be committed");
 		}
 		
 		
