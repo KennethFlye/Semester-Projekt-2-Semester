@@ -5,8 +5,10 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,6 +18,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import controller.BookingCtrl;
+import database.DataAccessException;
+import model.BookingTime;
 
 public class TimeSlotWindowEvent extends JDialog {
 
@@ -28,26 +34,28 @@ public class TimeSlotWindowEvent extends JDialog {
 	private JTextField textFieldChoosenDay;
 	private JButton btnSearchDay, okButton, cancelButton;
 	private LocalDateTime timeStart;
+	private BookingCtrl bookingCtrl;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			TimeSlotWindowEvent dialog = new TimeSlotWindowEvent();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			TimeSlotWindowEvent dialog = new TimeSlotWindowEvent();
+//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//			dialog.setVisible(true);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public TimeSlotWindowEvent() {
+	public TimeSlotWindowEvent(BookingCtrl bookingCtrl) {
 		super((java.awt.Frame) null, true);
 		setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+		this.bookingCtrl = bookingCtrl;
 		setBounds(100, 100, 550, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -196,11 +204,26 @@ public class TimeSlotWindowEvent extends JDialog {
 	private void handleSearchDAyEvent() {
 		// TODO Implement Retrieve Booked Times And Add To Table
 		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate searchDate = LocalDate.parse(textFieldStartTime.getText(), formatter);
+		
+		List<BookingTime> bookedTimes = null;
+		
+		int year = searchDate.getYear();
+		int month = searchDate.getMonthValue();
+		int day = searchDate.getDayOfMonth();
+		
+		try {
+			bookedTimes = bookingCtrl.findBookedTimeslots(year, month, day);
+		} catch (DataAccessException e) {
+			// TODO Vis hvad der gik galt
+			e.printStackTrace();
+		}
 
 		
 		//Loop over alle tider der bliver returneret
-		for (String element : columnNames) {
-			dtm.addRow(new Object[] {"Her indsættes Event Type", "Her indsættes Start Tid", "Her Indsættes Slut Tid"});
+		for (BookingTime element : bookedTimes) {
+			dtm.addRow(new Object[] {element.getEventType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
 		}
 		
 	}
