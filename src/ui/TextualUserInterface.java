@@ -9,8 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+
 import controller.BookingCtrl;
 import database.DBConnection;
+import database.DataAccessException;
 import model.CateringMenu;
 
 /**TUI - Testing class, not for standard use
@@ -26,7 +28,7 @@ import model.CateringMenu;
 public class TextualUserInterface {
 
 			
-	public static void main(String[] args) {
+	public static void main(String[] args) throws DataAccessException {
 		boolean running = true;
 		Scanner scanner = new Scanner(System.in);
 		BookingCtrl bookingCtrl = new BookingCtrl();
@@ -36,6 +38,8 @@ public class TextualUserInterface {
 			String input = getScan(scanner);
 			
 			switch(input) {
+			
+			/*-
 			case "exit":
 				running=false;
 				break;
@@ -52,7 +56,7 @@ public class TextualUserInterface {
 				
 			case "AddTime":
 				//System.out.println("added time");
-				bookingCtrl.addTime(null, null, input);
+				bookingCtrl.addTimeslot(LocalDateTime.of(2022, 11, 30, 10, 55), LocalDateTime.of(2022, 12, 1, 14, 30), "Formel 1");
 				break;
 				
 			case "AddCustomer":
@@ -62,12 +66,12 @@ public class TextualUserInterface {
 				
 			case "AddAmountOfPeople":
 				System.out.println("added amount of people");
-				bookingCtrl.addAmountOfPeople(5);
+				bookingCtrl.addAmountOfPeople(5, null, null);
 				break;
 				
 			case "AddCatering":
 				System.out.println("catering was added");
-				CateringMenu c = new CateringMenu();
+				CateringMenu c = new CateringMenu("Kyllinge og Bacon Sandwich", 55);
 				bookingCtrl.addCatering(c);
 				break;
 				
@@ -75,10 +79,15 @@ public class TextualUserInterface {
 				System.out.println("booking finished");
 				bookingCtrl.finishBooking();
 				break;
-				
+				*/
+			
 			case "FullTestCase": case"tst":
-				CateringMenu catering = new CateringMenu();
+				CateringMenu catering = new CateringMenu("Kyllinge og Bacon Sandwich", 55);
+				LocalDateTime from = LocalDateTime.now();
+				LocalDateTime to = LocalDateTime.of(2022, 12, 4, 10, 55);
 				int count=0; int max=7;
+				String type = "Formel 1";
+				int menu = 1;
 				
 				System.out.println("booking created");
 				bookingCtrl.createBooking(); count++;
@@ -88,16 +97,16 @@ public class TextualUserInterface {
 				System.out.println(l);
 				
 				System.out.println("\nadded time");
-				bookingCtrl.addTime(LocalDateTime.of(2022, 11, 30, 10, 55), LocalDateTime.of(2022, 12, 1, 14, 30), input); count++;
+				bookingCtrl.addTimeslot(type, from, to); count++;
 				
 				System.out.println("\nadded customer"); count++;
 				bookingCtrl.addCustomer("45702312");
 				
 				System.out.println("\nadded amount of people");
-				System.out.println(bookingCtrl.addAmountOfPeople(5)); count++;
+				System.out.println(bookingCtrl.addAmountOfPeople(5, from, to)); count++;
 				
 				System.out.println("\nadded catering");
-				bookingCtrl.addCatering(catering); count++;
+				bookingCtrl.addCateringMenu(menu); count++;
 				
 				System.out.println("\nfinished booking");
 				bookingCtrl.finishBooking(); count++;
@@ -112,28 +121,10 @@ public class TextualUserInterface {
 						PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from Booking");
 						ResultSet rs = psTst.executeQuery();
 						
-						int width = rs.getMetaData().getColumnCount();
+						printResultSet(rs);
 						
-						int adjustmentSize=20;
-						
-						for (int i = 1; i < width+1; i++) {
-							String s = rs.getMetaData().getColumnName(i);
-						System.out.print(s +" ".repeat(adjustmentSize-s.length()));
-						}
-						System.out.print("\n");
-						while (rs.next()) {
-							for (int i = 1; i < width+1; i++) { //rs.getObject(i).toString().length()
-								System.out.print(
-										rs.getObject(i)+" ".repeat(
-												adjustmentSize - (rs.getObject(i)!=null ? 
-														rs.getObject(i).toString().length() : 4)));
-							}
-							System.out.print("\n");
-						}
 					} catch (SQLException e) {e.printStackTrace();}
 				break;
-				
-				
 				
 			default:
 				//throw new IllegalArgumentException("Unexpected value: " + input);
@@ -150,5 +141,25 @@ public class TextualUserInterface {
 		return scanner.next();
 	}
 	
-
+	private static void printResultSet(ResultSet rs) throws SQLException {
+        int width = rs.getMetaData().getColumnCount();
+        int adjustmentSize=20;
+        for (int i = 1; i < width+1; i++) {
+            String s = rs.getMetaData().getColumnName(i);
+            System.out.print(s +" ".repeat(adjustmentSize-s.length()));
+        }
+        
+        System.out.print("\n");
+        while (rs.next()) {
+            for (int i = 1; i < width+1; i++) {
+                System.out.print(
+                        rs.getObject(i)+" ".repeat(
+                                adjustmentSize - (rs.getObject(i)!=null ? 
+                                        rs.getObject(i).toString().length() : 4)));
+            }
+            System.out.print("\n");
+        }    
+    }
+	
+	
 }

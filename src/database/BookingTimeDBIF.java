@@ -11,6 +11,6 @@ public interface BookingTimeDBIF {
 	
 	public ArrayList<BookingTime> insertBookingTime(ArrayList<BookingTime> bookingTimes, int bookingid) throws DataAccessException;
 
-	public List<BookingTime> getBookedTimeslots(Date date) throws DataAccessException;
+	public List<BookingTime> getBookedTimeslots(int day, int month, int year) throws DataAccessException;
 	
 }

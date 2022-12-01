@@ -1,6 +1,8 @@
 package controller;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,30 +47,40 @@ public class BookingCtrl {
 		
 	}
 	
-	public List<LocalDateTime> findBookedTimeslots(){
-		return bookingTimeDatabase.getBookedTimeslots();
+	public List<BookingTime> findBookedTimeslots(int year, int month, int day) throws DataAccessException {
+		//TODO evt convert a string (the param of the method) to ints (the param of the return statement) for easier booking
+		return bookingTimeDatabase.getBookedTimeslots(year, month, day);
 	}
 	
 	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
-		//TODO add param eventype to new bookingtime
-		BookingTime bt = new BookingTime(startTime,finishTime);
+		/*pseudo TODO
+		 * get bookingdb
+		 * get call a method like checkTimeslot with event and localdatetime
+		 * if timeslot is not occupied - add timeslot to newbooking, and add event to newbooking
+		 * ---
+		 * BookingTime bt = null;
+		 * if(startTime != findBookedTimeslots() && finish != findbookedslots){
+		 * 	bt = new bookingtime(et, start, finish);
+		 *  newBooking.addTimeslot(bt);
+		 * }
+		 */
+		BookingTime bt = new BookingTime(eventType, startTime,finishTime);
 		newBooking.addTimeslot(bt);
-//		newBooking.addEvent(eventType); TODO
 	}
 	
 	public void addCustomer(String phoneNo) throws DataAccessException {
 		newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
-	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) {
-//		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
-//			newBooking.setAmountOfPeople(amount);
-//		}
-//		return gokartCtrl.checkGokarts(amount, startTime, finishTime);
-		return true; //temp
+	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
+		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
+			newBooking.setAmountOfPeople(amount);
+		}
+		return gokartCtrl.checkGokarts(amount, startTime, finishTime); 
 	}
 	
 	public void addCateringMenu(int cateringMenu) throws DataAccessException {
+		//TODO make it possible to not set cateringmenu
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	

@@ -34,13 +34,18 @@ public class Booking {
 	
 	public void addCustomer(Customer c) {
 		customer=c;
-		System.out.println("Customer " + c + " added");
+		System.out.println("Customer " + c + " set");
 	}
 	
 	public void addCateringMenu(CateringMenu cm) {
 		cateringMenu = cm;
 		totalPrice = cateringMenu.getPrice();
-		System.out.println("Cateringmenu " + cm + " added");
+		System.out.println("Cateringmenu " + cm + " set");
+	}
+	
+	public void setAmountOfPeople(int amount) {
+		amountOfPeople=amount;
+		System.out.println("Amount of attendees set to " + amountOfPeople);
 	}
 
 	
