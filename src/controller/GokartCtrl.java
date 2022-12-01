@@ -20,17 +20,16 @@ public class GokartCtrl {
 		}
 		
 	}
-	public void checkGokarts(int amount, LocalDateTime start, LocalDateTime end) throws DataAccessException {
+	public boolean checkGokarts(int amount, LocalDateTime start, LocalDateTime end) throws DataAccessException {
 		
 		try {
-			gokartDB.checkGokarts(amount, start, end);
+			return gokartDB.checkGokarts(amount, start, end);
 			
 		}
 		catch(Exception e) {
 			throw new DataAccessException(e, "Could Not Check Gokarts");
 			
-		}
-		
+		}		
 		
 	}
 
