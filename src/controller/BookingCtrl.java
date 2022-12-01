@@ -53,7 +53,7 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots(year, month, day);
 	}
 	
-	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
+	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
 		/*pseudo TODO
 		 * get bookingdb
 		 * get call a method like checkTimeslot with event and localdatetime
@@ -70,7 +70,7 @@ public class BookingCtrl {
 		newBooking.addTimeslot(bt);
 	}
 	
-	private double getPriceOfEvent(EnumType typeOfEvent) {
+	private double getPriceOfEvent(EnumType typeOfEvent) throws DataAccessException {
 		return eventTypeCtrl.findPrice(typeOfEvent);
 	}
 	
