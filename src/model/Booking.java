@@ -29,7 +29,7 @@ public class Booking {
 	
 	public void addTimeslot(BookingTime bt) {
 		bookingTimeslots.add(bt);
-		
+		totalPrice += bt.getEventType().getPrice();
 		System.out.println("Time " + bt + " added");
 	}
 	
