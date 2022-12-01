@@ -16,6 +16,8 @@ import java.awt.Insets;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
 
 public class CreateBookingMenu extends JFrame {
 
@@ -29,6 +31,8 @@ public class CreateBookingMenu extends JFrame {
 	private JTextField textFieldZipcode;
 	private JTextField textFieldCity;
 	private JTextField textFieldCountry;
+	private JTextField textFieldAmountOfPeople;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -246,6 +250,136 @@ public class CreateBookingMenu extends JFrame {
 		
 		JPanel centerPanelEast = new JPanel();
 		centerPanel.add(centerPanelEast, BorderLayout.EAST);
+		GridBagLayout gbl_centerPanelEast = new GridBagLayout();
+		gbl_centerPanelEast.columnWidths = new int[]{0, 0, 0};
+		gbl_centerPanelEast.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_centerPanelEast.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gbl_centerPanelEast.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		centerPanelEast.setLayout(gbl_centerPanelEast);
+		
+		JLabel lblBookingType = new JLabel("Booking Type");
+		GridBagConstraints gbc_lblBookingType = new GridBagConstraints();
+		gbc_lblBookingType.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBookingType.gridx = 0;
+		gbc_lblBookingType.gridy = 0;
+		centerPanelEast.add(lblBookingType, gbc_lblBookingType);
+		
+		JComboBox comboBoxBookingType = new JComboBox();
+		GridBagConstraints gbc_comboBoxBookingType = new GridBagConstraints();
+		gbc_comboBoxBookingType.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBoxBookingType.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxBookingType.gridx = 1;
+		gbc_comboBoxBookingType.gridy = 0;
+		centerPanelEast.add(comboBoxBookingType, gbc_comboBoxBookingType);
+		
+		JLabel lblAmountOfPeople = new JLabel("Antal Personer");
+		GridBagConstraints gbc_lblAmountOfPeople = new GridBagConstraints();
+		gbc_lblAmountOfPeople.anchor = GridBagConstraints.EAST;
+		gbc_lblAmountOfPeople.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAmountOfPeople.gridx = 0;
+		gbc_lblAmountOfPeople.gridy = 1;
+		centerPanelEast.add(lblAmountOfPeople, gbc_lblAmountOfPeople);
+		
+		textFieldAmountOfPeople = new JTextField();
+		GridBagConstraints gbc_textFieldAmountOfPeople = new GridBagConstraints();
+		gbc_textFieldAmountOfPeople.insets = new Insets(0, 0, 5, 0);
+		gbc_textFieldAmountOfPeople.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldAmountOfPeople.gridx = 1;
+		gbc_textFieldAmountOfPeople.gridy = 1;
+		centerPanelEast.add(textFieldAmountOfPeople, gbc_textFieldAmountOfPeople);
+		textFieldAmountOfPeople.setColumns(10);
+		
+		JLabel lblTimeSlot = new JLabel("Tidspunkt");
+		GridBagConstraints gbc_lblTimeSlot = new GridBagConstraints();
+		gbc_lblTimeSlot.anchor = GridBagConstraints.EAST;
+		gbc_lblTimeSlot.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTimeSlot.gridx = 0;
+		gbc_lblTimeSlot.gridy = 2;
+		centerPanelEast.add(lblTimeSlot, gbc_lblTimeSlot);
+		
+		textField = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.insets = new Insets(0, 0, 5, 0);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 1;
+		gbc_textField.gridy = 2;
+		centerPanelEast.add(textField, gbc_textField);
+		textField.setColumns(10);
+		
+		JLabel lblEventTime = new JLabel("Event Tid");
+		GridBagConstraints gbc_lblEventTime = new GridBagConstraints();
+		gbc_lblEventTime.anchor = GridBagConstraints.EAST;
+		gbc_lblEventTime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEventTime.gridx = 0;
+		gbc_lblEventTime.gridy = 3;
+		centerPanelEast.add(lblEventTime, gbc_lblEventTime);
+		
+		JComboBox comboBoxEventTime = new JComboBox();
+		GridBagConstraints gbc_comboBoxEventTime = new GridBagConstraints();
+		gbc_comboBoxEventTime.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBoxEventTime.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxEventTime.gridx = 1;
+		gbc_comboBoxEventTime.gridy = 3;
+		centerPanelEast.add(comboBoxEventTime, gbc_comboBoxEventTime);
+		
+		JLabel lblRaceType = new JLabel("Løbstype");
+		GridBagConstraints gbc_lblRaceType = new GridBagConstraints();
+		gbc_lblRaceType.anchor = GridBagConstraints.EAST;
+		gbc_lblRaceType.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRaceType.gridx = 0;
+		gbc_lblRaceType.gridy = 4;
+		centerPanelEast.add(lblRaceType, gbc_lblRaceType);
+		
+		JComboBox comboBoxRaceType = new JComboBox();
+		GridBagConstraints gbc_comboBoxRaceType = new GridBagConstraints();
+		gbc_comboBoxRaceType.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBoxRaceType.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxRaceType.gridx = 1;
+		gbc_comboBoxRaceType.gridy = 4;
+		centerPanelEast.add(comboBoxRaceType, gbc_comboBoxRaceType);
+		
+		JLabel lblCatering = new JLabel("Mad");
+		GridBagConstraints gbc_lblCatering = new GridBagConstraints();
+		gbc_lblCatering.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCatering.gridx = 0;
+		gbc_lblCatering.gridy = 5;
+		centerPanelEast.add(lblCatering, gbc_lblCatering);
+		
+		JRadioButton rdbtnCatering = new JRadioButton("");
+		GridBagConstraints gbc_rdbtnCatering = new GridBagConstraints();
+		gbc_rdbtnCatering.insets = new Insets(0, 0, 5, 0);
+		gbc_rdbtnCatering.gridx = 1;
+		gbc_rdbtnCatering.gridy = 5;
+		centerPanelEast.add(rdbtnCatering, gbc_rdbtnCatering);
+		
+		JLabel lblCateringMenu = new JLabel("Mad Type");
+		GridBagConstraints gbc_lblCateringMenu = new GridBagConstraints();
+		gbc_lblCateringMenu.anchor = GridBagConstraints.EAST;
+		gbc_lblCateringMenu.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCateringMenu.gridx = 0;
+		gbc_lblCateringMenu.gridy = 6;
+		centerPanelEast.add(lblCateringMenu, gbc_lblCateringMenu);
+		
+		JComboBox comboBoxFoodType = new JComboBox();
+		GridBagConstraints gbc_comboBoxFoodType = new GridBagConstraints();
+		gbc_comboBoxFoodType.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBoxFoodType.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxFoodType.gridx = 1;
+		gbc_comboBoxFoodType.gridy = 6;
+		centerPanelEast.add(comboBoxFoodType, gbc_comboBoxFoodType);
+		
+		JButton btnAccept = new JButton("Godkend");
+		GridBagConstraints gbc_btnAccept = new GridBagConstraints();
+		gbc_btnAccept.insets = new Insets(0, 0, 0, 5);
+		gbc_btnAccept.gridx = 0;
+		gbc_btnAccept.gridy = 9;
+		centerPanelEast.add(btnAccept, gbc_btnAccept);
+		
+		JButton btnCancel = new JButton("Annuller");
+		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
+		gbc_btnCancel.gridx = 1;
+		gbc_btnCancel.gridy = 9;
+		centerPanelEast.add(btnCancel, gbc_btnCancel);
 	}
 
 }
