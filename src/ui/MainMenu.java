@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -15,6 +16,7 @@ import java.awt.FlowLayout;
 public class MainMenu extends JFrame {
 
 	private JPanel contentPane;
+	private BookingMenu bookingMenu;
 
 	/**
 	 * Launch the application.
@@ -102,9 +104,10 @@ public class MainMenu extends JFrame {
 
 	private void handleBookingClick() {
 		
-		//TODO Link til booking side
-		System.out.println("Hej");
+		bookingMenu = new BookingMenu();
+		bookingMenu.setVisible(true);
 		
 	}
+	
 
 }
