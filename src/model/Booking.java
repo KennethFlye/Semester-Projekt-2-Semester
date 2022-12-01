@@ -29,6 +29,7 @@ public class Booking {
 	
 	public void addTimeslot(BookingTime bt) {
 		bookingTimeslots.add(bt);
+		
 		System.out.println("Time " + bt + " added");
 	}
 	
@@ -39,7 +40,7 @@ public class Booking {
 	
 	public void addCateringMenu(CateringMenu cm) {
 		cateringMenu = cm;
-		totalPrice = cateringMenu.getPrice();
+		totalPrice += cateringMenu.getPrice();
 		System.out.println("Cateringmenu " + cm + " set");
 	}
 	
