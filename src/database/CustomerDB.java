@@ -60,6 +60,8 @@ public class CustomerDB implements CustomerDBIF{
 				country = rs.getString("country");
 				dateOfBirth = rs.getDate("dateOfBirth").toLocalDate();
 				
+			
+				
 				while(rsCity.next()) {
 					city = rsCity.getString("zipcodeCity");
 					
