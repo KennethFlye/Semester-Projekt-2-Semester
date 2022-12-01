@@ -1,6 +1,8 @@
 package controller;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +47,31 @@ public class BookingCtrl {
 		
 	}
 	
-	public List<LocalDateTime> findBookedTimeslots(){
-		return bookingTimeDatabase.getBookedTimeslots();
+	public List<BookingTime> findBookedTimeslots(int year, int month, int day) throws DataAccessException {
+		LocalDateTime date;
+		//TODO convert localdatetime/ints to date in db layer
+		return bookingTimeDatabase.getBookedTimeslots(date.of(year, month, day, 10, 20));
 	}
 	
 	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
+		/*pseudo
+		 * get bookingdb
+		 * get call a method like checkTimeslot with event and localdatetime
+		 * if timeslot is not occupied - add timeslot to newbooking, and add event to newbooking
+		 * ---
+		 * BookingTime bt = null;
+		 * eventtype et = null;
+		 * if(startTime != findBookedTimeslots() && finish != findbookedslots){
+		 * 	bt = new bookingtime(start, finish);
+		 *  TODO somehow convert string eventtype to enum -> new methodcall maybe
+		 *  newBooking.addTimeslot(bt, et); ? or .addevent(et)
+		 *  
+		 * }
+		 */
+		
+		
 		//TODO add param eventype to new bookingtime
-		BookingTime bt = new BookingTime(startTime,finishTime);
+		BookingTime bt = new BookingTime(eventType, startTime,finishTime);
 		newBooking.addTimeslot(bt);
 //		newBooking.addEvent(eventType); TODO
 	}
