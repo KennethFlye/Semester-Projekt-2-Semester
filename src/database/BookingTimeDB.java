@@ -5,8 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -49,7 +47,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	public ArrayList<BookingTime> insertBookingTime(ArrayList<BookingTime> bookingTimes, int bookingid) throws DataAccessException {
 		try {
 			for (BookingTime i: bookingTimes) {
-			insertBookingTime.setString(1, i.getEventType().getLabel());
+			insertBookingTime.setString(1, i.getEventType().getEnumType().getLabel());
 			insertBookingTime.setInt(2, bookingid);
 			insertBookingTime.setTime(3, Time.valueOf(i.getStartTime().toLocalTime()));
 			insertBookingTime.setTime(4, Time.valueOf(i.getFinishTime().toLocalTime()));

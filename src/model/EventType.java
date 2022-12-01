@@ -43,6 +43,11 @@ public class EventType {
 		
 	}
 
+	public EventType(EnumType valueOfLabel) {
+		eventType = valueOfLabel;
+		price = 0;
+	}
+
 	/**
 	 * @return the eventType
 	 */

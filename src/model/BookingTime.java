@@ -26,6 +26,7 @@ public class BookingTime {
 	}
 	public EventType getEventType() {
 		return eventType;
+
 	}
 	
 	public LocalDateTime getStartTime() {
@@ -35,6 +36,5 @@ public class BookingTime {
 	public LocalDateTime getFinishTime() {
 		return finishTime;
 	}
-	
 	
 }
