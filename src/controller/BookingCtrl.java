@@ -49,25 +49,27 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots();
 	}
 	
-	public void addTime(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
+	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
 		//TODO add param eventype to new bookingtime
 		BookingTime bt = new BookingTime(startTime,finishTime);
-		newBooking.addTime(bt);
+		newBooking.addTimeslot(bt);
 //		newBooking.addEvent(eventType); TODO
 	}
 	
-	public void addCustomer(String phoneNo) {
-		Customer c = customerCtrl.findCustomer(phoneNo);
-		newBooking.addCustomer(c);
+	public void addCustomer(String phoneNo) throws DataAccessException {
+		newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
 	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) {
-//		return gokartCtrl.checkGokarts(amount); TODO
-		return true;
+//		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
+//			newBooking.setAmountOfPeople(amount);
+//		}
+//		return gokartCtrl.checkGokarts(amount, startTime, finishTime);
+		return true; //temp
 	}
 	
-	public void addCatering(CateringMenu cateringMenu) {
-		
+	public void addCateringMenu(int cateringMenu) throws DataAccessException {
+		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
 	public void finishBooking() {
