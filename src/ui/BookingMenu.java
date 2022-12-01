@@ -13,6 +13,7 @@ import java.awt.Font;
 public class BookingMenu extends JFrame {
 
 	private JPanel contentPane;
+	private CreateBookingMenu createBookingMenu;
 
 	/**
 	 * Launch the application.
@@ -52,6 +53,8 @@ public class BookingMenu extends JFrame {
 		btnExit.setFont(new Font("Tahoma", Font.BOLD, 14));
 		northPanel1.add(btnExit, BorderLayout.EAST);
 		
+		btnExit.addActionListener((e) -> handleExitEvent());
+		
 		JPanel centerPanel1 = new JPanel();
 		contentPane.add(centerPanel1, BorderLayout.CENTER);
 		
@@ -67,8 +70,17 @@ public class BookingMenu extends JFrame {
 		centerPanel1.add(btnShowCalendar);
 	}
 
+	private void handleExitEvent() {
+		
+		this.dispose();
+		
+	}
+
 	private void handleCreateBookingEvent() {
-		// TODO Link til bookingside
+		
+		createBookingMenu = new CreateBookingMenu();
+		createBookingMenu.setVisible(true);
+		
 	}
 
 }
