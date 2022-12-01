@@ -58,7 +58,7 @@ public class CreateBookingMenu extends JFrame {
 	private String[] bookingTypes = {"Gokart & Event Pakke", "Gokart", "Event"};
 	private String[] raceTypes = {EnumType.FORMULA_1.getLabel(), EnumType.LARGE_FORMULA_1.getLabel(), EnumType.LE_MANS_1_HOUR.getLabel()};
 	private String[] eventLength = {EnumType.EVENT_HALL_1_HOUR.getLabel(), EnumType.EVENT_HALL_1_AND_HALF_HOUR.getLabel(), EnumType.EVENT_HALL_2_HOURS.getLabel()};
-	private String[] foodTypes = {EnumMenu.KYLLING_OG_BACON.getLabel(), EnumMenu.ÆG_OG_REJER.getLabel(), EnumMenu.FRIKADELLE.getLabel()};
+	private String[] foodTypes = {EnumMenu.CHICKEN.getLabel(), EnumMenu.EGGS.getLabel(), EnumMenu.FRIKADEL.getLabel()};
 	private JTextField textFieldTimeSlotEvent;
 
 	/**
