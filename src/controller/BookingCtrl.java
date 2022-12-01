@@ -87,7 +87,7 @@ public class BookingCtrl {
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
-	public void finishBooking() {
+	public void finishBooking() throws DataAccessException {
 		bookingDatabase.insertBooking(newBooking);
 	}
 	
