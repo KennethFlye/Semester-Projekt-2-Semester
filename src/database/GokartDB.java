@@ -76,22 +76,39 @@ public class GokartDB implements GokartDBIF {
 		
 	}
 	
-	/**
-	 * public static void main(String[] args) {
-		try{ 
-		getTimeForRentOut = DBConnection.getInstance().getConnection().prepareStatement(getTimeForRentOutQ);
-		getTimeForRentOut.setInt(1, 1);
-		ResultSet rsTimes = getTimeForRentOut.executeQuery();
+	//Main Metoder brugt til testing, please ignore :)
+		/**
+		 * public static void main(String[] args) {
+			try{ 
+			getTimeForRentOut = DBConnection.getInstance().getConnection().prepareStatement(getTimeForRentOutQ);
+			getTimeForRentOut.setInt(1, 1);
+			ResultSet rsTimes = getTimeForRentOut.executeQuery();
 
-		rsTimes.next();
-		System.out.println(rsTimes.getString("startTime"));
-		
-	}
-		catch(Exception e) {
+			rsTimes.next();
+			System.out.println(rsTimes.getString("startTime"));
 			
 		}
-	}
-	 */
+			catch(Exception e) {
+				
+			}
+		}
+		 */
+		
+		/**
+		 * public static void main(String[] args) {
+			
+			LocalDateTime ldt1 = LocalDateTime.of(2012, 05, 18, 10, 00);
+			LocalDateTime ldt2 = LocalDateTime.of(2022, 07, 18, 9, 30);
+			
+			try {
+				
+				System.out.println(checkGokarts(2, ldt1, ldt2));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		 */
 	
 
 }
