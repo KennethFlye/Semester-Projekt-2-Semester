@@ -9,7 +9,7 @@ public class BookingTime {
 
 	
 	EnumType eventType; 
-	LocalDateTime startTime, finishTime;
+	LocalDateTime startTime, finishTime; 
 	
 	
 
