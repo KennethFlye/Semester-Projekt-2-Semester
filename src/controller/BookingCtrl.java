@@ -48,9 +48,8 @@ public class BookingCtrl {
 	}
 	
 	public List<BookingTime> findBookedTimeslots(int year, int month, int day) throws DataAccessException {
-		LocalDateTime date;
 		//TODO convert localdatetime/ints to date in db layer
-		return bookingTimeDatabase.getBookedTimeslots(date.of(year, month, day, 10, 20));
+		return null; //bookingTimeDatabase.getBookedTimeslots(LocalDateTime.of(year, month, day, 10, 20));
 	}
 	
 	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) {
@@ -80,15 +79,15 @@ public class BookingCtrl {
 		newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
-	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) {
-//		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
-//			newBooking.setAmountOfPeople(amount);
-//		}
-//		return gokartCtrl.checkGokarts(amount, startTime, finishTime);
-		return true; //temp
+	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
+		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
+			newBooking.setAmountOfPeople(amount);
+		}
+		return gokartCtrl.checkGokarts(amount, startTime, finishTime); 
 	}
 	
 	public void addCateringMenu(int cateringMenu) throws DataAccessException {
+		//TODO make it possible to not set cateringmenu
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
