@@ -35,9 +35,10 @@ public class CateringMenu {
 	private double price;
 	private int id;
 	
-	public CateringMenu(String name, double price) {
+	public CateringMenu(String name, double price, int id) {
 		this.name = name;
 		this.price = price;
+		this.id = id;
 	}
 	
 	public String getName() {

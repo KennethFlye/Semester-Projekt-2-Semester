@@ -77,11 +77,9 @@ public class Booking {
 		return customer;
 	}
 
-	public float getPrice() { //TODO remove stub when getPrice is made
-		//return cateringMenu.getPrice() + eventprice;
-		return (float) cateringMenu.getPrice(); //TODO STUB TODO STUB TODO STUB TODO STUB
+	public double getTotal() {
+		return totalPrice;
 	}
-
 	/*public Employee getEmployee() { Outside use case
 		return null;
 	}*/
