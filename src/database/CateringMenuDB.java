@@ -20,6 +20,12 @@ public class CateringMenuDB implements CateringMenuDBIF {
 		}
 	}
 
+	/**
+	 * Finds a catering menu using it's ID, if such a catering menu exists in the database.
+	 * Creates a new catering menu object using the found catering menu's information, and returns this object.
+	 * @return a new CateringMenu object, with the same values as the found catering menu
+	 * @param cmId the id of the catering menu we are looking for
+	 */
 	
 	public CateringMenu findCateringMenu(int cmId) throws DataAccessException {
 		ResultSet rs;
