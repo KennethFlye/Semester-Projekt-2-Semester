@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -29,8 +32,9 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	}
 	
 	@Override
-	public List<BookingTime> getBookedTimeslots(Date date) throws DataAccessException {
+	public List<BookingTime> getBookedTimeslots(int day, int month, int year) throws DataAccessException {
 		ResultSet rs;
+		Date date = Date.valueOf(LocalDate.of(year, month, day));
 		try {
 			getBookingTimesByDate.setDate(1, date);
 			rs = getBookingTimesByDate.executeQuery();
@@ -50,7 +54,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			insertBookingTime.setTime(3, Time.valueOf(i.getStartTime().toLocalTime()));
 			insertBookingTime.setTime(4, Time.valueOf(i.getFinishTime().toLocalTime()));
 			insertBookingTime.executeQuery();
-			}
+			} 
 			return bookingTimes;
 		} 
 		catch (SQLException e) {
