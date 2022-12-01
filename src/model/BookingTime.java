@@ -21,9 +21,12 @@ public class BookingTime {
 	
 	public BookingTime(String type, LocalDateTime startTime, LocalDateTime finishTime) {
 		this.eventType = new EventType(EnumType.valueOfLabel(type));
-		this.finishTime=finishTime;
 		this.startTime=startTime;
+		this.finishTime=startTime.plusMinutes(EnumType.valueOfLabel(type).getLenght());
 	}
+		
+		
+	
 	public EventType getEventType() {
 		return eventType;
 
@@ -35,6 +38,7 @@ public class BookingTime {
 
 	public LocalDateTime getFinishTime() {
 		return finishTime;
-	}
+		}
+	
 	
 }
