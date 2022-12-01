@@ -53,28 +53,6 @@ public class EventTypeDB implements EventTypeDBIF{
 		
 		return actualEventType;
 	}
-	
-	public double findPrice(EnumType type) throws DataAccessException{
-		
-		ResultSet rs;
-		double price = 0;
-		
-		try {
-			
-			findByType.setString(1, type.getLabel());
-			rs = findByType.executeQuery();
-			
-			rs.next();
-			price = rs.getInt("price");
-			
-		} catch (SQLException e) {
-			throw new DataAccessException(e, "Could not retrieve EventType");
-		}
-		
-		
-		return price;
-		
-	}
 
 
 }
