@@ -19,9 +19,5 @@ public class EventTypeCtrl {
 	public EventType findEvent(EnumType type) throws DataAccessException {
 		return eventTypeDB.findEvent(type);
 	}
-	
-	public double findPrice(EnumType type) throws DataAccessException{
-		return eventTypeDB.findPrice(type);
-	}
 
 }
