@@ -501,7 +501,12 @@ public class CreateBookingMenu extends JFrame {
 	private void handleAddCateringMenuEvent() {
 		// TODO tilføj Id til EnumMenu
 		
-		//bookingCtrl.addCateringMenu(EnumMenu.valueOfLabel((String)comboBoxFoodType.getSelectedItem()).getId()); //
+		try {
+			bookingCtrl.addCateringMenu(EnumMenu.valueOfLabel((String)comboBoxFoodType.getSelectedItem()).getId());
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //
 		
 	}
 
@@ -612,7 +617,8 @@ public class CreateBookingMenu extends JFrame {
 		textFieldCity.setText(foundCustomer.getCity());
 		textFieldCountry.setText(foundCustomer.getCountry());
 		textFieldEmail.setText(foundCustomer.getEmail());
-		textFieldEmail.setText(foundCustomer.getName());
+		textFieldName.setText(foundCustomer.getName());
+		textFieldZipcode.setText(foundCustomer.getName());
 		
 	}
 
