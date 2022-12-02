@@ -612,7 +612,8 @@ public class CreateBookingMenu extends JFrame {
 		textFieldCity.setText(foundCustomer.getCity());
 		textFieldCountry.setText(foundCustomer.getCountry());
 		textFieldEmail.setText(foundCustomer.getEmail());
-		textFieldEmail.setText(foundCustomer.getName());
+		textFieldName.setText(foundCustomer.getName());
+		textFieldZipcode.setText(foundCustomer.getName());
 		
 	}
 
