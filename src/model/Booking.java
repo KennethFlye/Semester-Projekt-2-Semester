@@ -33,9 +33,10 @@ public class Booking {
 		System.out.println("Time " + bt + " added");
 	}
 	
-	public void addCustomer(Customer c) {
+	public Customer addCustomer(Customer c) {
 		customer=c;
 		System.out.println("Customer " + c + " set");
+		return c;
 	}
 	
 	public void addCateringMenu(CateringMenu cm) {
