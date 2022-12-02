@@ -49,7 +49,7 @@ public class BookingDB implements BookingDBIF {
 			DBConnection.getInstance().startTransaction();
 			
 			//Total price
-			ps.setFloat(1, newBooking.getPrice());
+			ps.setFloat(1, (float) newBooking.getTotal());
 			
 			//Creation date
 			ps.setDate(2, Date.valueOf(newBooking.getCreationDate().toLocalDate()));
@@ -68,13 +68,10 @@ public class BookingDB implements BookingDBIF {
 			//ps.setInt(6, newBooking.getEmployee().getId());// Outside use case
 			//ps.setInt(6, 1);
 			
-			/* TODO uncomment when getID() is made
 			//Menu id
 			if(newBooking.hasCateringMenu())
-				ps.setInt(7, newBooking.getCatering().getID());
-			//else
-				//ps.setInt();
-			*/
+				ps.setInt(6, newBooking.getCatering().getId());
+			
 			
 			//Commits the transaction and sets autocommit to true
 			DBConnection.getInstance().commitTransaction();
