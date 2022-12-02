@@ -18,24 +18,20 @@ public class BookingDB implements BookingDBIF {
 	
 	public BookingDB() {
 		
-		Connection connection;
-		try {
-			//Get connection
-			connection = DBConnection.getInstance().getConnection();
-			
-			//Initialize prepared statement
-			insertBookingPSFood = connection.prepareStatement(INSERTBOOKING_Q_FOOD);
-			insertBookingPSNoFood = connection.prepareStatement(INSERTBOOKING_Q_NOFOOD);
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 	
 	@Override
 	public void insertBooking(Booking newBooking) throws DataAccessException {
+		Connection connection;
+		connection = DBConnection.getInstance().getConnection();
+		try {
+			insertBookingPSFood = connection.prepareStatement(INSERTBOOKING_Q_FOOD);
+			insertBookingPSNoFood = connection.prepareStatement(INSERTBOOKING_Q_NOFOOD);
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement ps;
 		
 		if(newBooking.hasCateringMenu())
