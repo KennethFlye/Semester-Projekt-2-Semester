@@ -3,6 +3,7 @@ package database;
 import java.sql.*;
 
 import model.CateringMenu;
+import model.CateringMenu.EnumMenu;
 
 public class CateringMenuDB implements CateringMenuDBIF {
 	
@@ -43,7 +44,7 @@ public class CateringMenuDB implements CateringMenuDBIF {
 			}
 			
 			
-			foundCateringMenu = new CateringMenu(name, price, cmId);
+			foundCateringMenu = new CateringMenu(EnumMenu.valueOfLabel(name), price);
 		}
 		catch(SQLException e) {
 			throw new DataAccessException(e, "Could not retrieve cateringMenu");
