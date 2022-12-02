@@ -36,6 +36,7 @@ public class Booking {
 	public Customer addCustomer(Customer c) {
 		customer=c;
 		System.out.println("Customer " + c + " set");
+
 		return customer;
 	}
 	
