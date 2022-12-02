@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import controller.BookingCtrl;
 import database.DataAccessException;
 import model.CateringMenu.EnumMenu;
+import model.Customer;
 import model.EventType.EnumType;
 
 import javax.swing.JToggleButton;
@@ -500,7 +501,12 @@ public class CreateBookingMenu extends JFrame {
 	private void handleAddCateringMenuEvent() {
 		// TODO tilføj Id til EnumMenu
 		
-		//bookingCtrl.addCateringMenu(EnumMenu.valueOfLabel((String)comboBoxFoodType.getSelectedItem()).getId()); //
+		try {
+			bookingCtrl.addCateringMenu(EnumMenu.valueOfLabel((String)comboBoxFoodType.getSelectedItem()).getId());
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //
 		
 	}
 
@@ -589,12 +595,31 @@ public class CreateBookingMenu extends JFrame {
 	private void handleSearchForCustomerEvent() {
 		// TODO Få den til at returnere kunden så info kan indsættes;
 		
+		Customer foundCustomer = null;
+		
 		try {
-			bookingCtrl.addCustomer(textFieldCustomerPhone.getText());
+			foundCustomer = bookingCtrl.addCustomer(textFieldCustomerPhone.getText());
 		} catch (DataAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		setCustomerInfo(foundCustomer);
+		
+		
+	}
+
+	private void setCustomerInfo(Customer foundCustomer) {
+		
+		textFieldPhoneNo.setText(foundCustomer.getPhoneNo());
+		textFieldAddress.setText(foundCustomer.getAddress());
+		textFieldBirthDate.setText(foundCustomer.getDateOfBirth().toString());
+		textFieldCity.setText(foundCustomer.getCity());
+		textFieldCountry.setText(foundCustomer.getCountry());
+		textFieldEmail.setText(foundCustomer.getEmail());
+		textFieldName.setText(foundCustomer.getName());
+		textFieldZipcode.setText(String.valueOf(foundCustomer.getZipCode()));
+		
 	}
 
 	private void handleExitEvent() {

@@ -10,22 +10,22 @@ import model.Customer;
 public class CustomerDB implements CustomerDBIF{
 
 	private static final String findAllQ = "SELECT * FROM Contact, Customer";
-	private static final String findByPhoneNoQ = findAllQ + " WHERE Contact.phone = '?' AND Contact.contactId = Customer.contactId";
+	private static final String findByPhoneNoQ = findAllQ + " WHERE Contact.phone = ? AND Contact.contactId = Customer.customerId";
 	private static final String findAllCityQ = "SELECT * FROM ZipcodeCity";
 	private static final String findCityByZipCodeQ = findAllCityQ + " WHERE ZipcodeCity.zipcode = ?";
 	
 	
 	private PreparedStatement findAll, findByPhoneNo, findAllCity, findCityByZipCode;
 	
-	public CustomerDB() {
+	public CustomerDB() throws DataAccessException {
 		
 		try {
 			findAll = DBConnection.getInstance().getConnection().prepareStatement(findAllQ);
-			findByPhoneNo = DBConnection.getInstance().getConnection().prepareStatement(findAllQ);
+			findByPhoneNo = DBConnection.getInstance().getConnection().prepareStatement(findByPhoneNoQ);
 			findAllCity = DBConnection.getInstance().getConnection().prepareStatement(findAllCityQ);
 			findCityByZipCode = DBConnection.getInstance().getConnection().prepareStatement(findCityByZipCodeQ);
 		} catch (SQLException e) {
-			
+			throw new DataAccessException(e, "Cannot prepare customer statements");
 		}
 		
 		
