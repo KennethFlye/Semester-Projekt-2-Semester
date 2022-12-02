@@ -578,6 +578,8 @@ public class CreateBookingMenu extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.dispose();
 	}
 
 	private void handleResetCustomerEvent() {
