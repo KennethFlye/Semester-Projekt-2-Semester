@@ -30,8 +30,8 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	public void BookingDB() throws DataAccessException{
 		try {
 			insertBookingTime = DBConnection.getInstance().getConnection().prepareStatement(INSERTBOOKINGTIME_Q);
-			getBookingTime = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIMESBYDATE_Q);
-			getBookingTimesByDate = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIME_Q);
+			getBookingTimesByDate = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIMESBYDATE_Q);
+			getBookingTime = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIME_Q);
 		} catch (SQLException e) {
 			throw new DataAccessException(e, "Could not prepare statement");
 		}
@@ -46,8 +46,9 @@ public class BookingTimeDB implements BookingTimeDBIF {
 		ResultSet rs;
 		Date date = Date.valueOf(LocalDate.of(year, month, day));
 		try {
-			getBookingTimesByDate.setDate(1, date);
-			rs = getBookingTimesByDate.executeQuery();
+			getBookingTime.setDate(1, date);
+			getBookingTime.setDate(2, date);
+			rs = getBookingTime.executeQuery();
 			List<BookingTime> res = buildObjects(rs);
 			return res;
 		} catch (SQLException e) {
