@@ -6,9 +6,9 @@ public class EventType {
 		FORMULA_1("Formel 1", 30),
 		LARGE_FORMULA_1("Stor Formel 1", 60),
 		LE_MANS_1_HOUR("LeMans 1 Time", 60),
-		EVENT_HALL_1_HOUR("EventHal 1 Time", 60),
+		EVENT_HALL_1_HOUR("Eventhal 1 Time", 60),
 		EVENT_HALL_1_AND_HALF_HOUR("Eventhal 1.5 Time", 90),
-		EVENT_HALL_2_HOURS("EventHal 2 Timer", 120);
+		EVENT_HALL_2_HOURS("Eventhal 2 Timer", 120);
 		
 		
 		public final String label;
