@@ -37,22 +37,12 @@ public class CateringMenu {
 		}
 	}
 	
-	private String name;
+	private EnumMenu enumMenu;
 	private double price;
-	private int id;
 	
-	public CateringMenu(String name, double price, int id) {
-		this.name = name;
+	public CateringMenu(EnumMenu enumMenu, double price) {
 		this.price = price;
-		this.id = id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
+		this.enumMenu = enumMenu;
 	}
 	
 	public double getPrice() {
@@ -64,11 +54,7 @@ public class CateringMenu {
 	}
 	
 	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
+		return enumMenu.getId();
 	}
 
 }
