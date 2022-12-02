@@ -10,7 +10,7 @@ import model.EventType.EnumType;
 public class EventTypeDB implements EventTypeDBIF{
 
 	private static final String findAllQ = "SELECT EventType.type, EventType.price FROM EventType";
-	private static final String findByTypeQ = findAllQ + " WHERE EventType.type = '?'";
+	private static final String findByTypeQ = findAllQ + " WHERE EventType.type = ?";
 	private static final String findPriceByTypeQ = "SELECT EventType.price FROM EventType WHERE EventType.type = ?";
 	
 	private PreparedStatement findAll, findByType, findPriceByType;

@@ -36,8 +36,13 @@ public class CateringMenuDB implements CateringMenuDBIF {
 			
 			getCateringInfo.setInt(1, cmId);
 			rs = getCateringInfo.executeQuery();
-			name = rs.getString("foodName");
-			price = rs.getDouble("price");
+			
+			while(rs.next()) {
+				name = rs.getString("foodName");
+				price = rs.getDouble("price");
+			}
+			
+			
 			foundCateringMenu = new CateringMenu(name, price, cmId);
 		}
 		catch(SQLException e) {
