@@ -207,7 +207,9 @@ public class TimeSlotWindowGokart extends JDialog {
 	private void handleSearchDAyEvent() {
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate searchDate = LocalDate.parse(textFieldStartTime.getText(), formatter);
+		LocalDate searchDate = LocalDate.parse(textFieldChoosenDay.getText(), formatter);
+		
+		System.out.println(searchDate.toString());
 		
 		List<BookingTime> bookedTimes = null;
 		
