@@ -71,8 +71,8 @@ public class BookingCtrl {
 		newBooking.addTimeslot(bt);
 	}
 	
-	public void addCustomer(String phoneNo) throws DataAccessException {
-		newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
+	public Customer addCustomer(String phoneNo) throws DataAccessException {
+		return newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
 	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
