@@ -15,11 +15,6 @@ public class BookingDB implements BookingDBIF {
 	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?)";
 	private PreparedStatement insertBookingPSNoFood;
 	
-	
-	public BookingDB() {
-		
-	}
-	
 	@Override
 	public void insertBooking(Booking newBooking) throws DataAccessException {
 		Connection connection;
@@ -68,7 +63,6 @@ public class BookingDB implements BookingDBIF {
 			if(newBooking.hasCateringMenu())
 				ps.setInt(6, newBooking.getCatering().getId());
 			
-			
 			//Commits the transaction and sets autocommit to true
 			DBConnection.getInstance().commitTransaction();
 			
@@ -85,11 +79,7 @@ public class BookingDB implements BookingDBIF {
 			}
 			throw new DataAccessException(e, "Transaction couldnt be committed");
 		}
-		
-		
+				
 	}
 
-	
-	
-	
 }
