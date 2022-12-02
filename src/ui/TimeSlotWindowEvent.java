@@ -223,8 +223,8 @@ public class TimeSlotWindowEvent extends JDialog {
 		
 		//Loop over alle tider der bliver returneret
 		for (BookingTime element : bookedTimes) {
-			dtm.addRow(new Object[] {element.getEventType().toString(), element.getStartTime().toString(), element.getFinishTime().toString()});
-		} //TODO getEventType().getLabel() ændret til -.toString() 
+			dtm.addRow(new Object[] {element.getEventType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
+		}
 		
 	}
 	
