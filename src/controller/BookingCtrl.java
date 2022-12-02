@@ -39,6 +39,7 @@ public class BookingCtrl {
 		gokartCtrl = new GokartCtrl();
 		cateringCtrl = new CateringCtrl();
 		bookingDatabase = new BookingDB();
+		eventTypeCtrl = new EventTypeCtrl();
 	}
 	
 	
