@@ -15,6 +15,7 @@ import database.DBConnection;
 import database.DataAccessException;
 import model.BookingTime;
 import model.CateringMenu;
+import model.CateringMenu.EnumMenu;
 
 /**TUI - Testing class, not for standard use
  * <p>Methods <ul>
@@ -83,28 +84,40 @@ public class TextualUserInterface {
 				*/
 			
 			case "FullTestCase": case"tst":
-				CateringMenu catering = new CateringMenu("Kyllinge og Bacon Sandwich", 55, 1);
+					
+				int count=0; int max=7; //Amount of tests accepted/all
+				
+				//Test parameters
+				CateringMenu catering = new CateringMenu(EnumMenu.CHICKEN, 210);
 				LocalDateTime from = LocalDateTime.now();
-				LocalDateTime to = LocalDateTime.of(2022, 12, 4, 10, 55);	
-				int count=0; int max=7;
+				
+				int year = 2022, month=12, day=4;
+				int time = 10, minute = 55;
+				
+				LocalDateTime to = LocalDateTime.of(year, month, day, time, minute);
 				String type = "Formel 1";
 				int menu = 1;
+				String tlf="40404040";
+				
 				
 				System.out.println("booking created");
 				bookingCtrl.createBooking(); count++;
 				
 				System.out.println("\nfoundtimeslots");
-				List<BookingTime> l = bookingCtrl.findBookedTimeslots(2022, 12, 2); count++;
+				List<BookingTime> l = bookingCtrl.findBookedTimeslots(year, month, day); count++;
 				System.out.println(l);
 				
 				System.out.println("\nadded time");
 				bookingCtrl.addTimeslot(type, from, to); count++;
 				
 				System.out.println("\nadded customer"); count++;
-				bookingCtrl.addCustomer("45702312");
+				bookingCtrl.addCustomer(tlf);
 				
 				System.out.println("\nadded amount of people");
 				System.out.println(bookingCtrl.addAmountOfPeople(5, from, to)); count++;
+				
+				System.out.println("\nadded employee id");
+				//bookingCtrl.add
 				
 				System.out.println("\nadded catering");
 				bookingCtrl.addCateringMenu(menu); count++;
@@ -117,6 +130,7 @@ public class TextualUserInterface {
 				break;
 				
 			//Outside tests
+			//	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	PRINTS ALL BOOKINGS
 			case "PrintAllBookings":
 					try {
 						PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from Booking");
@@ -126,6 +140,22 @@ public class TextualUserInterface {
 						
 					} catch (SQLException e) {e.printStackTrace();}
 				break;
+//				-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	PRINTS ALL CONTACTS
+			case "PrintAllContacts":
+                try {
+                    PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from Contact");
+                    ResultSet rs = psTst.executeQuery();
+                    printResultSet(rs);
+                } catch (SQLException e) {e.printStackTrace();}
+                break;
+//            	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	PRINTS ALL CUSTOMERS
+            case "PrintAllCustomers":
+                try {
+                    PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from Customer");
+                    ResultSet rs = psTst.executeQuery();
+                    printResultSet(rs);
+                } catch (SQLException e) {e.printStackTrace();}
+                break;
 				
 			default:
 				//throw new IllegalArgumentException("Unexpected value: " + input);
