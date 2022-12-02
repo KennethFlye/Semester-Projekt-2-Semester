@@ -29,7 +29,7 @@ public class Booking {
 	
 	public void addTimeslot(BookingTime bt) {
 		bookingTimeslots.add(bt);
-		totalPrice += bt.getEventType().getPrice();
+//		totalPrice += bt.getEventType().getPrice();
 		System.out.println("Time " + bt + " added");
 	}
 	
@@ -42,7 +42,7 @@ public class Booking {
 	
 	public void addCateringMenu(CateringMenu cm) {
 		cateringMenu = cm;
-		totalPrice += cateringMenu.getPrice();
+//		totalPrice += cateringMenu.getPrice();
 		System.out.println("Cateringmenu " + cm + " set");
 	}
 	
@@ -71,7 +71,7 @@ public class Booking {
 		return isPaid;
 	}
 
-	public int amountOfPeople() {
+	public int getAmountOfPeople() {
 		return amountOfPeople;
 	}
 
@@ -79,9 +79,11 @@ public class Booking {
 		return customer;
 	}
 
-	public double getTotal() {
-		return totalPrice;
+	public float getTotal() {
+		// TODO get price from b.ctrl or change gettotal method in b.db
+		return 0;
 	}
+
 	/*public Employee getEmployee() { Outside use case
 		return null;
 	}*/
