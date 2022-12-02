@@ -4,15 +4,17 @@ public class CateringMenu {
 	
 	public enum EnumMenu{
 		
-		CHICKEN("Kylling og Bacon Sandwich"),
-		EGGS("Æg og Rejer Sandwich"),
-		FRIKADEL("Frikadelle Sandwich");
+		CHICKEN("Kylling og Bacon Sandwich", 1),
+		EGGS("Æg og Rejer Sandwich", 2),
+		FRIKADEL("Frikadelle Sandwich", 3);
 		
 		private final String label;
+		private final int id;
 		
 		
-		private EnumMenu(String label) {
+		private EnumMenu(String label, int id) {
 			this.label = label;
+			this.id = id;
 		}
 		
 		public static EnumMenu valueOfLabel(String label) {
@@ -24,6 +26,10 @@ public class CateringMenu {
 			}
 			
 			return null;
+		}
+		
+		public int getId() {
+			return id;
 		}
 		
 		public String getLabel() {
