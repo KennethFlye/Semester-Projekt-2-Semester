@@ -618,7 +618,7 @@ public class CreateBookingMenu extends JFrame {
 		textFieldCountry.setText(foundCustomer.getCountry());
 		textFieldEmail.setText(foundCustomer.getEmail());
 		textFieldName.setText(foundCustomer.getName());
-		textFieldZipcode.setText(foundCustomer.getName());
+		textFieldZipcode.setText(String.valueOf(foundCustomer.getZipCode()));
 		
 	}
 
