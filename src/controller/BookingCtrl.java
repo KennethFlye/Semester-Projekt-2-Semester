@@ -67,6 +67,8 @@ public class BookingCtrl {
 		 *  newBooking.addTimeslot(bt);
 		 * }
 		 */
+		
+		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
 		BookingTime bt = new BookingTime(et, startTime,finishTime);
 		newBooking.addTimeslot(bt);
