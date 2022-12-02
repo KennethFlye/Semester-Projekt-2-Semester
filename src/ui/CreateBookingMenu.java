@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import controller.BookingCtrl;
 import database.DataAccessException;
 import model.CateringMenu.EnumMenu;
+import model.Customer;
 import model.EventType.EnumType;
 
 import javax.swing.JToggleButton;
@@ -508,7 +509,15 @@ public class CreateBookingMenu extends JFrame {
 		// Har den ikke allerede starttidspunktet igennem bookingTime?
 		
 		
-		bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()), startTimeGokart, finishTimeGokart);
+		try {
+			bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()), startTimeGokart, finishTimeGokart);
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -520,7 +529,12 @@ public class CreateBookingMenu extends JFrame {
 		
 		String eventLabel = (String)comboBoxEventTime.getSelectedItem();
 		
-		bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLenght()));
+		try {
+			bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLenght()));
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void handleTimeSlotEventGokart() {
@@ -535,7 +549,12 @@ public class CreateBookingMenu extends JFrame {
 		textFieldTimeSlotGokart.setText(startTimeGokart.toString());
 		
 		
-		bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
+		try {
+			bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
@@ -548,7 +567,12 @@ public class CreateBookingMenu extends JFrame {
 	private void handleAcceptBookingEvent() {
 		// TODO Implement finishBooking();
 		
-		bookingCtrl.finishBooking();
+		try {
+			bookingCtrl.finishBooking();
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void handleResetCustomerEvent() {
@@ -566,7 +590,30 @@ public class CreateBookingMenu extends JFrame {
 	private void handleSearchForCustomerEvent() {
 		// TODO Få den til at returnere kunden så info kan indsættes;
 		
-		bookingCtrl.addCustomer(textFieldCustomerPhone.getText());
+		Customer foundCustomer = null;
+		
+		try {
+			foundCustomer = bookingCtrl.addCustomer(textFieldCustomerPhone.getText());
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		setCustomerInfo(foundCustomer);
+		
+		
+	}
+
+	private void setCustomerInfo(Customer foundCustomer) {
+		
+		textFieldPhoneNo.setText(foundCustomer.getPhoneNo());
+		textFieldAddress.setText(foundCustomer.getAddress());
+		textFieldBirthDate.setText(foundCustomer.getDateOfBirth().toString());
+		textFieldCity.setText(foundCustomer.getCity());
+		textFieldCountry.setText(foundCustomer.getCountry());
+		textFieldEmail.setText(foundCustomer.getEmail());
+		textFieldEmail.setText(foundCustomer.getName());
+		
 	}
 
 	private void handleExitEvent() {
