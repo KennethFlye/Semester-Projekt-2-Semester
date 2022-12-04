@@ -1,11 +1,9 @@
 package ui;
 
-import java.io.Console;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,48 +38,6 @@ public class TextualUserInterface {
 			String input = getScan(scanner);
 			
 			switch(input) {
-			
-			/*-
-			case "exit":
-				running=false;
-				break;
-				
-			case "CreateBooking":
-				//System.out.println("booking created");
-				bookingCtrl.createBooking();
-				break;
-				
-			case "FindBookedTimeslots":
-				//System.out.println("Time found");
-				bookingCtrl.findBookedTimeslots();
-				break;
-				
-			case "AddTime":
-				//System.out.println("added time");
-				bookingCtrl.addTimeslot(LocalDateTime.of(2022, 11, 30, 10, 55), LocalDateTime.of(2022, 12, 1, 14, 30), "Formel 1");
-				break;
-				
-			case "AddCustomer":
-				//System.out.println("added customer");
-				bookingCtrl.addCustomer("45702312");
-				break;
-				
-			case "AddAmountOfPeople":
-				System.out.println("added amount of people");
-				bookingCtrl.addAmountOfPeople(5, null, null);
-				break;
-				
-			case "AddCatering":
-				System.out.println("catering was added");
-				CateringMenu c = new CateringMenu("Kyllinge og Bacon Sandwich", 55);
-				bookingCtrl.addCatering(c);
-				break;
-				
-			case "FinishBooking":
-				System.out.println("booking finished");
-				bookingCtrl.finishBooking();
-				break;
-				*/
 			
 			case "FullTestCase": case"tst":
 					
@@ -132,31 +88,43 @@ public class TextualUserInterface {
 			//Outside tests
 			//	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	PRINTS ALL BOOKINGS
 			case "PrintAllBookings":
-					try {
-						PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from Booking");
-						ResultSet rs = psTst.executeQuery();
-						
-						printResultSet(rs);
-						
-					} catch (SQLException e) {e.printStackTrace();}
+				selectAllFrom("Booking");
 				break;
 //				-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	PRINTS ALL CONTACTS
 			case "PrintAllContacts":
-                try {
-                    PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from Contact");
-                    ResultSet rs = psTst.executeQuery();
-                    printResultSet(rs);
-                } catch (SQLException e) {e.printStackTrace();}
+				selectAllFrom("Contact");
                 break;
 //            	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	PRINTS ALL CUSTOMERS
             case "PrintAllCustomers":
-                try {
-                    PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from Customer");
-                    ResultSet rs = psTst.executeQuery();
-                    printResultSet(rs);
-                } catch (SQLException e) {e.printStackTrace();}
+            	selectAllFrom("Customer");
                 break;
 				
+            case "PrintAllRentOuts":
+            	selectAllFrom("RentOut");
+                break;
+                
+            case "All":
+            case "PRINT":
+            	
+            	selectAllFrom("Booking");
+            	
+            	selectAllFrom("BookingTime");
+            	
+            	selectAllFrom("RentOut");
+            	
+            	selectAllFrom("Customer");
+            	
+            	selectAllFrom("Contact");
+            	
+            	selectAllFrom("TimeSheet");
+            	selectAllFrom("Employee");
+            	selectAllFrom("RentOutGokart");
+            	selectAllFrom("EventType");
+            	selectAllFrom("Gokart");
+            	selectAllFrom("ZipcodeCity");
+            	selectAllFrom("CateringMenu");
+            	break;
+            	
 			default:
 				//throw new IllegalArgumentException("Unexpected value: " + input);
 				System.out.println("No such command as "+ input);
@@ -168,13 +136,25 @@ public class TextualUserInterface {
 		scanner.close();
 	}
 	
+	private static void selectAllFrom(String string) {
+		try {
+			System.out.println("\n"+string);
+            PreparedStatement psTst = DBConnection.getInstance().getConnection().prepareStatement("Select * from "+string);
+            ResultSet rs = psTst.executeQuery();
+            printResultSet(rs);
+        } catch (SQLException e) {e.printStackTrace();}
+		
+	}
+
 	private static String getScan(Scanner scanner) {
 		return scanner.next();
 	}
 	
 	private static void printResultSet(ResultSet rs) throws SQLException {
         int width = rs.getMetaData().getColumnCount();
+        
         int adjustmentSize=20;
+        
         for (int i = 1; i < width+1; i++) {
             String s = rs.getMetaData().getColumnName(i);
             System.out.print(s +" ".repeat(adjustmentSize-s.length()));
@@ -183,10 +163,11 @@ public class TextualUserInterface {
         System.out.print("\n");
         while (rs.next()) {
             for (int i = 1; i < width+1; i++) {
+            	int spacing = adjustmentSize - (rs.getObject(i)!=null ? rs.getObject(i).toString().length() : 4);
+            	if(spacing<1) spacing=1;
+            	
                 System.out.print(
-                        rs.getObject(i)+" ".repeat(
-                                adjustmentSize - (rs.getObject(i)!=null ? 
-                                        rs.getObject(i).toString().length() : 4)));
+                        rs.getObject(i)+" ".repeat(spacing));
             }
             System.out.print("\n");
         }    
