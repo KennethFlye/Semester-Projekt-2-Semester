@@ -3,20 +3,22 @@ package model;
 public class EventType {
 	
 	public enum EnumType{
-		FORMULA_1("Formel 1", 30),
-		LARGE_FORMULA_1("Stor Formel 1", 60),
-		LE_MANS_1_HOUR("LeMans 1 Time", 60),
-		EVENT_HALL_1_HOUR("Eventhal 1 Time", 60),
-		EVENT_HALL_1_AND_HALF_HOUR("Eventhal 1.5 Time", 90),
-		EVENT_HALL_2_HOURS("Eventhal 2 Timer", 120);
+		FORMULA_1("Formel 1", 30, 1),
+		LARGE_FORMULA_1("Stor Formel 1", 60, 1),
+		LE_MANS_1_HOUR("LeMans 1 Time", 60, 1),
+		EVENT_HALL_1_HOUR("Eventhal 1 Time", 60, 2),
+		EVENT_HALL_1_AND_HALF_HOUR("Eventhal 1.5 Time", 90, 2),
+		EVENT_HALL_2_HOURS("Eventhal 2 Timer", 120, 2);
 		
 		
 		public final String label;
 		public final long lenght;
+		public final int locataion;
 		
-		private EnumType(String label, long lenght) {
+		private EnumType(String label, long lenght, int location) {
 			this.label = label;
 			this.lenght = lenght;
+			this.locataion = location;
 		}
 		
 		public static EnumType valueOfLabel(String label) {
@@ -36,6 +38,10 @@ public class EventType {
 		
 		public long getLenght() {
 			return lenght;
+		}
+		
+		public int getLocation() {
+			return locataion;
 		}
 	}
 	

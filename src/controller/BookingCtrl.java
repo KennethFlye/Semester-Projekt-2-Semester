@@ -23,6 +23,8 @@ public class BookingCtrl {
 	
 	//Fields -----------------------------------------------------------------------------------------------
 	private Booking newBooking;
+	
+
 	private List<LocalDateTime> listTs;
 	private BookingTimeDBIF bookingTimeDatabase;
 	private CustomerCtrl customerCtrl;
@@ -51,6 +53,9 @@ public class BookingCtrl {
 		newBooking = new Booking();
 		
 	}
+	public Booking getNewBooking() {
+		return newBooking;
+	}
 	
 	public List<BookingTime> findBookedTimeslots(int year, int month, int day) throws DataAccessException {
 		//TODO evt convert a string (the param of the method) to ints (the param of the return statement) for easier booking
@@ -72,24 +77,23 @@ public class BookingCtrl {
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-<<<<<<< Updated upstream
-		bt = new BookingTime(et, startTime,finishTime); //set as field value, can be used for checking if timeslot requirements are met
-		newBooking.addTimeslot(bt);
-=======
+
 		bt = new BookingTime(et, startTime); //set as field value, can be used for checking if timeslot requirements are met
 		newBooking.addTimeslot(bt); 
->>>>>>> Stashed changes
+
 	}
 	
 	public Customer addCustomer(String phoneNo) throws DataAccessException {
 		return newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
-	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
-		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
+	
+	public boolean addAmountOfPeople(int amount, BookingTime bt) throws DataAccessException {
+		
+		if(bt.getEventType().getEnumType().locataion == 1 && gokartCtrl.checkGokarts(amount, bt.getStartTime(),bt.getFinishTime())==true) {
 			newBooking.setAmountOfPeople(amount);
 		}
-		return gokartCtrl.checkGokarts(amount, startTime, finishTime); 
+		return gokartCtrl.checkGokarts(amount, bt.getStartTime(), bt.getStartTime()); 
 	}
 	
 	public void addCateringMenu(int cateringMenu) throws DataAccessException {
