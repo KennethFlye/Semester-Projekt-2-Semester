@@ -80,14 +80,10 @@ public class BookingCtrl {
 		
 		int amount = newBooking.getAmountOfPeople();
 		int amountOfGroups = 0;
-		if(gokartCtrl.hasEnoughAvailableGokarts(amount, startTime, finishTime)) {
-			amountOfGroups = 1;
-		}
-		else {
-			int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
-			double additionalTimeMultiplication = Math.ceil((amount/available));
-			amountOfGroups = (int) additionalTimeMultiplication;
-		}
+		int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
+		double additionalTimeMultiplication = Math.ceil((amount/available));
+		amountOfGroups = (int) additionalTimeMultiplication;
+		
 		
 		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
 		newBooking.addTimeslot(bt); 
