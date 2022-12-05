@@ -86,6 +86,10 @@ public class Booking {
 	public void setTotal(double total) {
 		totalPrice = total;
 	}
+	
+	public ArrayList<BookingTime> getTimeslots(){
+		return bookingTimeslots; //Returns a list of timeslot(s)
+	}
 
 	/*public Employee getEmployee() { Outside use case
 		return null;
