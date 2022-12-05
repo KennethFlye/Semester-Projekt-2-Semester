@@ -13,7 +13,7 @@ public class BookingTime {
 
 	
 	
-	public BookingTime(EventType et, LocalDateTime startTime) {
+	public BookingTime(EventType et, LocalDateTime startTime, LocalDateTime finishTime) {
 		this.eventType = et;
 		this.startTime=startTime;
 		this.finishTime=startTime.plusMinutes(et.getEnumType().getLenght());
