@@ -79,7 +79,7 @@ public class BookingCtrl {
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
 		
 		int amount = newBooking.getAmountOfPeople();
-		int amountOfGroups = 0;
+		int amountOfGroups = 1;
 		int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
 		double additionalTimeMultiplication = Math.ceil((amount/available));
 		amountOfGroups = (int) additionalTimeMultiplication;
@@ -105,8 +105,8 @@ public class BookingCtrl {
 	
 	public String finishBooking() throws DataAccessException {
 		newBooking.calculateTotalPrice();
-		bookingDatabase.insertBooking(newBooking);
-		int currentId = bookingDatabase.getCurrentId();
+		int currentId = bookingDatabase.insertBooking(newBooking);
+		//int currentId = bookingDatabase.getCurrentId();
 		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
 		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
 	}
