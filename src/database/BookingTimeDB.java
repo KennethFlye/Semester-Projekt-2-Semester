@@ -64,9 +64,9 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			for (BookingTime i: bookingTimes) {
 			insertBookingTime.setString(1, i.getEventType().getEnumType().getLabel());
 			insertBookingTime.setInt(2, bookingid);
-			insertBookingTime.setTime(3, Time.valueOf(i.getStartTime().toLocalTime()));
-			insertBookingTime.setTime(4, Time.valueOf(i.getFinishTime().toLocalTime()));
-			insertBookingTime.executeQuery();
+			insertBookingTime.setTimestamp(3, Timestamp.valueOf(i.getStartTime()));
+			insertBookingTime.setTimestamp(4, Timestamp.valueOf(i.getFinishTime()));
+			insertBookingTime.execute();
 			} 
 			return bookingTimes;
 		} 
