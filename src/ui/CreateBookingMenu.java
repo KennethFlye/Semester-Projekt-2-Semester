@@ -40,7 +40,7 @@ public class CreateBookingMenu extends JFrame {
 	
 	private JLabel lblRaceType, lblCateringMenu, lblCatering, lblAmountOfPeople, lblTImeSlotEvent, lblEventTime, lblTimeSlotGokart;
 	
-	private JButton btnAddCateringMenu, btnChooseTimeSlotEvent, btnChooseTimeSlotGokart;
+	private JButton btnAddCateringMenu, btnChooseTimeSlotEvent, btnChooseTimeSlotGokart, btnAddCustomer;
 	
 	private JRadioButton rdbtnCatering;
 	
@@ -288,7 +288,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_panel_2.gridy = 8;
 		panel_1.add(panel_2, gbc_panel_2);
 		
-		JButton btnAddCustomer = new JButton("Tilføj");
+		btnAddCustomer = new JButton("Tilføj");
 		panel_2.add(btnAddCustomer);
 		
 		JButton btnResetCustomer = new JButton("Reset");
@@ -678,10 +678,23 @@ public class CreateBookingMenu extends JFrame {
 	private void handleResetCustomerEvent() {
 		// TODO Sæt alle tekst felter til at være tomme
 		
+		textFieldPhoneNo.setText("");
+		textFieldAddress.setText("");
+		textFieldBirthDate.setText("");
+		textFieldCity.setText("");
+		textFieldCountry.setText("");
+		textFieldEmail.setText("");
+		textFieldName.setText("");
+		textFieldZipcode.setText("");
+		
+		textFieldCustomerPhone.setText("Tlf.");
+		
+		btnAddCustomer.setVisible(true);
+		
 	}
 
 	private void handleAddCustomerEvent() {
-		// TODO Implent addCustomer() eller er i searchForCustomer;
+		// TODO Implement addCustomer() eller er i searchForCustomer;
 		
 		
 		
@@ -697,6 +710,7 @@ public class CreateBookingMenu extends JFrame {
 			try {
 				foundCustomer = bookingCtrl.addCustomer(textFieldCustomerPhone.getText());
 				setCustomerInfo(foundCustomer);
+				btnAddCustomer.setVisible(false);
 			} catch (DataAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
