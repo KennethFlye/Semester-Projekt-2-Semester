@@ -94,7 +94,8 @@ public class BookingCtrl {
 	
 	public String finishBooking() throws DataAccessException {
 //		newBooking.calculateTotalPrice(); TODO remove comments
-		int currentId = bookingDatabase.insertBooking(newBooking);
+		bookingDatabase.insertBooking(newBooking);
+		int currentId = bookingDatabase.getCurrentId();
 		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
 		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
 	}
