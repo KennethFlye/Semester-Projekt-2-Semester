@@ -56,7 +56,7 @@ public class TextualUserInterface {
 				int menu = 1;
 				String tlf="40404040";
 				
-				if(bookingCtrl.checkTimeslot(EnumType.FORMULA_1, from, to)) {
+				if(bookingCtrl.checkTimeslot(EnumType.FORMULA_1, from,to)) {
 				System.out.println("booking created");
 				bookingCtrl.createBooking(); count++;
 				

@@ -77,7 +77,7 @@ public class BookingCtrl {
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-		bt = new BookingTime(et, startTime,finishTime); //set as field value, can be used for checking if timeslot requirements are met
+		bt = new BookingTime(et, startTime); //set as field value, can be used for checking if timeslot requirements are met
 		newBooking.addTimeslot(bt); 
 	}
 	
