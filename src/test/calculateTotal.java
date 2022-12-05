@@ -29,11 +29,11 @@ class calculateTotal {
 	@Test
 	void test() {
 		//Arrange
-		boo
+		//boo
 		
 		
 		//Act
-		bc.addTimeslot();
+		//bc.addTimeslot();
 		//Assert
 	}
 
