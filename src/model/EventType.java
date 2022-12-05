@@ -34,7 +34,7 @@ public class EventType {
 			return label;
 		}
 		
-		public long getLenght() {
+		public long getLength() {
 			return lenght;
 		}
 	}
