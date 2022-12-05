@@ -77,7 +77,19 @@ public class BookingCtrl {
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-		bt = new BookingTime(et, startTime); //set as field value, can be used for checking if timeslot requirements are met
+		
+		int amount = newBooking.getAmountOfPeople();
+		int amountOfGroups = 0;
+		if(gokartCtrl.hasEnoughAvailableGokarts(amount, startTime, finishTime)) {
+			amountOfGroups = 1;
+		}
+		else {
+			int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
+			double additionalTimeMultiplication = Math.ceil((amount/available));
+			amountOfGroups = (int) additionalTimeMultiplication;
+		}
+		
+		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
 		newBooking.addTimeslot(bt); 
 	}
 	
@@ -85,11 +97,9 @@ public class BookingCtrl {
 		return newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
-	public boolean addAmountOfPeople(int amount, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
-		if(gokartCtrl.checkGokarts(amount, startTime, finishTime)==true) {
+	public boolean addAmountOfPeople(int amount) throws DataAccessException {
 			newBooking.setAmountOfPeople(amount);
-		}
-		return gokartCtrl.checkGokarts(amount, startTime, finishTime); 
+		    return true; //Skal nok ændres til at returne void?
 	}
 	
 	public void addCateringMenu(int cateringMenu) throws DataAccessException {

@@ -20,10 +20,10 @@ public class GokartCtrl {
 		}
 		
 	}
-	public boolean checkGokarts(int amount, LocalDateTime start, LocalDateTime end) throws DataAccessException {
+	public boolean hasEnoughAvailableGokarts(int amount, LocalDateTime start, LocalDateTime end) throws DataAccessException {
 		
 		try {
-			return gokartDB.checkGokarts(amount, start, end);
+			return gokartDB.hasEnoughAvailableGokarts(amount, start, end);
 			
 		}
 		catch(Exception e) {
@@ -31,6 +31,16 @@ public class GokartCtrl {
 			
 		}		
 		
+	}
+	public int getAvailableGokarts(LocalDateTime start, LocalDateTime end) throws DataAccessException {
+		try {
+			return gokartDB.getAvailableGokarts(start, end);
+			
+		}
+		catch(Exception e) {
+			throw new DataAccessException(e, "Could Not Get Gokarts");
+			
+		}	
 	}
 
 }

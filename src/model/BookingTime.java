@@ -13,10 +13,10 @@ public class BookingTime {
 
 	
 	
-	public BookingTime(EventType et, LocalDateTime startTime) {
+	public BookingTime(EventType et, LocalDateTime startTime, int groups) {
 		this.eventType = et;
 		this.startTime=startTime;
-		this.finishTime=startTime.plusMinutes(et.getEnumType().getLength());
+		this.finishTime=startTime.plusMinutes((et.getEnumType().getLength()*groups));
 	}
 		
 		

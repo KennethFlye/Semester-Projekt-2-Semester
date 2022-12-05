@@ -600,7 +600,7 @@ public class CreateBookingMenu extends JFrame {
 		
 		
 		try {
-			bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()), startTimeGokart, finishTimeGokart);
+			bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()));
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
