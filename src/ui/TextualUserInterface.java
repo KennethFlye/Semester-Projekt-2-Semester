@@ -14,6 +14,7 @@ import database.DataAccessException;
 import model.BookingTime;
 import model.CateringMenu;
 import model.CateringMenu.EnumMenu;
+import model.EventType.EnumType;
 
 /**TUI - Testing class, not for standard use
  * <p>Methods <ul>
@@ -45,17 +46,17 @@ public class TextualUserInterface {
 				
 				//Test parameters
 				CateringMenu catering = new CateringMenu(EnumMenu.CHICKEN, 210);
-				LocalDateTime from = LocalDateTime.now();
+				//LocalDateTime from = LocalDateTime.now();
 				
-				int year = 2022, month=12, day=4;
-				int time = 10, minute = 55;
-				
+				int year = 2022, month=11, day=28;
+				int time = 18, minute = 55;
+				LocalDateTime from= LocalDateTime.of(year,month,day,8, 30);
 				LocalDateTime to = LocalDateTime.of(year, month, day, time, minute);
 				String type = "Formel 1";
 				int menu = 1;
 				String tlf="40404040";
 				
-				
+				if(bookingCtrl.checkTimeslot(EnumType.FORMULA_1, from, to)) {
 				System.out.println("booking created");
 				bookingCtrl.createBooking(); count++;
 				
@@ -82,7 +83,7 @@ public class TextualUserInterface {
 				bookingCtrl.finishBooking(); count++;
 				
 				System.out.println("\n full test completed " + count+"/"+max);
-				
+				} else System.out.println("Timeslot already taken: [" +from + " - "+to.toString()+"]" );
 				break;
 				
 			//Outside tests
@@ -124,7 +125,14 @@ public class TextualUserInterface {
             	selectAllFrom("ZipcodeCity");
             	selectAllFrom("CateringMenu");
             	break;
+            case "Overlap":
+            	for (int i = 1; i < 30; i++) {
+            		LocalDateTime start = LocalDateTime.of(2022, 11, i, 9, 30);
+                	LocalDateTime end = LocalDateTime.of(2022, 12, i, 18, 30);
+                	System.out.println(bookingCtrl.checkTimeslot(EnumType.LE_MANS_1_HOUR, start, end));
+				}
             	
+            	break;
 			default:
 				//throw new IllegalArgumentException("Unexpected value: " + input);
 				System.out.println("No such command as "+ input);

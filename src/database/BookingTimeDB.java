@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +44,9 @@ public class BookingTimeDB implements BookingTimeDBIF {
 		List<BookingTime> res = new ArrayList<BookingTime>();
 			try {
 				//Type
-				
 				getBookingTimesByDate.setDate(1, date);
 				Timestamp ts = Timestamp.valueOf(date.toString()+" 23:59:59");
 				getBookingTimesByDate.setTimestamp(2, ts);
-				
 				
 				rs = getBookingTimesByDate.executeQuery();
 				res = buildObjects(rs);
@@ -54,8 +55,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 				e.printStackTrace();
 			}
 			
-			return res;
-		
+			return res;	
 	}
 			
 	@Override
@@ -93,8 +93,39 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			}
 			return res;
 		}
-		
-	
+
+			
+		@Override
+		public boolean checkTimeslot(EnumType type, LocalDateTime startTime, LocalDateTime finishTime) {
+			List<BookingTime> btList = null;
+			try {
+				btList = getBookedTimeslots(startTime.getYear(), startTime.getMonth().getValue(), startTime.getDayOfMonth());
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			}
+			System.out.println(btList);
+			boolean returnBool = true;
+			for (int i = 0; i < btList.size(); i++) {
+				boolean inFront = false, inFront2 = false;
+				ZoneOffset zo = ZoneOffset.systemDefault().getRules().getOffset(Instant.now());
+				long timeA = btList.get(i).getStartTime().toEpochSecond(zo);
+				long timeB = btList.get(i).getFinishTime().toEpochSecond(zo);
+				long checkedTimeA = startTime.toEpochSecond(zo);
+				long checkedTimeB = finishTime.toEpochSecond(zo);
+				
+				if(timeA<checkedTimeA||timeA<checkedTimeB)
+					inFront = true;
+				
+				if(timeB<checkedTimeA)
+					inFront2 = true;
+				
+				if(inFront!=inFront2) {
+					returnBool = false;
+					
+				}
+			}
+			return returnBool;			
+		}
 		}
 		
 		

@@ -57,6 +57,11 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots(year, month, day);
 	}
 	
+	/**Returns true if there are no bookings in the given timespan*/
+	public boolean checkTimeslot(EnumType type, LocalDateTime startTime,LocalDateTime finishTime) {
+		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime);
+	}
+	
 	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
 		/*pseudo TODO
 		 * get bookingdb
