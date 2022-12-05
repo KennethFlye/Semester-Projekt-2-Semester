@@ -93,15 +93,16 @@ public class BookingCtrl {
 	}
 	
 	public String finishBooking() throws DataAccessException {
+		newBooking.calculateTotalPrice();
 		bookingDatabase.insertBooking(newBooking);
-		return "Booking was saved. Total is:" + calculateTotalPrice() + " kr.";
+		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
 	}
 	
 	private double calculateTotalPrice() {
 		Double total = bt.getEventType().getPrice();
 		total += newBooking.getCatering().getPrice();
 		total *= newBooking.getAmountOfPeople();
-		return total;
+		return total; //TODO save total to the saved booking object or in db
 	}
 	
 }
