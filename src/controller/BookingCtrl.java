@@ -50,7 +50,7 @@ public class BookingCtrl {
 	//Methods -----------------------------------------------------------------------------------------------
 	
 	public void createBooking() {
-		newBooking = new Booking();
+		newBooking = new Booking(); 
 		
 	}
 	public Booking getNewBooking() {
@@ -62,7 +62,12 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots(year, month, day);
 	}
 	
-	public void addTimeslot(String eventType, LocalDateTime startTime) throws DataAccessException {
+	/**Returns true if there are no bookings in the given timespan*/
+	public boolean checkTimeslot(EnumType type, LocalDateTime startTime,LocalDateTime finishTime) {
+		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime);
+	}
+	
+	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
 		/*pseudo TODO
 		 * get bookingdb
 		 * get call a method like checkTimeslot with event and localdatetime
@@ -71,16 +76,14 @@ public class BookingCtrl {
 		 * BookingTime bt = null;
 		 * if(startTime != findBookedTimeslots() && finish != findbookedslots){
 		 * 	bt = new bookingtime(et, start, finish);
-		 *  newBooking.addTimeslot(bt);
+		 *  newBooking.addTimeslot(bt); 
 		 * }
 		 */
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-
 		bt = new BookingTime(et, startTime); //set as field value, can be used for checking if timeslot requirements are met
 		newBooking.addTimeslot(bt); 
-
 	}
 	
 	public Customer addCustomer(String phoneNo) throws DataAccessException {
@@ -102,15 +105,16 @@ public class BookingCtrl {
 	}
 	
 	public String finishBooking() throws DataAccessException {
+		newBooking.calculateTotalPrice();
 		bookingDatabase.insertBooking(newBooking);
-		return "Booking was saved. Total is:" + calculateTotalPrice() + " kr.";
+		int currentId = bookingDatabase.getCurrentId();
+		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
+		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
 	}
 	
-	private double calculateTotalPrice() {
-		Double total = bt.getEventType().getPrice();
-		total += newBooking.getCatering().getPrice();
-		total *= newBooking.getAmountOfPeople();
-		return total;
-	}
+	//Only for testing purposes - returns current booking
+		public Booking getBooking() {
+			return newBooking;
+		}
 	
 }

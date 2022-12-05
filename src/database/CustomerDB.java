@@ -46,27 +46,40 @@ public class CustomerDB implements CustomerDBIF{
 			rs = findByPhoneNo.executeQuery();
 			
 			while(rs.next()) {
-				firstName = rs.getString("firstName");
-				lastName = rs.getString("lastName");
-				fullName = firstName + " " + lastName;
-				phone = rs.getString("phone");
-				email = rs.getString("email");
-				address = rs.getString("address");
-				zipCode = rs.getInt("zipCode");
-				
-				findCityByZipCode.setInt(1, zipCode);
-				rsCity = findCityByZipCode.executeQuery();
-				
-				country = rs.getString("country");
-				dateOfBirth = rs.getDate("dateOfBirth").toLocalDate();
-				
-			
-				
-				while(rsCity.next()) {
-					city = rsCity.getString("zipcodeCity");
+				if(rs.getDate("dateOfBirth") != null) {
+					firstName = rs.getString("firstName");
+					lastName = rs.getString("lastName");
+					fullName = firstName + " " + lastName;
+					phone = rs.getString("phone");
+					email = rs.getString("email");
+					address = rs.getString("address");
+					zipCode = rs.getInt("zipCode");
 					
-					foundCustomer = new Customer(fullName, phoneNo, email, address, zipCode, city, country, dateOfBirth);
+					findCityByZipCode.setInt(1, zipCode);
+					rsCity = findCityByZipCode.executeQuery();
+					
+					country = rs.getString("country");
+					dateOfBirth = rs.getDate("dateOfBirth").toLocalDate();
+					
+				
+					
+					while(rsCity.next()) {
+						city = rsCity.getString("zipcodeCity");
+						
+						foundCustomer = new Customer(fullName, phone, email, address, zipCode, city, country, dateOfBirth);
+					}
 				}
+				else {
+					firstName = rs.getString("firstName");
+					lastName = rs.getString("lastName");
+					fullName = firstName + " " + lastName;
+					
+					phone = rs.getString("phone");
+					
+					foundCustomer = new Customer(fullName, phone);
+				}
+				
+				
 				
 			}
 			

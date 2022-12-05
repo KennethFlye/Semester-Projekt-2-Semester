@@ -5,7 +5,20 @@ import java.util.regex.Pattern;
 
 public class PatternCheck {
 	
-public boolean checkSignedInteger(String check) {
+	public boolean checkPhoneNo(String check) {
+		
+		String phoneNoPattern = "^[0-9]{8}|(\\+)[0-9]{10}$";
+		
+		Pattern pattern = Pattern.compile(phoneNoPattern);
+		
+		Matcher m = pattern.matcher(check);
+		
+		return m.find();
+		
+		
+	}
+	
+	public boolean checkSignedInteger(String check) {
 		
 		String signedIntegerPattern = "^(\\+|-)[0-9]+$";
 		
@@ -42,7 +55,7 @@ public boolean checkSignedInteger(String check) {
 	
 	public boolean checkCPRNo(String check) {
 		
-		String CPRNoPattern = "^([0-9]){6}\\-([0-9]){4}||([0-9]){10}$";
+		String CPRNoPattern = "^([0-9]){6}\\-([0-9]){4}|([0-9]){10}$";
 		
 		Pattern pattern = Pattern.compile(CPRNoPattern);
 		

@@ -45,21 +45,19 @@ class TestAddTimeSlot {
 		//Arrange
 		bc.createBooking();
 		EventType et = new EventType(EnumType.FORMULA_1);
-<<<<<<< Updated upstream
-		LocalDateTime startTime = LocalDateTime.of(2022, 11, 30, 12, 0);
-=======
 		BookingTime bt = new BookingTime(et, d);
->>>>>>> Stashed changes
 		
 		
 		//Act
 		bc.addTimeslot(et.getEnumType().getLabel(), startTime);
 		//Assert
-<<<<<<< Updated upstream
+
 		//assertEquals();
-=======
+
 		assertEquals( d.plusMinutes(et.getEnumType().getLength()),bt.getFinishTime());
->>>>>>> Stashed changes
+
+		assertEquals(bt.getFinishTime(), bt.getStartTime().plusMinutes(et.getEnumType().getLength()));
+
 	}
 
 }

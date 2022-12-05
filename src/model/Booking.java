@@ -79,13 +79,35 @@ public class Booking {
 		return customer;
 	}
 
-	public float getTotal() {
-		// TODO get price from b.ctrl or change gettotal method in b.db
-		return 0;
+	public double getTotal() {
+		return totalPrice;
+	}
+	
+	public void setTotal(double total) {
+		totalPrice = total;
+	}
+	
+	public ArrayList<BookingTime> getTimeslots(){
+		return bookingTimeslots; //Returns a list of timeslot(s)
 	}
 
 	/*public Employee getEmployee() { Outside use case
 		return null;
 	}*/
+	
+	public void calculateTotalPrice() {
+		double total = 0;
+		for (int i = 0; i < bookingTimeslots.size(); i++) {
+			total += bookingTimeslots.get(i).getEventType().getPrice();
+		}
+		
+		if(hasCateringMenu()) {
+			total += getCatering().getPrice();
+		}
+		
+		total *= getAmountOfPeople();
+		
+		setTotal(total);
+	}
 		
 }
