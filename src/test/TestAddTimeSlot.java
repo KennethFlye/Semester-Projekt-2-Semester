@@ -26,7 +26,8 @@ class TestAddTimeSlot {
 	void setUp() throws Exception {
 		con = DBConnection.getInstance();
 		bc = new BookingCtrl();
-		d = LocalDateTime.of(2022, 11, 30, 12, 0);
+	
+		d = LocalDateTime.of(2022, 11, 28, 15, 30);
 	
 	}
 
@@ -41,7 +42,7 @@ class TestAddTimeSlot {
 	
 	
 	@Test
-	void testT() throws DataAccessException {
+	void testValidTime() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		EventType et = new EventType(EnumType.FORMULA_1);
@@ -49,15 +50,25 @@ class TestAddTimeSlot {
 		
 		
 		//Act
-		bc.addTimeslot(et.getEnumType().getLabel(), startTime);
+		bc.addTimeslot(et.getEnumType().getLabel(), d);
 		//Assert
 
-		//assertEquals();
+		assertEquals(d.plusMinutes(et.getEnumType().getLength()),bt.getFinishTime());
 
-		assertEquals( d.plusMinutes(et.getEnumType().getLength()),bt.getFinishTime());
-
-		assertEquals(bt.getFinishTime(), bt.getStartTime().plusMinutes(et.getEnumType().getLength()));
 
 	}
+	@Test
+	void testInvalidTime ( ) {
+		//Arrange
+		
+		//Act
+		
+		//Assert
+	}
+	
+	
+	//Arrange
+	//Act
+	//Assert
 
 }
