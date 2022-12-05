@@ -83,7 +83,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 		
 		private BookingTime buildObject(ResultSet rs) throws SQLException {
 			EventType tempEvent = new EventType(EnumType.valueOfLabel(rs.getString("eventType")));
-			BookingTime bt = new BookingTime(tempEvent, rs.getTimestamp("startTime").toLocalDateTime());
+			BookingTime bt = new BookingTime(tempEvent, rs.getTimestamp("startTime").toLocalDateTime(), 1);
 			return bt;
 		}
 	

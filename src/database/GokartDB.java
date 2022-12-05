@@ -20,6 +20,15 @@ public class GokartDB implements GokartDBIF {
 	}
 
 	
+	public boolean hasEnoughAvailableGokarts(int amount, LocalDateTime start, LocalDateTime end) throws SQLException {
+		int available = getAvailableGokarts(start, end);
+		if (available >= amount) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	/**
 	 * Checks whether the required amount of gokarts are available for a booking. A gokart is available if it is not
 	 * rented out at the time of the booking. The method works by finding each gokart's rentouts, and checking whether 
@@ -30,12 +39,12 @@ public class GokartDB implements GokartDBIF {
 	 * @param end date and time for booking
 	 */
 	@Override
-	public boolean checkGokarts(int amount, LocalDateTime start, LocalDateTime end) throws SQLException {
+	public int getAvailableGokarts(LocalDateTime start, LocalDateTime end) throws SQLException {
 		int available = 0;
 		
 		ResultSet rsGetAll = getAllGokarts.executeQuery();
 		
-		while (rsGetAll.next() && available < amount) {
+		while (rsGetAll.next()) {
 			int kartId = rsGetAll.getInt("gokartNumber");
 			
 			getInfoForRentedGokart.setInt(1, kartId);
@@ -72,7 +81,7 @@ public class GokartDB implements GokartDBIF {
 			
 			
 		}
-		return (available >= amount);
+		return available;
 		
 	}
 	
