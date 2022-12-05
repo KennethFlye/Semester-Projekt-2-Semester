@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import controller.BookingCtrl;
 import database.DataAccessException;
 import model.CateringMenu.EnumMenu;
+import model.Customer;
 import model.EventType.EnumType;
 
 import javax.swing.JToggleButton;
@@ -58,7 +59,7 @@ public class CreateBookingMenu extends JFrame {
 	private String[] bookingTypes = {"Gokart & Event Pakke", "Gokart", "Event"};
 	private String[] raceTypes = {EnumType.FORMULA_1.getLabel(), EnumType.LARGE_FORMULA_1.getLabel(), EnumType.LE_MANS_1_HOUR.getLabel()};
 	private String[] eventLength = {EnumType.EVENT_HALL_1_HOUR.getLabel(), EnumType.EVENT_HALL_1_AND_HALF_HOUR.getLabel(), EnumType.EVENT_HALL_2_HOURS.getLabel()};
-	private String[] foodTypes = {EnumMenu.KYLLING_OG_BACON.getLabel(), EnumMenu.ÆG_OG_REJER.getLabel(), EnumMenu.FRIKADELLE.getLabel()};
+	private String[] foodTypes = {EnumMenu.CHICKEN.getLabel(), EnumMenu.EGGS.getLabel(), EnumMenu.FRIKADEL.getLabel()};
 	private JTextField textFieldTimeSlotEvent;
 
 	/**
@@ -500,7 +501,12 @@ public class CreateBookingMenu extends JFrame {
 	private void handleAddCateringMenuEvent() {
 		// TODO tilføj Id til EnumMenu
 		
-		//bookingCtrl.addCateringMenu(EnumMenu.valueOfLabel((String)comboBoxFoodType.getSelectedItem()).getId()); //
+		try {
+			bookingCtrl.addCateringMenu(EnumMenu.valueOfLabel((String)comboBoxFoodType.getSelectedItem()).getId());
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //
 		
 	}
 
@@ -508,7 +514,15 @@ public class CreateBookingMenu extends JFrame {
 		// Har den ikke allerede starttidspunktet igennem bookingTime?
 		
 		
-		bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()), startTimeGokart, finishTimeGokart);
+		try {
+			bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()), startTimeGokart, finishTimeGokart);
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -520,7 +534,12 @@ public class CreateBookingMenu extends JFrame {
 		
 		String eventLabel = (String)comboBoxEventTime.getSelectedItem();
 		
-		bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLenght()));
+		try {
+			bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLenght()));
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void handleTimeSlotEventGokart() {
@@ -535,7 +554,12 @@ public class CreateBookingMenu extends JFrame {
 		textFieldTimeSlotGokart.setText(startTimeGokart.toString());
 		
 		
-		bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
+		try {
+			bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
@@ -548,7 +572,14 @@ public class CreateBookingMenu extends JFrame {
 	private void handleAcceptBookingEvent() {
 		// TODO Implement finishBooking();
 		
-		bookingCtrl.finishBooking();
+		try {
+			bookingCtrl.finishBooking();
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.dispose();
 	}
 
 	private void handleResetCustomerEvent() {
@@ -566,7 +597,31 @@ public class CreateBookingMenu extends JFrame {
 	private void handleSearchForCustomerEvent() {
 		// TODO Få den til at returnere kunden så info kan indsættes;
 		
-		bookingCtrl.addCustomer(textFieldCustomerPhone.getText());
+		Customer foundCustomer = null;
+		
+		try {
+			foundCustomer = bookingCtrl.addCustomer(textFieldCustomerPhone.getText());
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		setCustomerInfo(foundCustomer);
+		
+		
+	}
+
+	private void setCustomerInfo(Customer foundCustomer) {
+		
+		textFieldPhoneNo.setText(foundCustomer.getPhoneNo());
+		textFieldAddress.setText(foundCustomer.getAddress());
+		textFieldBirthDate.setText(foundCustomer.getDateOfBirth().toString());
+		textFieldCity.setText(foundCustomer.getCity());
+		textFieldCountry.setText(foundCustomer.getCountry());
+		textFieldEmail.setText(foundCustomer.getEmail());
+		textFieldName.setText(foundCustomer.getName());
+		textFieldZipcode.setText(String.valueOf(foundCustomer.getZipCode()));
+		
 	}
 
 	private void handleExitEvent() {

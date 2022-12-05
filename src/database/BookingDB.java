@@ -15,27 +15,18 @@ public class BookingDB implements BookingDBIF {
 	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?)";
 	private PreparedStatement insertBookingPSNoFood;
 	
-	
-	public BookingDB() {
-		
+	@Override
+	public void insertBooking(Booking newBooking) throws DataAccessException {
 		Connection connection;
+		connection = DBConnection.getInstance().getConnection();
 		try {
-			//Get connection
-			connection = DBConnection.getInstance().getConnection();
-			
-			//Initialize prepared statement
 			insertBookingPSFood = connection.prepareStatement(INSERTBOOKING_Q_FOOD);
 			insertBookingPSNoFood = connection.prepareStatement(INSERTBOOKING_Q_NOFOOD);
+		} catch (SQLException e1) {
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 		
-	}
-	
-	@Override
-	public void insertBooking(Booking newBooking) {
 		PreparedStatement ps;
 		
 		if(newBooking.hasCateringMenu())
@@ -45,14 +36,17 @@ public class BookingDB implements BookingDBIF {
 		
 		try {
 			
+			//Start the transaction, sets autocommit to false
+			DBConnection.getInstance().startTransaction();
+			
 			//Total price
-			ps.setFloat(1, newBooking.getPrice());
+			ps.setFloat(1, (float) newBooking.getTotal());
 			
 			//Creation date
 			ps.setDate(2, Date.valueOf(newBooking.getCreationDate().toLocalDate()));
 			
 			//Amount of people
-			ps.setInt(3, newBooking.amountOfPeople());
+			ps.setInt(3, newBooking.getAmountOfPeople());
 			
 			//Is paid?
 			ps.setInt(4, newBooking.isPaid()?1:0);
@@ -65,25 +59,27 @@ public class BookingDB implements BookingDBIF {
 			//ps.setInt(6, newBooking.getEmployee().getId());// Outside use case
 			//ps.setInt(6, 1);
 			
-			/* TODO uncomment when getID() is made
 			//Menu id
 			if(newBooking.hasCateringMenu())
-				ps.setInt(7, newBooking.getCatering().getID());
-			//else
-				//ps.setInt();
-			*/
+				ps.setInt(6, newBooking.getCatering().getId());
+			
+			//Commits the transaction and sets autocommit to true
+			DBConnection.getInstance().commitTransaction();
 			
 			ps.execute();
 			ps.close();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			try {
+				//Undoes the changes that were tried to make and sets autocommit true
+				DBConnection.getInstance().rollbackTransaction();
+			}
+			catch(SQLException ex) {
+				throw new DataAccessException(ex, "Transaction cant be rolled back");
+			}
+			throw new DataAccessException(e, "Transaction couldnt be committed");
 		}
-		
-		
+				
 	}
 
-	
-	
-	
 }

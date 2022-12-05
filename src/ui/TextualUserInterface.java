@@ -13,7 +13,9 @@ import java.util.Scanner;
 import controller.BookingCtrl;
 import database.DBConnection;
 import database.DataAccessException;
+import model.BookingTime;
 import model.CateringMenu;
+import model.CateringMenu.EnumMenu;
 
 /**TUI - Testing class, not for standard use
  * <p>Methods <ul>
@@ -82,9 +84,9 @@ public class TextualUserInterface {
 				*/
 			
 			case "FullTestCase": case"tst":
-				CateringMenu catering = new CateringMenu("Kyllinge og Bacon Sandwich", 55);
+				CateringMenu catering = new CateringMenu(EnumMenu.CHICKEN, 55);
 				LocalDateTime from = LocalDateTime.now();
-				LocalDateTime to = LocalDateTime.of(2022, 12, 4, 10, 55);
+				LocalDateTime to = LocalDateTime.of(2022, 12, 4, 10, 55);	
 				int count=0; int max=7;
 				String type = "Formel 1";
 				int menu = 1;
@@ -93,7 +95,7 @@ public class TextualUserInterface {
 				bookingCtrl.createBooking(); count++;
 				
 				System.out.println("\nfoundtimeslots");
-				List<LocalDateTime> l = bookingCtrl.findBookedTimeslots(); count++;
+				List<BookingTime> l = bookingCtrl.findBookedTimeslots(2022, 12, 2); count++;
 				System.out.println(l);
 				
 				System.out.println("\nadded time");

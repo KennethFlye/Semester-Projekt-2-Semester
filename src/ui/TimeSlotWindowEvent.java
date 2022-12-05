@@ -56,7 +56,7 @@ public class TimeSlotWindowEvent extends JDialog {
 		super((java.awt.Frame) null, true);
 		setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
 		this.bookingCtrl = bookingCtrl;
-		setBounds(100, 100, 550, 300);
+		setBounds(100, 100, 750, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -113,6 +113,9 @@ public class TimeSlotWindowEvent extends JDialog {
 				tableTimeslot.setModel(dtm);
 				// Her
 				panelCenter.add(tableTimeslot, BorderLayout.EAST);
+				
+				tableTimeslot.getColumnModel().getColumn(1).setMinWidth(200);
+				tableTimeslot.getColumnModel().getColumn(2).setMinWidth(200);
 			}
 			{
 				JPanel panelCenterWest = new JPanel();
@@ -205,7 +208,7 @@ public class TimeSlotWindowEvent extends JDialog {
 		// TODO Implement Retrieve Booked Times And Add To Table
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate searchDate = LocalDate.parse(textFieldStartTime.getText(), formatter);
+		LocalDate searchDate = LocalDate.parse(textFieldChoosenDay.getText(), formatter);
 		
 		List<BookingTime> bookedTimes = null;
 		
@@ -223,7 +226,7 @@ public class TimeSlotWindowEvent extends JDialog {
 		
 		//Loop over alle tider der bliver returneret
 		for (BookingTime element : bookedTimes) {
-			dtm.addRow(new Object[] {element.getEventType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
+			dtm.addRow(new Object[] {element.getEventType().getEnumType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
 		}
 		
 	}

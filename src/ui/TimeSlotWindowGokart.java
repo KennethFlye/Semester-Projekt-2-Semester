@@ -59,7 +59,7 @@ public class TimeSlotWindowGokart extends JDialog {
 		super((java.awt.Frame) null, true);
 		setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
 		this.bookingCtrl = bookingCtrl;
-		setBounds(100, 100, 550, 300);
+		setBounds(100, 100, 750, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -109,6 +109,8 @@ public class TimeSlotWindowGokart extends JDialog {
 			{
 				tableTimeslot = new JTable();
 				
+				
+				
 				dtm = new DefaultTableModel(0,0);
 				dtm.setColumnIdentifiers(columnNames);
 				panelCenter.setLayout(new BorderLayout(0, 0));
@@ -116,6 +118,9 @@ public class TimeSlotWindowGokart extends JDialog {
 				tableTimeslot.setModel(dtm);
 				// Her
 				panelCenter.add(tableTimeslot, BorderLayout.EAST);
+				
+				tableTimeslot.getColumnModel().getColumn(1).setMinWidth(200);
+				tableTimeslot.getColumnModel().getColumn(2).setMinWidth(200);
 			}
 			{
 				JPanel panelCenterWest = new JPanel();
@@ -207,7 +212,9 @@ public class TimeSlotWindowGokart extends JDialog {
 	private void handleSearchDAyEvent() {
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate searchDate = LocalDate.parse(textFieldStartTime.getText(), formatter);
+		LocalDate searchDate = LocalDate.parse(textFieldChoosenDay.getText(), formatter);
+		
+		System.out.println(searchDate.toString());
 		
 		List<BookingTime> bookedTimes = null;
 		
