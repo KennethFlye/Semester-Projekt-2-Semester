@@ -41,7 +41,7 @@ class TestAddTimeSlot {
 		//Act
 		bc.addTimeslot(et.getEnumType().getLabel(), bt.getStartTime(), bt.getFinishTime());
 		//Assert
-		assertEquals(bt.getFinishTime(), bt.getStartTime().plusMinutes(et.getEnumType().getLenght()));
+		assertEquals(bt.getFinishTime(), bt.getStartTime().plusMinutes(et.getEnumType().getLength()));
 	}
 
 }

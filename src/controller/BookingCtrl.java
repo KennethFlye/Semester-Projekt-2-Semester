@@ -57,6 +57,11 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots(year, month, day);
 	}
 	
+	/**Returns true if there are no bookings in the given timespan*/
+	public boolean checkTimeslot(EnumType type, LocalDateTime startTime,LocalDateTime finishTime) {
+		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime);
+	}
+	
 	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
 		/*pseudo TODO
 		 * get bookingdb
@@ -72,7 +77,7 @@ public class BookingCtrl {
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-		bt = new BookingTime(et, startTime,finishTime); //set as field value, can be used for checking if timeslot requirements are met
+		bt = new BookingTime(et, startTime); //set as field value, can be used for checking if timeslot requirements are met
 		newBooking.addTimeslot(bt); 
 	}
 	
@@ -93,8 +98,9 @@ public class BookingCtrl {
 	}
 	
 	public String finishBooking() throws DataAccessException {
-//		newBooking.calculateTotalPrice(); TODO remove comments
-		int currentId = bookingDatabase.insertBooking(newBooking);
+		newBooking.calculateTotalPrice();
+		bookingDatabase.insertBooking(newBooking);
+		int currentId = bookingDatabase.getCurrentId();
 		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
 		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
 	}
