@@ -320,12 +320,37 @@ public class CreateBookingMenu extends JFrame {
 		gbc_comboBoxBookingType.gridy = 0;
 		centerPanelEast.add(comboBoxBookingType, gbc_comboBoxBookingType);
 		
+		lblAmountOfPeople = new JLabel("Antal Personer");
+		GridBagConstraints gbc_lblAmountOfPeople = new GridBagConstraints();
+		gbc_lblAmountOfPeople.anchor = GridBagConstraints.EAST;
+		gbc_lblAmountOfPeople.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAmountOfPeople.gridx = 0;
+		gbc_lblAmountOfPeople.gridy = 1;
+		centerPanelEast.add(lblAmountOfPeople, gbc_lblAmountOfPeople);
+		
+		textFieldAmountOfPeople = new JTextField();
+		GridBagConstraints gbc_textFieldAmountOfPeople = new GridBagConstraints();
+		gbc_textFieldAmountOfPeople.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldAmountOfPeople.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldAmountOfPeople.gridx = 1;
+		gbc_textFieldAmountOfPeople.gridy = 1;
+		centerPanelEast.add(textFieldAmountOfPeople, gbc_textFieldAmountOfPeople);
+		textFieldAmountOfPeople.setColumns(10);
+		
+		JButton btnAddAmountOfPeople = new JButton("Tilføj");
+		GridBagConstraints gbc_btnAddAmountOfPeople = new GridBagConstraints();
+		gbc_btnAddAmountOfPeople.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAddAmountOfPeople.gridx = 2;
+		gbc_btnAddAmountOfPeople.gridy = 1;
+		centerPanelEast.add(btnAddAmountOfPeople, gbc_btnAddAmountOfPeople);
+		btnAddAmountOfPeople.addActionListener((e) -> handleAddAmountOfPeopleEvent());
+		
 		lblRaceType = new JLabel("Løbstype");
 		GridBagConstraints gbc_lblRaceType = new GridBagConstraints();
 		gbc_lblRaceType.anchor = GridBagConstraints.EAST;
 		gbc_lblRaceType.insets = new Insets(0, 0, 5, 5);
 		gbc_lblRaceType.gridx = 0;
-		gbc_lblRaceType.gridy = 1;
+		gbc_lblRaceType.gridy = 2;
 		centerPanelEast.add(lblRaceType, gbc_lblRaceType);
 		
 		comboBoxRaceType = new JComboBox(raceTypes);
@@ -333,7 +358,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_comboBoxRaceType.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxRaceType.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxRaceType.gridx = 1;
-		gbc_comboBoxRaceType.gridy = 1;
+		gbc_comboBoxRaceType.gridy = 2;
 		centerPanelEast.add(comboBoxRaceType, gbc_comboBoxRaceType);
 		
 		lblEventTime = new JLabel("Event Tid");
@@ -341,7 +366,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblEventTime.anchor = GridBagConstraints.EAST;
 		gbc_lblEventTime.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEventTime.gridx = 0;
-		gbc_lblEventTime.gridy = 2;
+		gbc_lblEventTime.gridy = 3;
 		centerPanelEast.add(lblEventTime, gbc_lblEventTime);
 		
 		comboBoxEventTime = new JComboBox(eventLength);
@@ -349,7 +374,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_comboBoxEventTime.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxEventTime.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxEventTime.gridx = 1;
-		gbc_comboBoxEventTime.gridy = 2;
+		gbc_comboBoxEventTime.gridy = 3;
 		centerPanelEast.add(comboBoxEventTime, gbc_comboBoxEventTime);
 		
 		lblTimeSlotGokart = new JLabel("Tidspunkt Gokart");
@@ -357,7 +382,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblTimeSlotGokart.anchor = GridBagConstraints.EAST;
 		gbc_lblTimeSlotGokart.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTimeSlotGokart.gridx = 0;
-		gbc_lblTimeSlotGokart.gridy = 3;
+		gbc_lblTimeSlotGokart.gridy = 4;
 		centerPanelEast.add(lblTimeSlotGokart, gbc_lblTimeSlotGokart);
 		
 		textFieldTimeSlotGokart = new JTextField();
@@ -365,7 +390,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_textFieldTimeSlotGokart.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldTimeSlotGokart.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldTimeSlotGokart.gridx = 1;
-		gbc_textFieldTimeSlotGokart.gridy = 3;
+		gbc_textFieldTimeSlotGokart.gridy = 4;
 		centerPanelEast.add(textFieldTimeSlotGokart, gbc_textFieldTimeSlotGokart);
 		textFieldTimeSlotGokart.setColumns(10);
 		textFieldTimeSlotGokart.setEditable(false);
@@ -375,7 +400,7 @@ public class CreateBookingMenu extends JFrame {
 		GridBagConstraints gbc_btnChooseTimeSlotGokart = new GridBagConstraints();
 		gbc_btnChooseTimeSlotGokart.insets = new Insets(0, 0, 5, 0);
 		gbc_btnChooseTimeSlotGokart.gridx = 2;
-		gbc_btnChooseTimeSlotGokart.gridy = 3;
+		gbc_btnChooseTimeSlotGokart.gridy = 4;
 		centerPanelEast.add(btnChooseTimeSlotGokart, gbc_btnChooseTimeSlotGokart);
 		btnChooseTimeSlotGokart.addActionListener((e) -> handleTimeSlotEventGokart());
 		
@@ -385,7 +410,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblTImeSlotEvent.anchor = GridBagConstraints.EAST;
 		gbc_lblTImeSlotEvent.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTImeSlotEvent.gridx = 0;
-		gbc_lblTImeSlotEvent.gridy = 4;
+		gbc_lblTImeSlotEvent.gridy = 5;
 		centerPanelEast.add(lblTImeSlotEvent, gbc_lblTImeSlotEvent);
 		
 		textFieldTimeSlotEvent = new JTextField();
@@ -393,7 +418,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_textFieldTimeSlotEvent.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldTimeSlotEvent.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldTimeSlotEvent.gridx = 1;
-		gbc_textFieldTimeSlotEvent.gridy = 4;
+		gbc_textFieldTimeSlotEvent.gridy = 5;
 		centerPanelEast.add(textFieldTimeSlotEvent, gbc_textFieldTimeSlotEvent);
 		textFieldTimeSlotEvent.setColumns(10);
 		
@@ -404,34 +429,9 @@ public class CreateBookingMenu extends JFrame {
 		GridBagConstraints gbc_btnChooseTimeSlotEvent = new GridBagConstraints();
 		gbc_btnChooseTimeSlotEvent.insets = new Insets(0, 0, 5, 0);
 		gbc_btnChooseTimeSlotEvent.gridx = 2;
-		gbc_btnChooseTimeSlotEvent.gridy = 4;
+		gbc_btnChooseTimeSlotEvent.gridy = 5;
 		centerPanelEast.add(btnChooseTimeSlotEvent, gbc_btnChooseTimeSlotEvent);
 		btnChooseTimeSlotEvent.addActionListener((e) -> handleTimeSlotEventEvent());
-		
-		lblAmountOfPeople = new JLabel("Antal Personer");
-		GridBagConstraints gbc_lblAmountOfPeople = new GridBagConstraints();
-		gbc_lblAmountOfPeople.anchor = GridBagConstraints.EAST;
-		gbc_lblAmountOfPeople.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAmountOfPeople.gridx = 0;
-		gbc_lblAmountOfPeople.gridy = 5;
-		centerPanelEast.add(lblAmountOfPeople, gbc_lblAmountOfPeople);
-		
-		textFieldAmountOfPeople = new JTextField();
-		GridBagConstraints gbc_textFieldAmountOfPeople = new GridBagConstraints();
-		gbc_textFieldAmountOfPeople.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldAmountOfPeople.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldAmountOfPeople.gridx = 1;
-		gbc_textFieldAmountOfPeople.gridy = 5;
-		centerPanelEast.add(textFieldAmountOfPeople, gbc_textFieldAmountOfPeople);
-		textFieldAmountOfPeople.setColumns(10);
-		
-		JButton btnAddAmountOfPeople = new JButton("Tilføj");
-		GridBagConstraints gbc_btnAddAmountOfPeople = new GridBagConstraints();
-		gbc_btnAddAmountOfPeople.insets = new Insets(0, 0, 5, 0);
-		gbc_btnAddAmountOfPeople.gridx = 2;
-		gbc_btnAddAmountOfPeople.gridy = 5;
-		centerPanelEast.add(btnAddAmountOfPeople, gbc_btnAddAmountOfPeople);
-		btnAddAmountOfPeople.addActionListener((e) -> handleAddAmountOfPeopleEvent());
 		
 		
 		lblCatering = new JLabel("Mad");
