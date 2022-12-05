@@ -71,6 +71,8 @@ public class CreateBookingMenu extends JFrame {
 	private String[] eventLength = {EnumType.EVENT_HALL_1_HOUR.getLabel(), EnumType.EVENT_HALL_1_AND_HALF_HOUR.getLabel(), EnumType.EVENT_HALL_2_HOURS.getLabel()};
 	private String[] foodTypes = {EnumMenu.CHICKEN.getLabel(), EnumMenu.EGGS.getLabel(), EnumMenu.FRIKADEL.getLabel()};
 	private JTextField textFieldTimeSlotEvent;
+	
+	private boolean peopleAdded;
 
 	/**
 	 * Launch the application.
@@ -600,7 +602,7 @@ public class CreateBookingMenu extends JFrame {
 		
 		
 		try {
-			bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()), startTimeGokart, finishTimeGokart);
+			peopleAdded = bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()));
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -613,45 +615,59 @@ public class CreateBookingMenu extends JFrame {
 
 	private void handleTimeSlotEventEvent() {
 		
-		TimeSlotWindowEvent dialog = new TimeSlotWindowEvent(bookingCtrl);	
-		LocalDateTime eventStartTime = dialog.showDialog();
-		
-		if(eventStartTime != null) {
-			textFieldTimeSlotEvent.setText(eventStartTime.toString());
+		if(peopleAdded) {
+			TimeSlotWindowEvent dialog = new TimeSlotWindowEvent(bookingCtrl);	
+			LocalDateTime eventStartTime = dialog.showDialog();
 			
-			String eventLabel = (String)comboBoxEventTime.getSelectedItem();
-			
-			try {
-				bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength()));
-			} catch (DataAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(eventStartTime != null) {
+				textFieldTimeSlotEvent.setText(eventStartTime.toString());
+				
+				String eventLabel = (String)comboBoxEventTime.getSelectedItem();
+				
+				try {
+					bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength()));
+				} catch (DataAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
+		else {
+			JOptionPane.showMessageDialog(null, "Personer skal være tilføjet til ordren");
+		}
+		
+		
 		
 	}
 
 	private void handleTimeSlotEventGokart() {
 		
-		String eventLabel = (String)comboBoxRaceType.getSelectedItem();
-		
-		TimeSlotWindowGokart dialog = new TimeSlotWindowGokart(bookingCtrl);
-		startTimeGokart = dialog.showDialog();
-		
-		if(startTimeGokart != null) {
+		if(peopleAdded) {
+			String eventLabel = (String)comboBoxRaceType.getSelectedItem();
 			
-			finishTimeGokart = startTimeGokart.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength());
+			TimeSlotWindowGokart dialog = new TimeSlotWindowGokart(bookingCtrl);
+			startTimeGokart = dialog.showDialog();
 			
-			textFieldTimeSlotGokart.setText(startTimeGokart.toString());
-			
-			
-			try {
-				bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
-			} catch (DataAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(startTimeGokart != null) {
+				
+				finishTimeGokart = startTimeGokart.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength());
+				
+				textFieldTimeSlotGokart.setText(startTimeGokart.toString());
+				
+				
+				try {
+					bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
+				} catch (DataAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
+		else {
+			JOptionPane.showMessageDialog(null, "Personer skal være tilføjet til ordren");
+		}
+		
+		
 		
 		
 	}
