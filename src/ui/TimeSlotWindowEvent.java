@@ -27,7 +27,6 @@ public class TimeSlotWindowEvent extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldStartTime;
-	private JTextField textFieldEndTime;
 	private JTable tableTimeslot;
 	private DefaultTableModel dtm;
 	private String[] columnNames = {"Event type", "Start Tid", "Slut Tid"};
@@ -68,36 +67,42 @@ public class TimeSlotWindowEvent extends JDialog {
 			{
 				JPanel panelNorthWest = new JPanel();
 				panelNorth.add(panelNorthWest, BorderLayout.WEST);
+				GridBagLayout gbl_panelNorthWest = new GridBagLayout();
+				gbl_panelNorthWest.columnWidths = new int[]{43, 96, 0};
+				gbl_panelNorthWest.rowHeights = new int[]{20, 0, 0};
+				gbl_panelNorthWest.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+				gbl_panelNorthWest.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+				panelNorthWest.setLayout(gbl_panelNorthWest);
+				{
+					JLabel lblTimePattern = new JLabel("YYYY-MM-DD HH:mm");
+					GridBagConstraints gbc_lblTimePattern = new GridBagConstraints();
+					gbc_lblTimePattern.insets = new Insets(0, 0, 5, 0);
+					gbc_lblTimePattern.gridx = 1;
+					gbc_lblTimePattern.gridy = 0;
+					panelNorthWest.add(lblTimePattern, gbc_lblTimePattern);
+				}
 				{
 					JLabel lblStartTime = new JLabel("Start Tid");
-					panelNorthWest.add(lblStartTime);
+					GridBagConstraints gbc_lblStartTime = new GridBagConstraints();
+					gbc_lblStartTime.anchor = GridBagConstraints.WEST;
+					gbc_lblStartTime.insets = new Insets(0, 0, 0, 5);
+					gbc_lblStartTime.gridx = 0;
+					gbc_lblStartTime.gridy = 1;
+					panelNorthWest.add(lblStartTime, gbc_lblStartTime);
 				}
 				{
 					textFieldStartTime = new JTextField();
-					panelNorthWest.add(textFieldStartTime);
+					GridBagConstraints gbc_textFieldStartTime = new GridBagConstraints();
+					gbc_textFieldStartTime.anchor = GridBagConstraints.NORTHWEST;
+					gbc_textFieldStartTime.gridx = 1;
+					gbc_textFieldStartTime.gridy = 1;
+					panelNorthWest.add(textFieldStartTime, gbc_textFieldStartTime);
 					textFieldStartTime.setColumns(10);
-				}
-			}
-			{
-				JPanel panelNorthEast = new JPanel();
-				panelNorth.add(panelNorthEast, BorderLayout.EAST);
-				{
-					JLabel lblEndTime = new JLabel("Slut Tid");
-					panelNorthEast.add(lblEndTime);
-				}
-				{
-					textFieldEndTime = new JTextField();
-					panelNorthEast.add(textFieldEndTime);
-					textFieldEndTime.setColumns(10);
 				}
 			}
 			{
 				JPanel panel = new JPanel();
 				panelNorth.add(panel, BorderLayout.CENTER);
-				{
-					JLabel lblTimePattern = new JLabel("YYYY-MM-DD HH:mm");
-					panel.add(lblTimePattern);
-				}
 			}
 		}
 		{
