@@ -1,19 +1,20 @@
 package controller;
 
 import database.CateringMenuDB;
+import database.CateringMenuDBIF;
 import database.DataAccessException;
 import model.CateringMenu;
 
 public class CateringCtrl {
 	
-	private CateringMenuDB cateringMenuDB;
+	private CateringMenuDBIF cateringMenuDBIF;
 	
 	public CateringCtrl() throws DataAccessException {
-		cateringMenuDB = new CateringMenuDB();
+		cateringMenuDBIF = new CateringMenuDB();
 	}
 	
 	public CateringMenu findCateringMenu(int cmId) throws DataAccessException {
-		return cateringMenuDB.findCateringMenu(cmId);	
+		return cateringMenuDBIF.findCateringMenu(cmId);	
 	}
 
 }
