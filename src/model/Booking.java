@@ -83,6 +83,10 @@ public class Booking {
 		// TODO get price from b.ctrl or change gettotal method in b.db
 		return 0;
 	}
+	
+	public ArrayList<BookingTime> getTimeslots(){
+		return bookingTimeslots; //Returns a list of timeslot(s)
+	}
 
 	/*public Employee getEmployee() { Outside use case
 		return null;
