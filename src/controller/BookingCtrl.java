@@ -105,4 +105,9 @@ public class BookingCtrl {
 		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
 	}
 	
+	//Only for testing purposes - returns current booking
+		public Booking getBooking() {
+			return newBooking;
+		}
+	
 }
