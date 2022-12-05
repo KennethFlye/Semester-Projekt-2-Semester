@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.Instant;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -40,6 +42,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	@Override
 	public List<BookingTime> getBookedTimeslots(int year, int month, int day) throws DataAccessException {
 		ResultSet rs;
+
 		Date date = Date.valueOf(LocalDate.of(year, month, day));
 		List<BookingTime> res = new ArrayList<BookingTime>();
 			try {
@@ -61,6 +64,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	@Override
 	public ArrayList<BookingTime> insertBookingTime(ArrayList<BookingTime> bookingTimes, int bookingid) throws DataAccessException {
 		try {
+			insertBookingTime = DBConnection.getInstance().getConnection().prepareStatement(INSERTBOOKINGTIME_Q);
 			for (BookingTime i: bookingTimes) {
 			insertBookingTime.setString(1, i.getEventType().getEnumType().getLabel());
 			insertBookingTime.setInt(2, bookingid);
