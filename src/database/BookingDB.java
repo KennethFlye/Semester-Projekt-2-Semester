@@ -10,14 +10,18 @@ import model.Booking;
 
 public class BookingDB implements BookingDBIF {
 
-	private static final String INSERTBOOKING_Q_FOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId, menuId) VALUES (?, ?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
+	private static final String INSERTBOOKING_Q_FOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId, menuId) VALUES (?, ?, ?, ?, ?, ?);";
 	private PreparedStatement insertBookingPSFood;
 	
-	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
+	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?);";
 	private PreparedStatement insertBookingPSNoFood;
 	
+	private static final String GETCURRENTIDQ = "SELECT IDENT_CURRENT( 'Booking' )";
+	private PreparedStatement getCurrentId;
+
+	
 	@Override
-	public int insertBooking(Booking newBooking) throws DataAccessException {
+	public void insertBooking(Booking newBooking) throws DataAccessException {
 		Connection connection;
 		connection = DBConnection.getInstance().getConnection();
 		try {
@@ -67,10 +71,8 @@ public class BookingDB implements BookingDBIF {
 			//Commits the transaction and sets autocommit to true
 			DBConnection.getInstance().commitTransaction();
 			
-			ResultSet rs = ps.executeQuery();
+			ps.execute();
 			ps.close();
-			rs.next();
-			return rs.getInt(1);
 			
 		} catch (SQLException e) {
 			try {
@@ -84,5 +86,38 @@ public class BookingDB implements BookingDBIF {
 		}
 				
 	}
+	
+	public int getCurrentId() throws DataAccessException {
+		
+		Connection connection;
+		connection = DBConnection.getInstance().getConnection();
+		try {
+			getCurrentId = connection.prepareStatement(GETCURRENTIDQ);	
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+		}
+		try {
+			ResultSet rs = getCurrentId.executeQuery();
+			rs.next();
+			
+			int currentId = rs.getInt(1);
+			
+			return currentId;
+			
+		}
+		catch (SQLException e) {
+			try {
+				//Undoes the changes that were tried to make and sets autocommit true
+				DBConnection.getInstance().rollbackTransaction();
+			}
+			catch(SQLException ex) {
+				throw new DataAccessException(ex, "Transaction cant be rolled back");
+			}
+			throw new DataAccessException(e, "Transaction couldnt be committed");
+		}
+		}
+		
+		
+	}
 
-}
