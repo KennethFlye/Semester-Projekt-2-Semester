@@ -46,7 +46,7 @@ public class BookingDB implements BookingDBIF {
 			ps.setDate(2, Date.valueOf(newBooking.getCreationDate().toLocalDate()));
 			
 			//Amount of people
-			ps.setInt(3, newBooking.amountOfPeople());
+			ps.setInt(3, newBooking.getAmountOfPeople());
 			
 			//Is paid?
 			ps.setInt(4, newBooking.isPaid()?1:0);

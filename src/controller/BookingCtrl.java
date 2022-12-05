@@ -30,6 +30,7 @@ public class BookingCtrl {
 	private CateringCtrl cateringCtrl;
 	private EventTypeCtrl eventTypeCtrl;
 	private BookingDBIF bookingDatabase;
+	private BookingTime bt;
 	
 	//Constructor/init -----------------------------------------------------------------------------------------------
 	public BookingCtrl() throws DataAccessException {
@@ -40,6 +41,7 @@ public class BookingCtrl {
 		cateringCtrl = new CateringCtrl();
 		bookingDatabase = new BookingDB();
 		eventTypeCtrl = new EventTypeCtrl();
+		bt=null;
 	}
 	
 	
@@ -70,7 +72,7 @@ public class BookingCtrl {
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-		BookingTime bt = new BookingTime(et, startTime,finishTime);
+		bt = new BookingTime(et, startTime,finishTime); //set as field value, can be used for checking if timeslot requirements are met
 		newBooking.addTimeslot(bt);
 	}
 	
@@ -90,8 +92,16 @@ public class BookingCtrl {
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
-	public void finishBooking() throws DataAccessException {
+	public String finishBooking() throws DataAccessException {
 		bookingDatabase.insertBooking(newBooking);
+		return "Booking was saved. Total is:" + calculateTotalPrice() + " kr.";
+	}
+	
+	private double calculateTotalPrice() {
+		Double total = bt.getEventType().getPrice();
+		total += newBooking.getCatering().getPrice();
+		total *= newBooking.getAmountOfPeople();
+		return total;
 	}
 	
 }
