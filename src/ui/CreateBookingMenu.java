@@ -535,7 +535,7 @@ public class CreateBookingMenu extends JFrame {
 		String eventLabel = (String)comboBoxEventTime.getSelectedItem();
 		
 		try {
-			bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLenght()));
+			bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength()));
 		} catch (DataAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -549,7 +549,7 @@ public class CreateBookingMenu extends JFrame {
 		TimeSlotWindowGokart dialog = new TimeSlotWindowGokart(bookingCtrl);
 		startTimeGokart = dialog.showDialog();
 		
-		finishTimeGokart = startTimeGokart.plusMinutes(EnumType.valueOfLabel(eventLabel).getLenght());
+		finishTimeGokart = startTimeGokart.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength());
 		
 		textFieldTimeSlotGokart.setText(startTimeGokart.toString());
 		
