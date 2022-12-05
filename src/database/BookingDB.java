@@ -3,20 +3,21 @@ package database;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.Booking;
 
 public class BookingDB implements BookingDBIF {
 
-	private static final String INSERTBOOKING_Q_FOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId, menuId) VALUES (?, ?, ?, ?, ?, ?)";
+	private static final String INSERTBOOKING_Q_FOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId, menuId) VALUES (?, ?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
 	private PreparedStatement insertBookingPSFood;
 	
-	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?)";
+	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
 	private PreparedStatement insertBookingPSNoFood;
 	
 	@Override
-	public void insertBooking(Booking newBooking) throws DataAccessException {
+	public int insertBooking(Booking newBooking) throws DataAccessException {
 		Connection connection;
 		connection = DBConnection.getInstance().getConnection();
 		try {
@@ -66,8 +67,10 @@ public class BookingDB implements BookingDBIF {
 			//Commits the transaction and sets autocommit to true
 			DBConnection.getInstance().commitTransaction();
 			
-			ps.execute();
+			ResultSet rs = ps.executeQuery();
 			ps.close();
+			rs.next();
+			return rs.getInt(1);
 			
 		} catch (SQLException e) {
 			try {

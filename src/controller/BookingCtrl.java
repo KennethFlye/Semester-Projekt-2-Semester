@@ -78,7 +78,7 @@ public class BookingCtrl {
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
 		bt = new BookingTime(et, startTime,finishTime); //set as field value, can be used for checking if timeslot requirements are met
-		newBooking.addTimeslot(bt);
+		newBooking.addTimeslot(bt); 
 	}
 	
 	public Customer addCustomer(String phoneNo) throws DataAccessException {
@@ -98,15 +98,10 @@ public class BookingCtrl {
 	}
 	
 	public String finishBooking() throws DataAccessException {
-		bookingDatabase.insertBooking(newBooking);
-		return "Booking was saved. Total is:" + calculateTotalPrice() + " kr.";
-	}
-	
-	private double calculateTotalPrice() {
-		Double total = bt.getEventType().getPrice();
-		total += newBooking.getCatering().getPrice();
-		total *= newBooking.getAmountOfPeople();
-		return total;
+//		newBooking.calculateTotalPrice(); TODO remove comments
+		int currentId = bookingDatabase.insertBooking(newBooking);
+		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
+		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
 	}
 	
 }
