@@ -71,7 +71,7 @@ public class TextualUserInterface {
 				bookingCtrl.addCustomer(tlf);
 				
 				System.out.println("\nadded amount of people");
-				System.out.println(bookingCtrl.addAmountOfPeople(5, from, to)); count++;
+				System.out.println(bookingCtrl.addAmountOfPeople(5)); count++;
 				
 				System.out.println("\nadded employee id");
 				//bookingCtrl.add
