@@ -28,7 +28,18 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	private static final String GETBOOKINGTIME_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime between ? and ?";
 	private PreparedStatement insertBookingTime,getBookingTimesByDate,getBookingTime;
 	
+	List<EnumType> usesEventHall = new ArrayList<>();
+	List<EnumType> usesGokartTrack = new ArrayList<>();
+	
 	public BookingTimeDB() throws DataAccessException{
+		
+		usesEventHall.add(EnumType.EVENT_HALL_1_HOUR);
+		usesEventHall.add(EnumType.EVENT_HALL_1_AND_HALF_HOUR);
+		usesEventHall.add(EnumType.EVENT_HALL_2_HOURS);
+		usesGokartTrack.add(EnumType.FORMULA_1);
+		usesGokartTrack.add(EnumType.LARGE_FORMULA_1);
+		usesGokartTrack.add(EnumType.LE_MANS_1_HOUR);
+		
 		try {
 			getBookingTimesByDate = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIME_Q);
 			insertBookingTime = DBConnection.getInstance().getConnection().prepareStatement(INSERTBOOKINGTIME_Q);
@@ -98,6 +109,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 
 			
 		@Override
+		/**Returns true if the spot is clear, returns false if the spot is taken*/
 		public boolean checkTimeslot(EnumType type, LocalDateTime startTime, LocalDateTime finishTime) {
 			List<BookingTime> btList = null;
 			try {
@@ -122,8 +134,10 @@ public class BookingTimeDB implements BookingTimeDBIF {
 					inFront2 = true;
 				
 				if(inFront!=inFront2) {
+					EnumType checkedType = btList.get(i).getEventType().getEnumType();
+					if(usesEventHall.contains(type) && usesEventHall.contains(checkedType)
+							|| usesGokartTrack.contains(type) && usesGokartTrack.contains(checkedType))
 					returnBool = false;
-					
 				}
 			}
 			return returnBool;			
