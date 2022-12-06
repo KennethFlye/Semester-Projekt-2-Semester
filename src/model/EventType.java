@@ -13,12 +13,12 @@ public class EventType {
 		
 		public final String label;
 		public final long lenght;
-		public final int locataion;
+		public final int location;
 		
 		private EnumType(String label, long lenght, int location) {
 			this.label = label;
 			this.lenght = lenght;
-			this.locataion = location;
+			this.location = location;
 		}
 		
 		public static EnumType valueOfLabel(String label) {
@@ -39,10 +39,10 @@ public class EventType {
 		public long getLength() {
 			return lenght;
 		}
-		
 		public int getLocation() {
-			return locataion;
+			return location;
 		}
+		
 	}
 	
 	private EnumType eventType;

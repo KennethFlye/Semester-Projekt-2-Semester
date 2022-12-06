@@ -46,16 +46,13 @@ class TestAddTimeSlot {
 		//Arrange
 		bc.createBooking();
 		EventType et = new EventType(EnumType.FORMULA_1);
-		BookingTime bt = new BookingTime(et, d);
+		BookingTime bt = new BookingTime(et, LocalDateTime.of(2022, 11, 30, 12, 0)); 
 		
 		
 		//Act
 		bc.addTimeslot(et.getEnumType().getLabel(), d);
 		//Assert
-
-		assertEquals(d.plusMinutes(et.getEnumType().getLength()),bt.getFinishTime());
-
-
+		assertEquals(bt.getFinishTime(), bt.getStartTime().plusMinutes(et.getEnumType().getLength()));
 	}
 	@Test
 	void testInvalidTime ( ) {

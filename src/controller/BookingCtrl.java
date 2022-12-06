@@ -67,7 +67,7 @@ public class BookingCtrl {
 		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime);
 	}
 	
-	public void addTimeslot(String eventType, LocalDateTime startTime) throws DataAccessException {
+	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
 		/*pseudo TODO
 		 * get bookingdb
 		 * get call a method like checkTimeslot with event and localdatetime
@@ -82,27 +82,25 @@ public class BookingCtrl {
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-		bt = new BookingTime(et, startTime); //set as field value, can be used for checking if timeslot requirements are met
-		if (!checkTimeslot(et.getEnumType(),bt.getStartTime(),bt.getFinishTime())) {
-			System.out.println("nej");
-		}
-		else {
-			newBooking.addTimeslot(bt); 
-			System.out.println("ja");
-		}
+		int amount = newBooking.getAmountOfPeople();
+		int amountOfGroups = 1;
+		if( et.getEnumType().location == 1) {
+				int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
+				double additionalTimeMultiplication = Math.ceil((amount/available));
+				amountOfGroups = (int) additionalTimeMultiplication;
+				}
+		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
+		checkTimeslot(et.getEnumType(), bt.getStartTime(), bt.getFinishTime());
+		newBooking.addTimeslot(bt); 
 	}
 	
 	public Customer addCustomer(String phoneNo) throws DataAccessException {
 		return newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
 	}
 	
-	
-	public boolean addAmountOfPeople(int amount, BookingTime bt) throws DataAccessException {
-		
-		if(bt.getEventType().getEnumType().locataion == 1 && gokartCtrl.checkGokarts(amount, bt.getStartTime(),bt.getFinishTime())==true) {
+	public boolean addAmountOfPeople(int amount) throws DataAccessException {
 			newBooking.setAmountOfPeople(amount);
-		}
-		return gokartCtrl.checkGokarts(amount, bt.getStartTime(), bt.getStartTime()); 
+		    return true; //Skal nok �ndres til at returne void?
 	}
 	
 	public void addCateringMenu(int cateringMenu) throws DataAccessException {
@@ -112,8 +110,8 @@ public class BookingCtrl {
 	
 	public String finishBooking() throws DataAccessException {
 		newBooking.calculateTotalPrice();
-		bookingDatabase.insertBooking(newBooking);
-		int currentId = bookingDatabase.getCurrentId();
+		int currentId = bookingDatabase.insertBooking(newBooking);
+		//int currentId = bookingDatabase.getCurrentId();
 		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
 		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
 	}
