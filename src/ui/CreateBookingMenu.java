@@ -97,7 +97,7 @@ public class CreateBookingMenu extends JFrame {
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 713, 343);
+		setBounds(100, 100, 913, 343);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -392,7 +392,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_textFieldTimeSlotGokart.gridx = 1;
 		gbc_textFieldTimeSlotGokart.gridy = 4;
 		centerPanelEast.add(textFieldTimeSlotGokart, gbc_textFieldTimeSlotGokart);
-		textFieldTimeSlotGokart.setColumns(10);
+		textFieldTimeSlotGokart.setColumns(30);
 		textFieldTimeSlotGokart.setEditable(false);
 		
 		btnChooseTimeSlotGokart = new JButton("Vælg Tidspunkt");
@@ -420,7 +420,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_textFieldTimeSlotEvent.gridx = 1;
 		gbc_textFieldTimeSlotEvent.gridy = 5;
 		centerPanelEast.add(textFieldTimeSlotEvent, gbc_textFieldTimeSlotEvent);
-		textFieldTimeSlotEvent.setColumns(10);
+		textFieldTimeSlotEvent.setColumns(30);
 		
 		textFieldTimeSlotEvent.setEditable(false);
 		
@@ -652,11 +652,12 @@ public class CreateBookingMenu extends JFrame {
 				
 				finishTimeGokart = startTimeGokart.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength());
 				
-				textFieldTimeSlotGokart.setText(startTimeGokart.toString());
 				
 				
 				try {
-					bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
+					finishTimeGokart = bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
+					
+					textFieldTimeSlotGokart.setText(startTimeGokart.toString() + " /-/ " + finishTimeGokart.toString());
 				} catch (DataAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

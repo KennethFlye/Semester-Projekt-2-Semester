@@ -30,7 +30,7 @@ class TestAddTimeSlot {
 	void tearDown() throws Exception {
 	}
 		
-	@Test
+	/*@Test
 	void test() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
@@ -42,6 +42,6 @@ class TestAddTimeSlot {
 		bc.addTimeslot(et.getEnumType().getLabel(), bt.getStartTime(), bt.getFinishTime());
 		//Assert
 		assertEquals(bt.getFinishTime(), bt.getStartTime().plusMinutes(et.getEnumType().getLength()));
-	}
+	}*/
 
 }
