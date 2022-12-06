@@ -35,7 +35,7 @@ class TestAddTimeSlot {
 		//Arrange
 		bc.createBooking();
 		EventType et = new EventType(EnumType.FORMULA_1);
-		BookingTime bt = new BookingTime(et, LocalDateTime.of(2022, 11, 30, 12, 0));
+		BookingTime bt = new BookingTime(et, LocalDateTime.of(2022, 11, 30, 12, 0)); 
 		
 		
 		//Act
