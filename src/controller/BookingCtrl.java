@@ -99,12 +99,16 @@ public class BookingCtrl {
 	}
 	
 	public boolean addAmountOfPeople(int amount) throws DataAccessException {
+		if(amount > 0) {
 			newBooking.setAmountOfPeople(amount);
-		    return true; //Skal nok ændres til at returne void?
+			return true;
+		}
+		else {
+			return false; //TODO Skal nok ï¿½ndres til at returne void?
+		}
 	}
 	
 	public void addCateringMenu(int cateringMenu) throws DataAccessException {
-		//TODO make it possible to not set cateringmenu
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
