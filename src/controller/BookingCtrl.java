@@ -78,6 +78,10 @@ public class BookingCtrl {
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
 		double amount = newBooking.getAmountOfPeople();
+		if (amount <= 0) {
+			Exception e = new Exception();
+			throw new DataAccessException(e, "Amount of people must be set to a positive amount!");
+		}
 		int amountOfGroups = 1;
 		if( et.getEnumType().location == 1) {
 				double available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
