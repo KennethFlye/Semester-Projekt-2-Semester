@@ -45,7 +45,7 @@ public class Receipt extends JDialog {
 	public Receipt(ArrayList<String> receiptInfo) {
 		super((java.awt.Frame) null, true);
 		setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 550);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -60,7 +60,7 @@ public class Receipt extends JDialog {
 			
 			contentPanel.add(tableReceipt);
 			
-			tableReceipt.getColumnModel().getColumn(0).setMinWidth(200); //Gør Større
+			tableReceipt.getColumnModel().getColumn(0).setMinWidth(400); //Gør Større
 		}
 		{
 			JPanel buttonPane = new JPanel();
