@@ -77,15 +77,15 @@ public class BookingCtrl {
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-		
 		int amount = newBooking.getAmountOfPeople();
 		int amountOfGroups = 1;
-		int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
-		double additionalTimeMultiplication = Math.ceil((amount/available));
-		amountOfGroups = (int) additionalTimeMultiplication;
-		
-		
+		if( et.getEnumType().location == 1) {
+				int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
+				double additionalTimeMultiplication = Math.ceil((amount/available));
+				amountOfGroups = (int) additionalTimeMultiplication;
+				}
 		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
+		checkTimeslot(et.getEnumType(), bt.getStartTime(), bt.getFinishTime());
 		newBooking.addTimeslot(bt); 
 		return bt.getFinishTime();
 	}
