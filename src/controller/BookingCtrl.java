@@ -110,12 +110,43 @@ public class BookingCtrl {
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
-	public String finishBooking() throws DataAccessException {
+	public ArrayList<String> finishBooking() throws DataAccessException {
 		newBooking.calculateTotalPrice();
 		int currentId = bookingDatabase.insertBooking(newBooking);
 		//int currentId = bookingDatabase.getCurrentId();
 		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
-		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
+		ArrayList<String> receipt = new ArrayList<>();
+		receipt.add("---RECEIPT---");
+		receipt.add("Booking created on " + newBooking.getCreationDate());
+		receipt.add("Customer name: " + newBooking.getCustomer().getName());
+		receipt.add("Customer phone number: " + newBooking.getCustomer().getPhoneNo());
+		receipt.add("Amount of people: " + newBooking.getAmountOfPeople());
+		receipt.add("Event(s):");
+
+		for (int i = 0; i < newBooking.getTimeslots().size();i++) {
+			receipt.add("Event type: " + newBooking.getTimeslots().get(i).getEventType());
+			receipt.add("Event start time: " + newBooking.getTimeslots().get(i).getStartTime());
+			receipt.add("Event finish time: " + newBooking.getTimeslots().get(i).getFinishTime());
+			receipt.add("Event type base price: " + newBooking.getTimeslots().get(i).getEventType().getPrice());
+
+			receipt.add(" ");
+		}
+		if(newBooking.hasCateringMenu()) {
+			receipt.add("Catering menu: " + newBooking.getCatering().getEnumMenu().getLabel());
+			receipt.add("Catering menu price per person: " + newBooking.getCatering().getPrice());
+
+		}
+		String paid = "";
+		if(newBooking.isPaid()) {
+			paid = "Yes";
+		}
+		else {
+			paid = "No";
+		}
+		receipt.add("Booking paid?: " + paid);
+		receipt.add("Booking total: " + newBooking.getTotal());
+
+		return receipt;
 	}
 	
 	//Only for testing purposes - returns current booking
