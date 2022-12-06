@@ -24,14 +24,9 @@ class TestAddTimeSlot {
 	static BookingCtrl bc;
 	static LocalDateTime d;
 	static LocalDateTime dt;
-	static Customer c;
 	static EventType eg;
 	static EventType ee;
-	static BookingTime btg;
-	static BookingTime bte;
-	static Booking b;
-	static Exception e = new Exception();
-	static	DataAccessException trown;
+	static BookingTime bt;
 	
 
 	
@@ -42,7 +37,6 @@ class TestAddTimeSlot {
 		con = DBConnection.getInstance();
 		bc = new BookingCtrl();
 		d = LocalDateTime.of(2022, 02, 01, 14, 30);	
-		dt = d;
 		eg = new EventType(EnumType.LE_MANS_1_HOUR);
 		ee = new EventType(EnumType.EVENT_HALL_1_HOUR);
 	
@@ -57,48 +51,55 @@ class TestAddTimeSlot {
 		eg = null;
 		ee = null;
 		dt = null;
+		bt = null;
 	}
 		
 	@Test
 	void testNoOverlap() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
+		bc.addAmountOfPeople(6);
 		LocalDateTime dt = d.plusDays(1);
 		BookingTime bt = new BookingTime(eg, dt, 1);
 		//Act
 		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
 		//Assert
-		assertEquals(dt.plusMinutes((eg.getEnumType()).getLength()*1),bc.getBooking().getTimeslots().get(0).getFinishTime());
+		assertEquals(dt.plusMinutes((eg.getEnumType()).getLength()),bc.getBooking().getTimeslots().get(0).getFinishTime());
 	}
 	@Test
 	void testStartOverlapSameType() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
+		bc.addAmountOfPeople(6);
 		LocalDateTime dt = d.plusMinutes(30);
 		BookingTime bt = new BookingTime(ee, dt, 1);
 		//Act
 		bc.addTimeslot(ee.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
 		//Assert
 		
-		assertEquals(dt.plusMinutes((ee.getEnumType().getLength()*1)),bc.getBooking().getTimeslots().get(0).getFinishTime());
-		System.out.println(dt.plusMinutes((ee.getEnumType().getLength()*1)));
+		assertEquals(dt.plusMinutes(ee.getEnumType().getLength()),bc.getBooking().getTimeslots().get(0).getFinishTime());
 	}
 	
 	@Test
 	void testFinishOverlapSameType() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
+		bc.addAmountOfPeople(6);
 		LocalDateTime dt = d.minusMinutes(30);
 		BookingTime bt = new BookingTime(ee, dt, 1);
 		//Act
 		bc.addTimeslot(ee.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
 		//Assert
-		assertEquals(dt.plusMinutes((ee.getEnumType().getLength()*1)),bc.getBooking().getTimeslots().get(0).getFinishTime());	
+		//assertEquals(dt.plusMinutes((ee.getEnumType().getLength()*1)),bc.getBooking().getTimeslots().get(0).getFinishTime());	
+		
+		assertEquals(dt.plusMinutes((ee.getEnumType().getLength()*1)),bt.getFinishTime());	
+
 	}
 	@Test
 	void testStartOverlapDifferentType() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
+		bc.addAmountOfPeople(6);
 		LocalDateTime dt = d.plusMinutes(30);
 		BookingTime bt = new BookingTime(eg, dt, 1);
 		//Act
@@ -111,6 +112,7 @@ class TestAddTimeSlot {
 	void testFinishOverlapDifferentType() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
+		bc.addAmountOfPeople(6);
 		LocalDateTime dt = d.minusMinutes(30);
 		BookingTime bt = new BookingTime(eg, dt, 1);
 		//Act

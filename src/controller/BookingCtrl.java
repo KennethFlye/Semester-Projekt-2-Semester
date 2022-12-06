@@ -62,31 +62,29 @@ public class BookingCtrl {
 		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime);
 	}
 	
+	public int calculateGroups(EventType et, LocalDateTime startTime, LocalDateTime finishTime , double amount) throws DataAccessException {
+		if( et.getEnumType().location == 1) {
+			double available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
+			if(8 < available) {
+				available = 8;
+			}
+			double additionalTimeMultiplication = Math.ceil((amount/available));
+			int amountOfGroups =  (int) additionalTimeMultiplication;
+			return amountOfGroups;
+			}
+		else {
+			return 1;
+		}
+		
+		
+	}
+	
 	public LocalDateTime addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
-		/*pseudo TODO
-		 * get bookingdb
-		 * get call a method like checkTimeslot with event and localdatetime
-		 * if timeslot is not occupied - add timeslot to newbooking, and add event to newbooking
-		 * ---
-		 * BookingTime bt = null;
-		 * if(startTime != findBookedTimeslots() && finish != findbookedslots){
-		 * 	bt = new bookingtime(et, start, finish);
-		 *  newBooking.addTimeslot(bt);
-		 * }
-		 */
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
 		double amount = newBooking.getAmountOfPeople();
-		int amountOfGroups = 1;
-		if( et.getEnumType().location == 1) {
-				double available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
-				if(8 < available) {
-					available = 8;
-				}
-				double additionalTimeMultiplication = Math.ceil((amount/available));
-				amountOfGroups = (int) additionalTimeMultiplication;
-				}
+		int amountOfGroups = calculateGroups(et, startTime, finishTime, amount) ;
 		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
 		if (!checkTimeslot(et.getEnumType(), bt.getStartTime(), bt.getFinishTime())) {
 			Exception e = new Exception();
