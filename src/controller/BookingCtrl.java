@@ -62,31 +62,29 @@ public class BookingCtrl {
 		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime);
 	}
 	
+	public int calculateGroups(EventType et, LocalDateTime startTime, LocalDateTime finishTime , double amount) throws DataAccessException {
+		if( et.getEnumType().location == 1) {
+			double available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
+			if(8 < available) {
+				available = 8;
+			}
+			double additionalTimeMultiplication = Math.ceil((amount/available));
+			int amountOfGroups =  (int) additionalTimeMultiplication;
+			return amountOfGroups;
+			}
+		else {
+			return 1;
+		}
+		
+		
+	}
+	
 	public LocalDateTime addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
-		/*pseudo TODO
-		 * get bookingdb
-		 * get call a method like checkTimeslot with event and localdatetime
-		 * if timeslot is not occupied - add timeslot to newbooking, and add event to newbooking
-		 * ---
-		 * BookingTime bt = null;
-		 * if(startTime != findBookedTimeslots() && finish != findbookedslots){
-		 * 	bt = new bookingtime(et, start, finish);
-		 *  newBooking.addTimeslot(bt);
-		 * }
-		 */
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
 		double amount = newBooking.getAmountOfPeople();
-		int amountOfGroups = 1;
-		if( et.getEnumType().location == 1) {
-				double available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
-				if(8 < available) {
-					available = 8;
-				}
-				double additionalTimeMultiplication = Math.ceil((amount/available));
-				amountOfGroups = (int) additionalTimeMultiplication;
-				}
+		int amountOfGroups = calculateGroups(et, startTime, finishTime, amount) ;
 		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
 		if (!checkTimeslot(et.getEnumType(), bt.getStartTime(), bt.getFinishTime())) {
 			Exception e = new Exception();
@@ -110,12 +108,48 @@ public class BookingCtrl {
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
-	public String finishBooking() throws DataAccessException {
+	public ArrayList<String> finishBooking() throws DataAccessException {
 		newBooking.calculateTotalPrice();
 		int currentId = bookingDatabase.insertBooking(newBooking);
 		//int currentId = bookingDatabase.getCurrentId();
 		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
-		return "Booking was saved. Total is:" + newBooking.getTotal() + " kr.";
+		return getReceipt();
+		
+	}
+	
+	public ArrayList<String> getReceipt(){
+		ArrayList<String> receipt = new ArrayList<>();
+		receipt.add("---RECEIPT---");
+		receipt.add("Booking created on " + newBooking.getCreationDate());
+		receipt.add("Customer name: " + newBooking.getCustomer().getName());
+		receipt.add("Customer phone number: " + newBooking.getCustomer().getPhoneNo());
+		receipt.add("Amount of people: " + newBooking.getAmountOfPeople());
+		receipt.add("Event(s):");
+
+		for (int i = 0; i < newBooking.getTimeslots().size();i++) {
+			receipt.add("Event type: " + newBooking.getTimeslots().get(i).getEventType().getEnumType().getLabel());
+			receipt.add("Event start time: " + newBooking.getTimeslots().get(i).getStartTime());
+			receipt.add("Event finish time: " + newBooking.getTimeslots().get(i).getFinishTime());
+			receipt.add("Event type base price: " + newBooking.getTimeslots().get(i).getEventType().getPrice() + " DKK");
+
+			receipt.add(" ");
+		}
+		if(newBooking.hasCateringMenu()) {
+			receipt.add("Catering menu: " + newBooking.getCatering().getEnumMenu().getLabel());
+			receipt.add("Catering menu price per person: " + newBooking.getCatering().getPrice() + " DKK");
+
+		}
+		String paid = "";
+		if(newBooking.isPaid()) {
+			paid = "Yes";
+		}
+		else {
+			paid = "No";
+		}
+		receipt.add("Booking paid?: " + paid);
+		receipt.add("Booking total: " + newBooking.getTotal() + " DKK");
+
+		return receipt;
 	}
 	
 	//Only for testing purposes - returns current booking
