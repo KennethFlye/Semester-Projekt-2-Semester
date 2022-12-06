@@ -56,5 +56,9 @@ public class CateringMenu {
 	public int getId() {
 		return enumMenu.getId();
 	}
+	
+	public EnumMenu getEnumMenu() {
+		return enumMenu;
+	}
 
 }
