@@ -43,8 +43,6 @@ public class Receipt extends JDialog {
 	 * Create the dialog.
 	 */
 	public Receipt(ArrayList<String> receiptInfo) {
-		super((java.awt.Frame) null, true);
-		setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
 		setBounds(100, 100, 450, 550);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
