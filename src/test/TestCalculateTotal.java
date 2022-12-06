@@ -55,25 +55,22 @@ class TestCalculateTotal {
 	}
 	
 	@Test //Tests to see if Total is updated with the price of more timeslots
-	void testTotalPriceMoreTimeslotsNegativeCustomers() throws DataAccessException {
+	void testTotalPriceNoTimeslotsNegativeCustomers() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		
 		//Act
-		bc.addTimeslot("Formel 1", d, d); //285
-		bc.addTimeslot("Eventhal 1 Time", d, d); //180
-		
 		bc.addAmountOfPeople(-1);
 		
 		//Arrange
 		bc.getBooking().calculateTotalPrice();
 		
-		//Assert
+		//Assert //TODO throw
 		assertEquals(0, bc.getBooking().getTotal()); //TODO fix it
 	}
 	
 	@Test //Tests to see if Total is updated with the price of more timeslots + price of catering 
-	void testTotalPriceTimeslotNegativeCustomersWithCatering() throws DataAccessException {
+	void testTotalPriceMoreTimeslotsNegativeCustomersWithCatering() throws DataAccessException {
 		//arrange
 		bc.createBooking();
 		
@@ -106,23 +103,20 @@ class TestCalculateTotal {
 	}
 	
 	@Test
-	void testTotalPriceMoreTimeslotsNoCustomers() throws DataAccessException {
+	void testTotalPriceNoTimeslotsNoCustomers() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		
 		//Act
-		bc.addTimeslot("Formel 1", d, d); //285
-		bc.addTimeslot("Eventhal 1 Time", d, d); //180
-		
 		//Arrange
 		bc.getBooking().calculateTotalPrice();
 		
-		//Assert
+		//Assert TODO throw
 		assertEquals(0, bc.getBooking().getTotal());
 	}
 	
 	@Test
-	void testTotalPriceTimeslotNoCustomersWithCatering() throws DataAccessException {
+	void testTotalPriceMoreTimeslotsNoCustomersWithCatering() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		
@@ -154,24 +148,22 @@ class TestCalculateTotal {
 	}
 	
 	@Test
-	void testTotalPriceMoreTimeslotsOneCustomer() throws DataAccessException {
+	void testTotalPriceNoTimeslotsOneCustomer() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		
 		//Act
-		bc.addTimeslot("Formel 1", d, d); //285
-		bc.addTimeslot("Eventhal 1 Time", d, d); //180
 		bc.addAmountOfPeople(1);
 		
 		//Arrange
 		bc.getBooking().calculateTotalPrice(); //simply multiplies price by 1
 		
-		//Assert
+		//Assert TODO throw
 		assertEquals(285+180, bc.getBooking().getTotal());
 	}
 	
 	@Test
-	void testTotalPriceTimeslotOneCustomerWithCatering() throws DataAccessException {
+	void testTotalPriceMoreTimeslotsOneCustomerWithCatering() throws DataAccessException {
 		//arrange
 		bc.createBooking();
 		
@@ -203,25 +195,22 @@ class TestCalculateTotal {
 	}
 	
 	@Test
-	void testTotalPriceMoreTimeslotsMaxCustomers() throws DataAccessException {
+	void testTotalPriceNoTimeslotsMaxCustomers() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		
 		//Act
-		bc.addTimeslot("Formel 1", d, d); //285
-		bc.addTimeslot("Eventhal 1 Time", d, d); //180
-		
 		bc.addAmountOfPeople(8);
 		
 		//Arrange
 		bc.getBooking().calculateTotalPrice();
 		
-		//Assert
+		//Assert //TODO throw msg
 		assertEquals(8*(285+180), bc.getBooking().getTotal());
 	}
 	
 	@Test
-	void testTotalPriceTimeslotMaxCustomersWithCatering() throws DataAccessException {
+	void testTotalPriceMoreTimeslotsMaxCustomersWithCatering() throws DataAccessException {
 		//arrange
 		bc.createBooking();
 		
@@ -253,25 +242,22 @@ class TestCalculateTotal {
 	}
 	
 	@Test
-	void testTotalPriceMoreTimeslotsTooManyCustomers() throws DataAccessException {
+	void testTotalPriceNoTimeslotsTooManyCustomers() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		
 		//Act
-		bc.addTimeslot("Formel 1", d, d); //285
-		bc.addTimeslot("Eventhal 1 Time", d, d); //180
-		
 		bc.addAmountOfPeople(9);
 		
 		//Arrange
 		bc.getBooking().calculateTotalPrice();
 		
-		//Assert
+		//Assert TODO throw
 		assertEquals(9*(285+180), bc.getBooking().getTotal());
 	}
 	
 	@Test
-	void testTotalPriceTimeslotTooManyCustomersWithCatering() throws DataAccessException {
+	void testTotalPriceMoreTimeslotsTooManyCustomersWithCatering() throws DataAccessException {
 		//arrange
 		bc.createBooking();
 		
@@ -304,24 +290,22 @@ class TestCalculateTotal {
 	}
 	
 	@Test
-	void testTotalPriceMoreTimeslotsMuchTooManyCustomers() throws DataAccessException {
+	void testTotalPriceNoTimeslotsMuchTooManyCustomers() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		
 		//Act
-		bc.addTimeslot("Formel 1", d, d); //285
-		bc.addTimeslot("Eventhal 1 Time", d, d); //180
 		bc.addAmountOfPeople(11);
 		
 		//Arrange
 		bc.getBooking().calculateTotalPrice();
 		
-		//Assert
+		//Assert //TODO throw
 		assertEquals(11*(285+180), bc.getBooking().getTotal());
 	}
 	
 	@Test
-	void testTotalPriceTimeslotMuchTooManyCustomersWithCatering() throws DataAccessException {
+	void testTotalPriceMoreTimeslotsMuchTooManyCustomersWithCatering() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
 		
