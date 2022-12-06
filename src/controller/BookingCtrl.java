@@ -115,6 +115,11 @@ public class BookingCtrl {
 		int currentId = bookingDatabase.insertBooking(newBooking);
 		//int currentId = bookingDatabase.getCurrentId();
 		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
+		return getReceipt();
+		
+	}
+	
+	public ArrayList<String> getReceipt(){
 		ArrayList<String> receipt = new ArrayList<>();
 		receipt.add("---RECEIPT---");
 		receipt.add("Booking created on " + newBooking.getCreationDate());
@@ -124,16 +129,16 @@ public class BookingCtrl {
 		receipt.add("Event(s):");
 
 		for (int i = 0; i < newBooking.getTimeslots().size();i++) {
-			receipt.add("Event type: " + newBooking.getTimeslots().get(i).getEventType());
+			receipt.add("Event type: " + newBooking.getTimeslots().get(i).getEventType().getEnumType().getLabel());
 			receipt.add("Event start time: " + newBooking.getTimeslots().get(i).getStartTime());
 			receipt.add("Event finish time: " + newBooking.getTimeslots().get(i).getFinishTime());
-			receipt.add("Event type base price: " + newBooking.getTimeslots().get(i).getEventType().getPrice());
+			receipt.add("Event type base price: " + newBooking.getTimeslots().get(i).getEventType().getPrice() + " DKK");
 
 			receipt.add(" ");
 		}
 		if(newBooking.hasCateringMenu()) {
 			receipt.add("Catering menu: " + newBooking.getCatering().getEnumMenu().getLabel());
-			receipt.add("Catering menu price per person: " + newBooking.getCatering().getPrice());
+			receipt.add("Catering menu price per person: " + newBooking.getCatering().getPrice() + " DKK");
 
 		}
 		String paid = "";
@@ -144,7 +149,7 @@ public class BookingCtrl {
 			paid = "No";
 		}
 		receipt.add("Booking paid?: " + paid);
-		receipt.add("Booking total: " + newBooking.getTotal());
+		receipt.add("Booking total: " + newBooking.getTotal() + " DKK");
 
 		return receipt;
 	}
