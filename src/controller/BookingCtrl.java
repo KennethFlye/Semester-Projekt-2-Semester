@@ -62,7 +62,7 @@ public class BookingCtrl {
 		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime);
 	}
 	
-	public void addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
+	public LocalDateTime addTimeslot(String eventType, LocalDateTime startTime,LocalDateTime finishTime) throws DataAccessException {
 		/*pseudo TODO
 		 * get bookingdb
 		 * get call a method like checkTimeslot with event and localdatetime
@@ -77,16 +77,17 @@ public class BookingCtrl {
 		
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
-		
 		int amount = newBooking.getAmountOfPeople();
 		int amountOfGroups = 1;
-		int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
-		double additionalTimeMultiplication = Math.ceil((amount/available));
-		amountOfGroups = (int) additionalTimeMultiplication;
-		
-		
+		if( et.getEnumType().location == 1) {
+				int available = gokartCtrl.getAvailableGokarts(startTime, finishTime);
+				double additionalTimeMultiplication = Math.ceil((amount/available));
+				amountOfGroups = (int) additionalTimeMultiplication;
+				}
 		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
+		checkTimeslot(et.getEnumType(), bt.getStartTime(), bt.getFinishTime());
 		newBooking.addTimeslot(bt); 
+		return bt.getFinishTime();
 	}
 	
 	public Customer addCustomer(String phoneNo) throws DataAccessException {

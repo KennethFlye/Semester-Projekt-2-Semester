@@ -26,7 +26,7 @@ public class PatternCheck {
 		
 		Matcher m = pattern.matcher(check);
 		
-		return m.find();
+		return m.find(); 
 		
 		
 	}
