@@ -7,7 +7,7 @@ public class PatternCheck {
 	
 	public boolean checkPhoneNo(String check) {
 		
-		String phoneNoPattern = "^[0-9]{8}|(\\+)[0-9]{10}$";
+		String phoneNoPattern = "^[0-9]{8}$|^(\\+)[0-9]{10}$";
 		
 		Pattern pattern = Pattern.compile(phoneNoPattern);
 		
