@@ -620,16 +620,21 @@ public class CreateBookingMenu extends JFrame {
 			LocalDateTime eventStartTime = dialog.showDialog();
 			
 			if(eventStartTime != null) {
-				textFieldTimeSlotEvent.setText(eventStartTime.toString());
+				
 				
 				String eventLabel = (String)comboBoxEventTime.getSelectedItem();
+				LocalDateTime finishTime;
 				
 				try {
-					bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength()));
+					finishTime = bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength()));
+					
+					textFieldTimeSlotEvent.setText(eventStartTime.toString() + " /-/ " + finishTime.toString());
 				} catch (DataAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				
 			}
 		}
 		else {
