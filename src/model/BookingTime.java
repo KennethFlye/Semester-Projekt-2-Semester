@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 public class BookingTime {
 
 	
-	EventType eventType; 
-	LocalDateTime startTime, finishTime; 
+	private EventType eventType; 
+	private LocalDateTime startTime, finishTime; 
 	
 	
 
