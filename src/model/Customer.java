@@ -6,13 +6,13 @@ public class Customer extends Contact {
 	
 	private LocalDate dateOfBirth;
 	
-	public Customer(String name, String phoneNo) {
-		super(name, phoneNo);
+	public Customer(int contactId, String name, String phoneNo) {
+		super(contactId, name, phoneNo);
 		System.out.println(this + " created");
 	}
 	
-	public Customer(String name, String phoneNo, String email, String address, int zipCode, String city, String country, LocalDate dateOfBirth) {
-		super(name, phoneNo, email, address, zipCode, city, country);
+	public Customer(int contactId, String name, String phoneNo, String email, String address, int zipCode, String city, String country, LocalDate dateOfBirth) {
+		super(contactId, name, phoneNo, email, address, zipCode, city, country);
 		this.dateOfBirth = dateOfBirth;
 	}
 

@@ -35,7 +35,7 @@ public class CustomerDB implements CustomerDBIF{
 	public Customer findCustomer(String phoneNo) throws DataAccessException {
 		
 		String firstName, lastName, fullName, phone, email, address, city, country;
-		int zipCode;
+		int zipCode, contactId;
 		LocalDate dateOfBirth;
 		ResultSet rs, rsCity;
 		
@@ -47,6 +47,7 @@ public class CustomerDB implements CustomerDBIF{
 			
 			while(rs.next()) {
 				if(rs.getDate("dateOfBirth") != null) {
+					contactId = rs.getInt("contactId");
 					firstName = rs.getString("firstName");
 					lastName = rs.getString("lastName");
 					fullName = firstName + " " + lastName;
@@ -66,17 +67,18 @@ public class CustomerDB implements CustomerDBIF{
 					while(rsCity.next()) {
 						city = rsCity.getString("zipcodeCity");
 						
-						foundCustomer = new Customer(fullName, phone, email, address, zipCode, city, country, dateOfBirth);
+						foundCustomer = new Customer(contactId, fullName, phone, email, address, zipCode, city, country, dateOfBirth);
 					}
 				}
 				else {
+					contactId = rs.getInt("contactId");
 					firstName = rs.getString("firstName");
 					lastName = rs.getString("lastName");
 					fullName = firstName + " " + lastName;
 					
 					phone = rs.getString("phone");
 					
-					foundCustomer = new Customer(fullName, phone);
+					foundCustomer = new Customer(contactId, fullName, phone);
 				}
 				
 				
