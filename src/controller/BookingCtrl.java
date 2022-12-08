@@ -80,7 +80,13 @@ public class BookingCtrl {
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
 		double amount = newBooking.getAmountOfPeople();
+    if (amount <= 0) {
+			Exception e = new Exception();
+			throw new DataAccessException(e, "Amount of people must be set to a positive amount!");
+		}
+    
 		int amountOfGroups = calculateGroups(et, startTime, finishTime, amount) ;
+    
 		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
 		if (!checkTimeslot(et.getEnumType(), bt.getStartTime(), bt.getFinishTime())) {
 			Exception e = new Exception();
