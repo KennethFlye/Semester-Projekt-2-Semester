@@ -1,29 +1,25 @@
 package controller;
 
-import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import model.CateringMenu;
-import model.Customer;
-import model.EventType;
-import model.EventType.EnumType;
-import model.Booking;
-import model.BookingTime;
 import database.BookingDB;
 import database.BookingDBIF;
 import database.BookingTimeDB;
 import database.BookingTimeDBIF;
 import database.DataAccessException;
+import model.Booking;
+import model.BookingTime;
+import model.Customer;
+import model.EventType;
+import model.EventType.EnumType;
 
 public class BookingCtrl {
 	
 	//Fields -----------------------------------------------------------------------------------------------
 	private Booking newBooking;
-	private List<LocalDateTime> listTs;
+	private List<BookingTime> btl;
 	private BookingTimeDBIF bookingTimeDatabase;
 	private CustomerCtrl customerCtrl;
 	private GokartCtrl gokartCtrl;
@@ -34,7 +30,7 @@ public class BookingCtrl {
 	
 	//Constructor/init -----------------------------------------------------------------------------------------------
 	public BookingCtrl() throws DataAccessException {
-		listTs = new ArrayList<>();
+		btl = new ArrayList<>(); //TODO overflødig? se også fields
 		bookingTimeDatabase = new BookingTimeDB();
 		customerCtrl = new CustomerCtrl();
 		gokartCtrl = new GokartCtrl();
@@ -118,12 +114,30 @@ public class BookingCtrl {
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
-	public ArrayList<String> finishBooking() throws DataAccessException {
-		newBooking.calculateTotalPrice();
-		int currentId = bookingDatabase.insertBooking(newBooking);
-		//int currentId = bookingDatabase.getCurrentId();
-		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
-		return getReceipt();
+	public ArrayList<String> finishBooking() throws DataAccessException, SQLException {
+		try {
+			//starttransaction sets autocommit to false, which means nothing will be committed before we tell it to
+			bookingDatabase.getDBConnection().startTransaction(); //since dbconnection is a singleton, it doesnt matter which db class we call it from
+			
+			newBooking.calculateTotalPrice();
+			int currentId = bookingDatabase.insertBooking(newBooking); //gets the current bookings' ID, to keep track with the bookingTime
+			bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
+			
+			//committransaction inserts everything in the database so far, unless there are problems - sets autocommit to true again
+			bookingDatabase.getDBConnection().commitTransaction();
+			
+			return getReceipt();
+		}
+		catch(DataAccessException dae) {
+			try {
+				//Undoes the changes that were tried to make and sets autocommit true
+				bookingDatabase.getDBConnection().rollbackTransaction();
+			}
+			catch(SQLException ex) {
+				throw new DataAccessException(ex, "Transaction cant be rolled back");
+			}
+			throw new DataAccessException(dae, "Transaction could not be committed");
+		}
 		
 	}
 	
