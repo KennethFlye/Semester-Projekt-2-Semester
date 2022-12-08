@@ -106,7 +106,7 @@ public class BookingCtrl {
 			return true;
 		}
 		else {
-			return false; //TODO Skal nok �ndres til at returne void?
+			return false;
 		}
 	}
 	
