@@ -13,15 +13,20 @@ public class BookingTime {
 
 	
 	
-	public BookingTime(EventType et, LocalDateTime startTime, LocalDateTime finishTime) {
+	public BookingTime(EventType et, LocalDateTime startTime, int groups) {
 		this.eventType = et;
-		this.finishTime=finishTime;
 		this.startTime=startTime;
-		this.finishTime=startTime.plusMinutes(et.getEnumType().getLenght());
+		this.finishTime=startTime.plusMinutes((et.getEnumType().getLength()*groups));
 	}
 		
 		
 	
+	public BookingTime(int i, Object object) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	public EventType getEventType() {
 		return eventType;
 	}

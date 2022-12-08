@@ -40,7 +40,7 @@ public class CreateBookingMenu extends JFrame {
 	
 	private JLabel lblRaceType, lblCateringMenu, lblCatering, lblAmountOfPeople, lblTImeSlotEvent, lblEventTime, lblTimeSlotGokart;
 	
-	private JButton btnAddCateringMenu, btnChooseTimeSlotEvent, btnChooseTimeSlotGokart;
+	private JButton btnAddCateringMenu, btnChooseTimeSlotEvent, btnChooseTimeSlotGokart, btnAddCustomer;
 	
 	private JRadioButton rdbtnCatering;
 	
@@ -71,6 +71,8 @@ public class CreateBookingMenu extends JFrame {
 	private String[] eventLength = {EnumType.EVENT_HALL_1_HOUR.getLabel(), EnumType.EVENT_HALL_1_AND_HALF_HOUR.getLabel(), EnumType.EVENT_HALL_2_HOURS.getLabel()};
 	private String[] foodTypes = {EnumMenu.CHICKEN.getLabel(), EnumMenu.EGGS.getLabel(), EnumMenu.FRIKADEL.getLabel()};
 	private JTextField textFieldTimeSlotEvent;
+	
+	private boolean peopleAdded;
 
 	/**
 	 * Launch the application.
@@ -95,7 +97,7 @@ public class CreateBookingMenu extends JFrame {
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 713, 343);
+		setBounds(100, 100, 913, 343);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -288,7 +290,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_panel_2.gridy = 8;
 		panel_1.add(panel_2, gbc_panel_2);
 		
-		JButton btnAddCustomer = new JButton("Tilføj");
+		btnAddCustomer = new JButton("Tilføj");
 		panel_2.add(btnAddCustomer);
 		
 		JButton btnResetCustomer = new JButton("Reset");
@@ -318,12 +320,37 @@ public class CreateBookingMenu extends JFrame {
 		gbc_comboBoxBookingType.gridy = 0;
 		centerPanelEast.add(comboBoxBookingType, gbc_comboBoxBookingType);
 		
+		lblAmountOfPeople = new JLabel("Antal Personer");
+		GridBagConstraints gbc_lblAmountOfPeople = new GridBagConstraints();
+		gbc_lblAmountOfPeople.anchor = GridBagConstraints.EAST;
+		gbc_lblAmountOfPeople.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAmountOfPeople.gridx = 0;
+		gbc_lblAmountOfPeople.gridy = 1;
+		centerPanelEast.add(lblAmountOfPeople, gbc_lblAmountOfPeople);
+		
+		textFieldAmountOfPeople = new JTextField();
+		GridBagConstraints gbc_textFieldAmountOfPeople = new GridBagConstraints();
+		gbc_textFieldAmountOfPeople.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldAmountOfPeople.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldAmountOfPeople.gridx = 1;
+		gbc_textFieldAmountOfPeople.gridy = 1;
+		centerPanelEast.add(textFieldAmountOfPeople, gbc_textFieldAmountOfPeople);
+		textFieldAmountOfPeople.setColumns(10);
+		
+		JButton btnAddAmountOfPeople = new JButton("Tilføj");
+		GridBagConstraints gbc_btnAddAmountOfPeople = new GridBagConstraints();
+		gbc_btnAddAmountOfPeople.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAddAmountOfPeople.gridx = 2;
+		gbc_btnAddAmountOfPeople.gridy = 1;
+		centerPanelEast.add(btnAddAmountOfPeople, gbc_btnAddAmountOfPeople);
+		btnAddAmountOfPeople.addActionListener((e) -> handleAddAmountOfPeopleEvent());
+		
 		lblRaceType = new JLabel("Løbstype");
 		GridBagConstraints gbc_lblRaceType = new GridBagConstraints();
 		gbc_lblRaceType.anchor = GridBagConstraints.EAST;
 		gbc_lblRaceType.insets = new Insets(0, 0, 5, 5);
 		gbc_lblRaceType.gridx = 0;
-		gbc_lblRaceType.gridy = 1;
+		gbc_lblRaceType.gridy = 2;
 		centerPanelEast.add(lblRaceType, gbc_lblRaceType);
 		
 		comboBoxRaceType = new JComboBox(raceTypes);
@@ -331,7 +358,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_comboBoxRaceType.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxRaceType.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxRaceType.gridx = 1;
-		gbc_comboBoxRaceType.gridy = 1;
+		gbc_comboBoxRaceType.gridy = 2;
 		centerPanelEast.add(comboBoxRaceType, gbc_comboBoxRaceType);
 		
 		lblEventTime = new JLabel("Event Tid");
@@ -339,7 +366,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblEventTime.anchor = GridBagConstraints.EAST;
 		gbc_lblEventTime.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEventTime.gridx = 0;
-		gbc_lblEventTime.gridy = 2;
+		gbc_lblEventTime.gridy = 3;
 		centerPanelEast.add(lblEventTime, gbc_lblEventTime);
 		
 		comboBoxEventTime = new JComboBox(eventLength);
@@ -347,7 +374,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_comboBoxEventTime.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxEventTime.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxEventTime.gridx = 1;
-		gbc_comboBoxEventTime.gridy = 2;
+		gbc_comboBoxEventTime.gridy = 3;
 		centerPanelEast.add(comboBoxEventTime, gbc_comboBoxEventTime);
 		
 		lblTimeSlotGokart = new JLabel("Tidspunkt Gokart");
@@ -355,7 +382,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblTimeSlotGokart.anchor = GridBagConstraints.EAST;
 		gbc_lblTimeSlotGokart.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTimeSlotGokart.gridx = 0;
-		gbc_lblTimeSlotGokart.gridy = 3;
+		gbc_lblTimeSlotGokart.gridy = 4;
 		centerPanelEast.add(lblTimeSlotGokart, gbc_lblTimeSlotGokart);
 		
 		textFieldTimeSlotGokart = new JTextField();
@@ -363,9 +390,9 @@ public class CreateBookingMenu extends JFrame {
 		gbc_textFieldTimeSlotGokart.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldTimeSlotGokart.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldTimeSlotGokart.gridx = 1;
-		gbc_textFieldTimeSlotGokart.gridy = 3;
+		gbc_textFieldTimeSlotGokart.gridy = 4;
 		centerPanelEast.add(textFieldTimeSlotGokart, gbc_textFieldTimeSlotGokart);
-		textFieldTimeSlotGokart.setColumns(10);
+		textFieldTimeSlotGokart.setColumns(30);
 		textFieldTimeSlotGokart.setEditable(false);
 		
 		btnChooseTimeSlotGokart = new JButton("Vælg Tidspunkt");
@@ -373,7 +400,7 @@ public class CreateBookingMenu extends JFrame {
 		GridBagConstraints gbc_btnChooseTimeSlotGokart = new GridBagConstraints();
 		gbc_btnChooseTimeSlotGokart.insets = new Insets(0, 0, 5, 0);
 		gbc_btnChooseTimeSlotGokart.gridx = 2;
-		gbc_btnChooseTimeSlotGokart.gridy = 3;
+		gbc_btnChooseTimeSlotGokart.gridy = 4;
 		centerPanelEast.add(btnChooseTimeSlotGokart, gbc_btnChooseTimeSlotGokart);
 		btnChooseTimeSlotGokart.addActionListener((e) -> handleTimeSlotEventGokart());
 		
@@ -383,7 +410,7 @@ public class CreateBookingMenu extends JFrame {
 		gbc_lblTImeSlotEvent.anchor = GridBagConstraints.EAST;
 		gbc_lblTImeSlotEvent.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTImeSlotEvent.gridx = 0;
-		gbc_lblTImeSlotEvent.gridy = 4;
+		gbc_lblTImeSlotEvent.gridy = 5;
 		centerPanelEast.add(lblTImeSlotEvent, gbc_lblTImeSlotEvent);
 		
 		textFieldTimeSlotEvent = new JTextField();
@@ -391,9 +418,9 @@ public class CreateBookingMenu extends JFrame {
 		gbc_textFieldTimeSlotEvent.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldTimeSlotEvent.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldTimeSlotEvent.gridx = 1;
-		gbc_textFieldTimeSlotEvent.gridy = 4;
+		gbc_textFieldTimeSlotEvent.gridy = 5;
 		centerPanelEast.add(textFieldTimeSlotEvent, gbc_textFieldTimeSlotEvent);
-		textFieldTimeSlotEvent.setColumns(10);
+		textFieldTimeSlotEvent.setColumns(30);
 		
 		textFieldTimeSlotEvent.setEditable(false);
 		
@@ -402,34 +429,9 @@ public class CreateBookingMenu extends JFrame {
 		GridBagConstraints gbc_btnChooseTimeSlotEvent = new GridBagConstraints();
 		gbc_btnChooseTimeSlotEvent.insets = new Insets(0, 0, 5, 0);
 		gbc_btnChooseTimeSlotEvent.gridx = 2;
-		gbc_btnChooseTimeSlotEvent.gridy = 4;
+		gbc_btnChooseTimeSlotEvent.gridy = 5;
 		centerPanelEast.add(btnChooseTimeSlotEvent, gbc_btnChooseTimeSlotEvent);
 		btnChooseTimeSlotEvent.addActionListener((e) -> handleTimeSlotEventEvent());
-		
-		lblAmountOfPeople = new JLabel("Antal Personer");
-		GridBagConstraints gbc_lblAmountOfPeople = new GridBagConstraints();
-		gbc_lblAmountOfPeople.anchor = GridBagConstraints.EAST;
-		gbc_lblAmountOfPeople.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAmountOfPeople.gridx = 0;
-		gbc_lblAmountOfPeople.gridy = 5;
-		centerPanelEast.add(lblAmountOfPeople, gbc_lblAmountOfPeople);
-		
-		textFieldAmountOfPeople = new JTextField();
-		GridBagConstraints gbc_textFieldAmountOfPeople = new GridBagConstraints();
-		gbc_textFieldAmountOfPeople.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldAmountOfPeople.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldAmountOfPeople.gridx = 1;
-		gbc_textFieldAmountOfPeople.gridy = 5;
-		centerPanelEast.add(textFieldAmountOfPeople, gbc_textFieldAmountOfPeople);
-		textFieldAmountOfPeople.setColumns(10);
-		
-		JButton btnAddAmountOfPeople = new JButton("Tilføj");
-		GridBagConstraints gbc_btnAddAmountOfPeople = new GridBagConstraints();
-		gbc_btnAddAmountOfPeople.insets = new Insets(0, 0, 5, 0);
-		gbc_btnAddAmountOfPeople.gridx = 2;
-		gbc_btnAddAmountOfPeople.gridy = 5;
-		centerPanelEast.add(btnAddAmountOfPeople, gbc_btnAddAmountOfPeople);
-		btnAddAmountOfPeople.addActionListener((e) -> handleAddAmountOfPeopleEvent());
 		
 		
 		lblCatering = new JLabel("Mad");
@@ -596,16 +598,16 @@ public class CreateBookingMenu extends JFrame {
 	}
 
 	private void handleAddAmountOfPeopleEvent() {
-		// Har den ikke allerede starttidspunktet igennem bookingTime?
-		
-		
 		try {
-			bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()), startTimeGokart, finishTimeGokart);
+			if(Integer.parseInt(textFieldAmountOfPeople.getText())>0) {
+				peopleAdded = bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()));
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Input skal v�re positivt tal");
+			}
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Input skal v�re et tal");
 		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -613,45 +615,65 @@ public class CreateBookingMenu extends JFrame {
 
 	private void handleTimeSlotEventEvent() {
 		
-		TimeSlotWindowEvent dialog = new TimeSlotWindowEvent(bookingCtrl);	
-		LocalDateTime eventStartTime = dialog.showDialog();
-		
-		if(eventStartTime != null) {
-			textFieldTimeSlotEvent.setText(eventStartTime.toString());
+		if(peopleAdded) {
+			TimeSlotWindowEvent dialog = new TimeSlotWindowEvent(bookingCtrl);	
+			LocalDateTime eventStartTime = dialog.showDialog();
 			
-			String eventLabel = (String)comboBoxEventTime.getSelectedItem();
-			
-			try {
-				bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLenght()));
-			} catch (DataAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(eventStartTime != null) {
+				
+				
+				String eventLabel = (String)comboBoxEventTime.getSelectedItem();
+				LocalDateTime finishTime;
+				
+				try {
+					finishTime = bookingCtrl.addTimeslot(eventLabel, eventStartTime, eventStartTime.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength()));
+					
+					textFieldTimeSlotEvent.setText(eventStartTime.toString() + " /-/ " + finishTime.toString());
+				} catch (DataAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
 			}
 		}
+		else {
+			JOptionPane.showMessageDialog(null, "Personer skal være tilføjet til ordren");
+		}
+		
+		
 		
 	}
 
 	private void handleTimeSlotEventGokart() {
 		
-		String eventLabel = (String)comboBoxRaceType.getSelectedItem();
-		
-		TimeSlotWindowGokart dialog = new TimeSlotWindowGokart(bookingCtrl);
-		startTimeGokart = dialog.showDialog();
-		
-		if(startTimeGokart != null) {
+		if(peopleAdded) {
+			String eventLabel = (String)comboBoxRaceType.getSelectedItem();
 			
-			finishTimeGokart = startTimeGokart.plusMinutes(EnumType.valueOfLabel(eventLabel).getLenght());
+			TimeSlotWindowGokart dialog = new TimeSlotWindowGokart(bookingCtrl);
+			startTimeGokart = dialog.showDialog();
 			
-			textFieldTimeSlotGokart.setText(startTimeGokart.toString());
-			
-			
-			try {
-				bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
-			} catch (DataAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(startTimeGokart != null) {
+				
+				finishTimeGokart = startTimeGokart.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength());
+				
+				
+				
+				try {
+					finishTimeGokart = bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
+					
+					textFieldTimeSlotGokart.setText(startTimeGokart.toString() + " /-/ " + finishTimeGokart.toString());
+				} catch (DataAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
+		else {
+			JOptionPane.showMessageDialog(null, "Personer skal være tilføjet til ordren");
+		}
+		
+		
 		
 		
 	}
@@ -678,10 +700,23 @@ public class CreateBookingMenu extends JFrame {
 	private void handleResetCustomerEvent() {
 		// TODO Sæt alle tekst felter til at være tomme
 		
+		textFieldPhoneNo.setText("");
+		textFieldAddress.setText("");
+		textFieldBirthDate.setText("");
+		textFieldCity.setText("");
+		textFieldCountry.setText("");
+		textFieldEmail.setText("");
+		textFieldName.setText("");
+		textFieldZipcode.setText("");
+		
+		textFieldCustomerPhone.setText("Tlf.");
+		
+		btnAddCustomer.setVisible(true);
+		
 	}
 
 	private void handleAddCustomerEvent() {
-		// TODO Implent addCustomer() eller er i searchForCustomer;
+		// TODO Implement addCustomer() eller er i searchForCustomer;
 		
 		
 		
@@ -697,6 +732,7 @@ public class CreateBookingMenu extends JFrame {
 			try {
 				foundCustomer = bookingCtrl.addCustomer(textFieldCustomerPhone.getText());
 				setCustomerInfo(foundCustomer);
+				btnAddCustomer.setVisible(false);
 			} catch (DataAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
