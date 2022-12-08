@@ -3,7 +3,9 @@ package database;
 import model.Booking;
 
 public interface BookingDBIF {
-	DBConnection getDBConnection();
+	
+	//void insertBookingTime(Booking newBooking);
+
 	int insertBooking(Booking newBooking) throws DataAccessException;
 
 }

@@ -112,30 +112,12 @@ public class BookingCtrl {
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
-	public ArrayList<String> finishBooking() throws DataAccessException, SQLException {
-		try {
-			//starttransaction sets autocommit to false, which means nothing will be committed before we tell it to
-			bookingDatabase.getDBConnection().startTransaction(); //since dbconnection is a singleton, it doesnt matter which db class we call it from
-			
-			newBooking.calculateTotalPrice();
-			int currentId = bookingDatabase.insertBooking(newBooking); //gets the current bookings' ID, to keep track with the bookingTime
-			bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
-			
-			//committransaction inserts everything in the database so far, unless there are problems - sets autocommit to true again
-			bookingDatabase.getDBConnection().commitTransaction();
-			
-			return getReceipt();
-		}
-		catch(DataAccessException dae) {
-			try {
-				//Undoes the changes that were tried to make and sets autocommit true
-				bookingDatabase.getDBConnection().rollbackTransaction();
-			}
-			catch(SQLException ex) {
-				throw new DataAccessException(ex, "Transaction cant be rolled back");
-			}
-			throw new DataAccessException(dae, "Transaction could not be committed");
-		}
+	public ArrayList<String> finishBooking() throws DataAccessException {
+		newBooking.calculateTotalPrice();
+		int currentId = bookingDatabase.insertBooking(newBooking);
+		//int currentId = bookingDatabase.getCurrentId();
+		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
+		return getReceipt();
 		
 	}
 	

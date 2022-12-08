@@ -1,6 +1,5 @@
 package ui;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
@@ -23,15 +22,16 @@ public class BackgroundWorkerFinishBooking extends SwingWorker<Void, Void>{
 		}
 	
 	@Override
-	protected Void doInBackground() throws DataAccessException {
+	protected Void doInBackground() {
 		
 		try {
 			receipt = bookingCtrl.finishBooking();
 			Receipt receiptDialog = new Receipt(receipt);
 			receiptDialog.setVisible(true);
 			ui.dispose();
-		} catch (SQLException e) {
-			throw new DataAccessException(e, "Could not run in bg");
+		} catch (DataAccessException e) {
+			// TODO gør noget med den
+			e.printStackTrace();
 		}
 		
 		return null;
