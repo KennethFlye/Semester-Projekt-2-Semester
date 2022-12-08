@@ -28,8 +28,8 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	private static final String GETBOOKINGTIME_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime between ? and ?";
 	private PreparedStatement insertBookingTime,getBookingTimesByDate,getBookingTime;
 	
-	List<EnumType> usesEventHall = new ArrayList<>();
-	List<EnumType> usesGokartTrack = new ArrayList<>();
+	private List<EnumType> usesEventHall = new ArrayList<>();
+	private List<EnumType> usesGokartTrack = new ArrayList<>();
 	
 	public BookingTimeDB() throws DataAccessException{
 		
