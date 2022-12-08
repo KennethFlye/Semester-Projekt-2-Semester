@@ -598,16 +598,16 @@ public class CreateBookingMenu extends JFrame {
 	}
 
 	private void handleAddAmountOfPeopleEvent() {
-		// Har den ikke allerede starttidspunktet igennem bookingTime?
-		
-		
 		try {
-			peopleAdded = bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()));
+			if(Integer.parseInt(textFieldAmountOfPeople.getText())>0) {
+				peopleAdded = bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()));
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Input skal være positivt tal");
+			}
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Input skal være et tal");
 		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -16,11 +16,16 @@ public class BookingDB implements BookingDBIF {
 	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
 	private PreparedStatement insertBookingPSNoFood;
 
+	//Method mainly for making the transaction
+	@Override
+	public DBConnection getDBConnection() {
+		return DBConnection.getInstance();
+	}
 	
 	@Override
 	public int insertBooking(Booking newBooking) throws DataAccessException {
 		Connection connection;
-		connection = DBConnection.getInstance().getConnection();
+		connection = getDBConnection().getConnection();
 		try {
 			insertBookingPSFood = connection.prepareStatement(INSERTBOOKING_Q_FOOD);
 			insertBookingPSNoFood = connection.prepareStatement(INSERTBOOKING_Q_NOFOOD);
@@ -37,9 +42,6 @@ public class BookingDB implements BookingDBIF {
 			ps = insertBookingPSNoFood;
 		
 		try {
-			
-			//Start the transaction, sets autocommit to false
-			DBConnection.getInstance().startTransaction();
 			
 			//Total price
 			ps.setFloat(1, (float) newBooking.getTotal());
@@ -64,9 +66,6 @@ public class BookingDB implements BookingDBIF {
 			if(newBooking.hasCateringMenu())
 				ps.setInt(6, newBooking.getCatering().getId());
 			
-			//Commits the transaction and sets autocommit to true
-			DBConnection.getInstance().commitTransaction();
-			
 			ps.execute();
 			ps.getMoreResults();
 			ResultSet rs = ps.getResultSet();
@@ -76,14 +75,7 @@ public class BookingDB implements BookingDBIF {
 			return currentId;
 			
 		} catch (SQLException e) {
-			try {
-				//Undoes the changes that were tried to make and sets autocommit true
-				DBConnection.getInstance().rollbackTransaction();
-			}
-			catch(SQLException ex) {
-				throw new DataAccessException(ex, "Transaction cant be rolled back");
-			}
-			throw new DataAccessException(e, "Transaction couldnt be committed");
+			throw new DataAccessException(e, "Could not execute");
 		}
 				
 	}
