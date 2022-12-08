@@ -1,7 +1,7 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 
@@ -43,12 +43,13 @@ class TestFinishBooking {
 		
 		//act
 		bc.addCustomer("14354678");
-		bc.addAmountOfPeople(8);
-		bc.addTimeslot("LeMans 1 Time", d, d);
-		bc.addTimeslot("Eventhal 1.5 Time", d, d);
+//		bc.addAmountOfPeople(8);
+		bc.addTimeslot("LeMans 1 Time", d, d.plusHours(1));
+		bc.addTimeslot("Eventhal 2 Timer", d, d.plusHours(2));
 		bc.addCateringMenu(3);
 		
-//		assertDoesNotThrow(); //TODO either somehow get to throw or add a method in bc explicitly for calling the insert methods
+		
+		assertThrows(DataAccessException.class, () -> bc.finishBooking()); //TODO either somehow get to throw or add a method in bc explicitly for calling the insert methods
 	}
 
 }
