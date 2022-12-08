@@ -599,16 +599,11 @@ public class CreateBookingMenu extends JFrame {
 
 	private void handleAddAmountOfPeopleEvent() {
 		try {
-			if(Integer.parseInt(textFieldAmountOfPeople.getText())>0) {
-				peopleAdded = bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()));
-			}
-			else {
-				JOptionPane.showMessageDialog(null, "Input skal være positivt tal");
-			}
+			peopleAdded = bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()));
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Input skal være et tal");
 		} catch (DataAccessException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,  e.getMessage());
 		}
 		
 	}
@@ -765,16 +760,19 @@ public class CreateBookingMenu extends JFrame {
 		else{
 			textFieldPhoneNo.setText(foundCustomer.getPhoneNo());
 			textFieldName.setText(foundCustomer.getName());
-		}
-		
-		
-		
+		}	
 	}
 
 	private void handleExitEvent() {
 		
 		this.dispose();
 		
+	}
+	
+	
+	//Only used for testing
+	public void setCustomer(Customer c) {
+		setCustomerInfo(c);
 	}
 
 }

@@ -126,6 +126,7 @@ class TestAddTimeSlot {
 	void testInBetweenOverlap() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
+		bc.addAmountOfPeople(9);
 		LocalDateTime dt = d.plusMinutes(30);
 		BookingTime bt = new BookingTime(ee, dt, 2);
 		//Act
