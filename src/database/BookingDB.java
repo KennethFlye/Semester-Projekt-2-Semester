@@ -54,8 +54,7 @@ public class BookingDB implements BookingDBIF {
 			ps.setInt(4, newBooking.isPaid()?1:0);
 			
 			//Customer id
-			//ps.setInt(5, newBooking.getCustomer().getId());// ToDo
-			ps.setInt(5, 1);
+			ps.setInt(5, newBooking.getCustomer().getContactId());
 			
 			//Employee id
 			//ps.setInt(6, newBooking.getEmployee().getId());// Outside use case

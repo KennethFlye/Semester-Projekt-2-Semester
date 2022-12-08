@@ -3,14 +3,16 @@ package model;
 public abstract class Contact {
 	
 	private String name, phoneNo, email, address, city, country;
-	private int zipCode;
+	private int zipCode, contactId;
 	
-	public Contact(String name, String phoneNo) {
+	public Contact(int contactId, String name, String phoneNo) {
+		this.contactId = contactId;
 		this.name = name;
 		this.phoneNo = phoneNo;
 	}
 	
-	public Contact(String name, String phoneNo, String email, String address, int zipCode, String city, String country) {
+	public Contact(int contactId, String name, String phoneNo, String email, String address, int zipCode, String city, String country) {
+		this.contactId = contactId;
 		this.name = name;
 		this.phoneNo = phoneNo;
 		this.email = email;
@@ -18,6 +20,10 @@ public abstract class Contact {
 		this.zipCode = zipCode;
 		this.city = city;
 		this.country = country;
+	}
+	
+	public void setContactId(int contactId) {
+		this.contactId = contactId;
 	}
 	
 	public void setName(String name) {
@@ -46,6 +52,10 @@ public abstract class Contact {
 	
 	public void setCountry(String country) {
 		this.country = country;
+	}
+	
+	public int getContactId() {
+		return contactId;
 	}
 	
 	public String getName() {
