@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.*;
+import java.util.*;
 
 import model.Booking;
 
@@ -15,6 +17,10 @@ public class BookingDB implements BookingDBIF {
 	
 	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
 	private PreparedStatement insertBookingPSNoFood;
+	
+	private static final String GETBOOKINGBYIDQ = "SELECT * FROM Booking WHERE bookingId = ?";
+	private PreparedStatement getBookingById;
+
 
 	//Method mainly for making the transaction
 	@Override
@@ -78,6 +84,28 @@ public class BookingDB implements BookingDBIF {
 			throw new DataAccessException(e, "Could not execute");
 		}
 				
+	}
+	
+	public List<Booking> findBookingByDate(LocalDate date){
+		Connection connection;
+		connection = getDBConnection().getConnection();
+		try {
+			getBookingById = connection.prepareStatement(GETBOOKINGBYIDQ);
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+		}
+
+		List<Booking> bookings = new ArrayList<>();
+		
+		BookingTimeDBIF bkTDB = new BookingTimeDB();
+		ResultSet rs = bkTDB.getBookingIdsByDate(date);
+		
+		while(rs.next()) {
+			
+			
+		}
+		
 	}
 	
 }
