@@ -4,8 +4,6 @@ import model.Booking;
 
 public interface BookingDBIF {
 	
-	//void insertBookingTime(Booking newBooking);
-
-	int insertBooking(Booking newBooking) throws DataAccessException;
+	public int insertBooking(Booking newBooking) throws DataAccessException;
 
 }

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public interface GokartDBIF {
-	boolean hasEnoughAvailableGokarts(int amount, LocalDateTime time, LocalDateTime end) throws SQLException;
+	public boolean hasEnoughAvailableGokarts(int amount, LocalDateTime time, LocalDateTime end) throws SQLException;
 
 	/**
 	 * Checks whether the required amount of gokarts are available for a booking. A gokart is available if it is not
@@ -15,5 +15,5 @@ public interface GokartDBIF {
 	 * @param start start date and time for booking 
 	 * @param end date and time for booking
 	 */
-	int getAvailableGokarts(LocalDateTime start, LocalDateTime end) throws SQLException;
+	public int getAvailableGokarts(LocalDateTime start, LocalDateTime end) throws SQLException;
 }
