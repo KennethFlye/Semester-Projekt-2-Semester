@@ -10,9 +10,6 @@ public class BookingTime {
 	private LocalDateTime startTime, finishTime; 
 	
 	
-
-	
-	
 	public BookingTime(EventType et, LocalDateTime startTime, int groups) {
 		this.eventType = et;
 		this.startTime=startTime;
