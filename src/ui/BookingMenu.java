@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JToggleButton;
@@ -14,6 +15,7 @@ public class BookingMenu extends JFrame {
 
 	private JPanel contentPane;
 	private CreateBookingMenu createBookingMenu;
+	private UpdateBookingMenu updateBookingMenu;
 
 	/**
 	 * Launch the application.
@@ -63,24 +65,40 @@ public class BookingMenu extends JFrame {
 
 		btnCreateBooking.addActionListener((e) -> handleCreateBookingEvent());
 		
-		JButton btnFindBooking = new JButton("Find Booking");
-		centerPanel1.add(btnFindBooking);
+		JButton btnUpdateBooking = new JButton("Opdater Booking");
+		centerPanel1.add(btnUpdateBooking);
+		
+		btnUpdateBooking.addActionListener((e) -> handleUpdateBookingEvent());
 		
 		JButton btnShowCalendar = new JButton("Vis Kalender");
 		centerPanel1.add(btnShowCalendar);
+		
+		btnShowCalendar.addActionListener((e) -> handleShowCalenderClick());
+		
+	}
+
+	private void handleUpdateBookingEvent() {
+		
+//		flyt et niveau ned:
+//		BackgroundWorker bgw = new BackgroundWorker(createBookingMenu);
+//		
+//		bgw.execute(); //run the updatebooking list window in bg
+		
+		//TODO open dialog to find the requested booking
+		
+	}
+
+	private void handleShowCalenderClick() {
+		JOptionPane.showMessageDialog(null, "Endnu ikke implementeret");
 	}
 
 	private void handleExitEvent() {
-		
 		this.dispose();
-		
 	}
 
 	private void handleCreateBookingEvent() {
-		
 		createBookingMenu = new CreateBookingMenu();
 		createBookingMenu.setVisible(true);
-		
 	}
 
 }

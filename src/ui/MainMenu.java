@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -77,9 +79,11 @@ public class MainMenu extends JFrame {
 		
 		JButton btnCustomer = new JButton("Kunde");
 		northSecondPanel.add(btnCustomer);
+		btnCustomer.addActionListener((e) -> handleCustomerClick());
 		
 		JButton btnEmployee = new JButton("Medarbejder");
 		northSecondPanel.add(btnEmployee);
+		btnEmployee.addActionListener((e) -> handleEmployeeClick());
 		
 		JPanel centerSecondPanel = new JPanel();
 		centerFirstPanel.add(centerSecondPanel, BorderLayout.CENTER);
@@ -91,25 +95,44 @@ public class MainMenu extends JFrame {
 		
 		JButton btnRent = new JButton("Udlejning");
 		northThirdPanel.add(btnRent);
+		btnRent.addActionListener((e) -> handleRentClick());
 		
 		JButton btnPrices = new JButton("Priser");
 		northThirdPanel.add(btnPrices);
+		btnPrices.addActionListener((e) -> handlePricesClick());
 		
 		JButton btnGokarts = new JButton("Gokarts");
 		northThirdPanel.add(btnGokarts);
+		btnGokarts.addActionListener((e) -> handleGokartsClick());
+	}
+
+	private void handleGokartsClick() {
+		JOptionPane.showMessageDialog(null, "Endnu ikke implementeret");
+	}
+
+	private void handlePricesClick() {
+		JOptionPane.showMessageDialog(null, "Endnu ikke implementeret");
+	}
+
+	private void handleRentClick() {
+		JOptionPane.showMessageDialog(null, "Endnu ikke implementeret");
+	}
+
+	private void handleEmployeeClick() {
+		JOptionPane.showMessageDialog(null, "Endnu ikke implementeret");
+	}
+
+	private void handleCustomerClick() {
+		JOptionPane.showMessageDialog(null, "Endnu ikke implementeret");
 	}
 
 	private void handleExitEvent() {
-		
 		this.dispose();
-		
 	}
 
 	private void handleBookingClick() {
-		
 		bookingMenu = new BookingMenu();
 		bookingMenu.setVisible(true);
-		
 	}
 	
 	
