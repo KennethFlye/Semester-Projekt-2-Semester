@@ -44,15 +44,13 @@ class TestFinishBooking {
 		bc.createBooking();
 		
 		//act
-//		bc.addCustomer("14354678");
+		bc.addCustomer("14354678");
 		bc.addAmountOfPeople(8);
 		bc.addTimeslot("LeMans 1 Time", d, d.plusDays(1));
 		bc.addTimeslot("Eventhal 2 Timer", d, d.plusDays(1));
 		bc.addCateringMenu(3);
-		
-		BookingDBIF db = new BookingDB();
 		assertThrows(DataAccessException.class, () -> bc.finishBooking());
-		
+		//test om listen returned ikke er nul fx eller linje i db tables er ændret
 	}
 
 }
