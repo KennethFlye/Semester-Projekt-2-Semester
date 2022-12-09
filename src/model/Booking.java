@@ -102,6 +102,10 @@ public class Booking {
 	public ArrayList<BookingTime> getTimeslots(){
 		return bookingTimeslots; //Returns a list of timeslot(s)
 	}
+	
+	public int getBookingId() {
+		return bookingID;
+	}
 
 	/*public Employee getEmployee() { Outside use case
 		return null;
