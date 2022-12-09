@@ -28,15 +28,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbl_topPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		topPanel.setLayout(gbl_topPanel);
 		
-		JLabel lblUpdateBookingHeader = new JLabel("New label");
-		GridBagConstraints gbc_lblUpdateBookingHeader = new GridBagConstraints();
-		gbc_lblUpdateBookingHeader.anchor = GridBagConstraints.WEST;
-		gbc_lblUpdateBookingHeader.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUpdateBookingHeader.gridx = 1;
-		gbc_lblUpdateBookingHeader.gridy = 0;
-		topPanel.add(lblUpdateBookingHeader, gbc_lblUpdateBookingHeader);
-		
-		JLabel lblSearchDate = new JLabel("Search date:");
+		JLabel lblSearchDate = new JLabel("S\u00F8g dato");
 		GridBagConstraints gbc_lblSearchDate = new GridBagConstraints();
 		gbc_lblSearchDate.anchor = GridBagConstraints.EAST;
 		gbc_lblSearchDate.insets = new Insets(0, 0, 0, 5);
@@ -53,7 +45,7 @@ public class UpdateBookingMenu extends JFrame {
 		topPanel.add(txtSearchDate, gbc_txtSearchDate);
 		txtSearchDate.setColumns(10);
 		
-		JButton btnSearchDate = new JButton("Search");
+		JButton btnSearchDate = new JButton("S\u00F8g");
 		GridBagConstraints gbc_btnSearchDate = new GridBagConstraints();
 		gbc_btnSearchDate.insets = new Insets(0, 0, 0, 5);
 		gbc_btnSearchDate.anchor = GridBagConstraints.WEST;
@@ -61,17 +53,36 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_btnSearchDate.gridy = 1;
 		topPanel.add(btnSearchDate, gbc_btnSearchDate);
 		
+		btnSearchDate.addActionListener((e) -> handleSearchDateClick());
+		
 		JPanel bottomPanel = new JPanel();
 		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 		
 		JButton btnAccept = new JButton("Godkend");
 		bottomPanel.add(btnAccept);
 		
+		btnAccept.addActionListener((e) -> handleAcceptClick());
+		
 		JButton btnCancel = new JButton("Annuller");
 		bottomPanel.add(btnCancel);
 		
+		btnCancel.addActionListener((e) -> handleCancelClick());
+		
 		table = new JTable();
 		getContentPane().add(table, BorderLayout.CENTER);
+	}
+	
+	
+	private void handleSearchDateClick() {
+		//TODO implement
+	}
+	
+	private void handleAcceptClick() {
+		//TODO implement - get the swingworker
+	}
+	
+	private void handleCancelClick() {
+		this.dispose();
 	}
 
 }
