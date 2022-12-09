@@ -1,36 +1,42 @@
 package controller;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import model.CateringMenu;
+import model.Customer;
+import model.EventType;
+import model.EventType.EnumType;
+import model.Booking;
+import model.BookingTime;
 import database.BookingDB;
 import database.BookingDBIF;
 import database.BookingTimeDB;
 import database.BookingTimeDBIF;
 import database.DataAccessException;
-import model.Booking;
-import model.BookingTime;
-import model.Customer;
-import model.EventType;
-import model.EventType.EnumType;
 
 public class BookingCtrl {
 	
 	//Fields -----------------------------------------------------------------------------------------------
 	private Booking newBooking;
-	private List<BookingTime> btl;
+	private List<LocalDateTime> listTs;
 	private BookingTimeDBIF bookingTimeDatabase;
 	private CustomerCtrl customerCtrl;
 	private GokartCtrl gokartCtrl;
 	private CateringCtrl cateringCtrl;
 	private EventTypeCtrl eventTypeCtrl;
+	private BookingTimeCrtl bookingTimeCtrl;
 	private BookingDBIF bookingDatabase;
 	private BookingTime bt;
 	
 	//Constructor/init -----------------------------------------------------------------------------------------------
 	public BookingCtrl() throws DataAccessException {
-		btl = new ArrayList<>(); //TODO overflødig? se også fields
+		listTs = new ArrayList<>();
 		bookingTimeDatabase = new BookingTimeDB();
 		customerCtrl = new CustomerCtrl();
 		gokartCtrl = new GokartCtrl();
@@ -80,6 +86,11 @@ public class BookingCtrl {
 		//TODO set mutex lock on chosen timeslot??
 		EventType et = eventTypeCtrl.findEvent(EnumType.valueOfLabel(eventType));
 		double amount = newBooking.getAmountOfPeople();
+    if (amount <= 0) {
+			Exception e = new Exception();
+			throw new DataAccessException(e, "Amount of people must be set to a positive amount!");
+		}
+    
 		int amountOfGroups = calculateGroups(et, startTime, finishTime, amount) ;
     
 		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
@@ -101,8 +112,7 @@ public class BookingCtrl {
 			return true;
 		}
 		else {
-			Exception e = new Exception();
-				throw new DataAccessException(e, "Amount of people must be set to a positive amount!");
+			return false; //TODO Skal nok ï¿½ndres til at returne void?
 		}
 	}
 	
@@ -110,30 +120,12 @@ public class BookingCtrl {
 		newBooking.addCateringMenu(cateringCtrl.findCateringMenu(cateringMenu));
 	}
 	
-	public ArrayList<String> finishBooking() throws DataAccessException, SQLException {
-		try {
-			//starttransaction sets autocommit to false, which means nothing will be committed before we tell it to
-			bookingDatabase.getDBConnection().startTransaction(); //since dbconnection is a singleton, it doesnt matter which db class we call it from
-			
-			newBooking.calculateTotalPrice();
-			int currentId = bookingDatabase.insertBooking(newBooking); //gets the current bookings' ID, to keep track with the bookingTime
-			bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
-			
-			//committransaction inserts everything in the database so far, unless there are problems - sets autocommit to true again
-			bookingDatabase.getDBConnection().commitTransaction();
-			
-			return getReceipt();
-		}
-		catch(DataAccessException dae) {
-			try {
-				//Undoes the changes that were tried to make and sets autocommit true
-				bookingDatabase.getDBConnection().rollbackTransaction();
-			}
-			catch(SQLException ex) {
-				throw new DataAccessException(ex, "Transaction cant be rolled back");
-			}
-			throw new DataAccessException(dae, "Transaction could not be committed");
-		}
+	public ArrayList<String> finishBooking() throws DataAccessException {
+		newBooking.calculateTotalPrice();
+		int currentId = bookingDatabase.insertBooking(newBooking);
+		//int currentId = bookingDatabase.getCurrentId();
+		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
+		return getReceipt();
 		
 	}
 	
@@ -173,8 +165,39 @@ public class BookingCtrl {
 	}
 	
 	//Only for testing purposes - returns current booking
-	public Booking getBooking() {
-		return newBooking;
+		public Booking getBooking() {
+			return newBooking;
+		}
+		
+	public List<BookingTime> findBookingTimeById(List<Booking> l) {
+		bookingTimeCtrl.findBookingTimeVyIDd(list);
+		
+		
+		
+		List<BookingTime> times = new ArrayList<>();
+		for (Booking i : list) {
+			list.add(i);
+		}
+		return times;
+		
 	}
+	
+	
+	public List<Booking> findBookingByDate(LocalDateTime date) {
+		bookingDatabase.findBookingByDate(date);
+	}
+	
+	public Booking findBookingsById(int bookingId) {
+		bookingDatabase.findBookingsByid(bookingId);
+	}
+	public Boolean updateBooking(Booking booking) {
+		bookingDatabase.updateBooking(booking); 
+	}
+	public Boolean updateBooking(Booking booking) {
+		bookingTimeDatabase.updateBookingTime(booking);
+		
+	}
+
+
 	
 }
