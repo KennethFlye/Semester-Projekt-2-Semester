@@ -25,6 +25,18 @@ public class Booking {
 		totalPrice = 0;
 	}
 	
+	public Booking(Customer customer, CateringMenu cateringMenu, int amountOfPeople, int bookingID, double totalPrice, LocalDateTime creationDate) {
+		this.customer = customer;
+		this.cateringMenu = cateringMenu;
+		this.amountOfPeople = amountOfPeople;
+		this.bookingID = bookingID;
+		this.totalPrice = totalPrice;
+		this.creationDate = creationDate;
+		
+		bookingTimeslots = new ArrayList<>();
+		isPaid = false;
+	}
+	
 	//SET
 	
 	public void addTimeslot(BookingTime bt) {
