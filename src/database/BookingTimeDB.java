@@ -15,6 +15,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Booking;
 import model.BookingTime;
 import model.EventType;
 import model.EventType.EnumType;
@@ -26,7 +27,10 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	private static final String INSERTBOOKINGTIME_Q = "INSERT INTO BookingTime (eventType, bookingId, startTime, finishTime) VALUES (?, ?, ?, ?);";
 	private static final String GETBOOKINGTIMESBYDATE_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime LIKE '?%'";
 	private static final String GETBOOKINGTIME_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime between ? and ?";
-	private PreparedStatement insertBookingTime,getBookingTimesByDate,getBookingTime;
+	private static final String GET_EVENTTYPE_BOOKINGTIME_BY_BOOKINGID_JOIN_TABLE_Q = "Select * FROM EventType, BookingTime Where BookingTime.eventType = EventType.type and BookingTime.bookingId = ?";
+	private static final String UPDATE_BOOKINGTIME_Q = "UPDATE BookingTime SET startTime = ?, finishTime = ? WHERE BookingTime.bookingId = ? AND BookingTime.eventType = ?" ;
+	
+	private PreparedStatement insertBookingTime,getBookingTimesByDate,getBookingTime, getEventTypeBookingTimeByBookingId, updateBookingTime;
 	
 	private List<EnumType> usesEventHall = new ArrayList<>();
 	private List<EnumType> usesGokartTrack = new ArrayList<>();
@@ -44,6 +48,8 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			getBookingTimesByDate = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIME_Q);
 			insertBookingTime = DBConnection.getInstance().getConnection().prepareStatement(INSERTBOOKINGTIME_Q);
 			getBookingTime = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIMESBYDATE_Q); 
+			getEventTypeBookingTimeByBookingId = DBConnection.getInstance().getConnection().prepareStatement(GET_EVENTTYPE_BOOKINGTIME_BY_BOOKINGID_JOIN_TABLE_Q);
+			updateBookingTime = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_BOOKINGTIME_Q);
 			
 		} catch (SQLException e) {
 			throw new DataAccessException(e, "Could not prepare statement");
@@ -142,6 +148,67 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			}
 			return returnBool;			
 		}
+
+		@Override
+		public boolean updateBookingTime(Booking booking) throws DataAccessException {
+			//UPDATE BookingTime SET startTime = ?, finishTime = ? WHERE BookingTime.bookingId = ? AND BookingTime.eventType = ?
+			List<BookingTime> bookingTimes = booking.getTimeslots();
+			
+			for(int i = 0; i < bookingTimes.size(); i++) {
+				BookingTime currentBookingTime = bookingTimes.get(i);
+				try {
+					updateBookingTime.setTimestamp(0, Timestamp.valueOf(currentBookingTime.getStartTime()));
+					updateBookingTime.setTimestamp(1, Timestamp.valueOf(currentBookingTime.getFinishTime()));
+					updateBookingTime.setInt(2, booking.getBookingId());
+					updateBookingTime.setString(3, currentBookingTime.getEventType().getEnumType().getLabel());
+					
+					updateBookingTime.executeUpdate();
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					throw new DataAccessException(e, "Error during update");
+				}
+			}
+			
+			
+			return true;
+		}
+
+		@Override
+		public List<Booking> findBookingTimeByBookingId(List<Booking> bookings) throws DataAccessException {
+			ResultSet rs;
+			
+			
+			for(int i = 0; i < bookings.size(); i++) {
+				Booking currentBooking = bookings.get(i);
+				
+				try {
+					getEventTypeBookingTimeByBookingId.setInt(0, currentBooking.getBookingId());
+					
+					rs = getEventTypeBookingTimeByBookingId.executeQuery();
+					
+					while(rs.next()) {
+						EnumType enumType = EnumType.valueOfLabel(rs.getString("type"));
+						double price = rs.getDouble("price");
+						
+						EventType et = new EventType(enumType, price);
+						
+						LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
+						LocalDateTime finishTime = rs.getTimestamp("finishTime").toLocalDateTime();
+						
+						BookingTime bt = new BookingTime(et, startTime, finishTime);
+						
+						currentBooking.addTimeslot(bt);
+					}
+				} catch (SQLException e) {
+					throw new DataAccessException(e, "Could not get EventType and BookingTime from Database");
+				}
+			}
+			
+			return bookings;
+		}
+
+
 		}
 		
 		
