@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 
@@ -42,9 +43,9 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//act
+		bc.addAmountOfPeople(1);
 		bc.addTimeslot("Formel 1", d, d); //285
 		bc.addTimeslot("Eventhal 1 Time", d, d); //180
-		bc.addAmountOfPeople(1);
 		bc.addCateringMenu(1);
 		
 		bc.getBooking().calculateTotalPrice();
@@ -59,9 +60,9 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//act
+		bc.addAmountOfPeople(8);
 		bc.addTimeslot("Formel 1", d, d); //285
 		bc.addTimeslot("Eventhal 1 Time", d, d); //180
-		bc.addAmountOfPeople(8);
 		bc.addCateringMenu(1); //55
 		
 		bc.getBooking().calculateTotalPrice();
@@ -76,9 +77,9 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//act
+		bc.addAmountOfPeople(9); //if nine or more drivers, two timeslots should be booked instead
 		bc.addTimeslot("Formel 1", d, d); //285
 		bc.addTimeslot("Eventhal 1 Time", d, d); //180
-		bc.addAmountOfPeople(9); //if nine or more drivers, two timeslots should be booked instead
 		bc.addCateringMenu(1);
 		
 		bc.getBooking().calculateTotalPrice();
@@ -113,9 +114,9 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//act
+		assertThrows(DataAccessException.class, () -> bc.addAmountOfPeople(-1)); //the method wont set non-positive numbers, therefore amount of people is still zero
 		bc.addTimeslot("Formel 1", d, d); //285
 		bc.addTimeslot("Eventhal 1 Time", d, d); //180
-		bc.addAmountOfPeople(-1); //the method wont set non-positive numbers, therefore amount of people is still zero
 		bc.addCateringMenu(1);
 		
 		bc.getBooking().calculateTotalPrice();
@@ -133,8 +134,8 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//act
-		bc.addTimeslot("Formel 1", d, d); //285
 		bc.addAmountOfPeople(1);
+		bc.addTimeslot("Formel 1", d, d); //285
 		
 		bc.getBooking().calculateTotalPrice();
 		
@@ -148,8 +149,8 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//act
-		bc.addTimeslot("Formel 1", d, d); //285
 		bc.addAmountOfPeople(8);
+		bc.addTimeslot("Formel 1", d, d); //285
 		
 		bc.getBooking().calculateTotalPrice();
 		
@@ -163,8 +164,8 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//Act
-		bc.addTimeslot("Formel 1", d, d); //285
 		bc.addAmountOfPeople(9);
+		bc.addTimeslot("Formel 1", d, d); //285
 		
 		//Arrange
 		bc.getBooking().calculateTotalPrice();
@@ -197,8 +198,8 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//act
+		assertThrows(DataAccessException.class, () -> bc.addAmountOfPeople(-1));
 		bc.addTimeslot("Formel 1", d, d); //285
-		bc.addAmountOfPeople(-1); 
 		
 		bc.getBooking().calculateTotalPrice();
 		
@@ -280,7 +281,7 @@ class TestCalculateTotal {
 		bc.createBooking();
 		
 		//act
-		bc.addAmountOfPeople(-1); 
+		assertThrows(DataAccessException.class, () -> bc.addAmountOfPeople(-1)); 
 		bc.addCateringMenu(1);
 		
 		bc.getBooking().calculateTotalPrice();
