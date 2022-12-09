@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.time.*;
 import java.util.*;
 
-import model.Booking;
+import model.*;
+import model.CateringMenu.EnumMenu;
 
 public class BookingDB implements BookingDBIF {
 
@@ -18,8 +19,20 @@ public class BookingDB implements BookingDBIF {
 	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
 	private PreparedStatement insertBookingPSNoFood;
 	
+	private static final String GETBOOKINGIDSBYDATEQ = "SELECT bookingId FROM BookingTime WHERE BookingTime.startTime LIKE '?%'";
+	private PreparedStatement getBookingIdsByDate;
+
 	private static final String GETBOOKINGBYIDQ = "SELECT * FROM Booking WHERE bookingId = ?";
 	private PreparedStatement getBookingById;
+	
+	private static final String GETALLCUSTOMERINFOQ = "SELECT * FROM Contact, Customer WHERE customerId = ? AND contactId = customerId";
+	private PreparedStatement getAllCustomerInfo;
+	
+	private static final String GETZIPCODECITYQ = "SELECT zipcodeCity FROM ZipcodeCity WHERE zipcode = ?";
+	private PreparedStatement getZipcodeCity;
+
+	private static final String GETALLCATERINGINFO = "SELECT * FROM CateringMenu WHERE menuId = ?";
+	private PreparedStatement getAllCateringInfo;
 
 
 	//Method mainly for making the transaction
@@ -86,27 +99,75 @@ public class BookingDB implements BookingDBIF {
 				
 	}
 	
-	public List<Booking> findBookingByDate(LocalDate date){
+	public List<Booking> findBookingByDate(LocalDate date) throws DataAccessException{
 		Connection connection;
 		connection = getDBConnection().getConnection();
 		try {
 			getBookingById = connection.prepareStatement(GETBOOKINGBYIDQ);
+			getBookingIdsByDate = connection.prepareStatement(GETBOOKINGIDSBYDATEQ);
+			getAllCustomerInfo = connection.prepareStatement(GETALLCUSTOMERINFOQ);
+			getZipcodeCity = connection.prepareStatement(GETZIPCODECITYQ);
+			getAllCateringInfo = connection.prepareStatement(GETALLCATERINGINFO);
+
+
 		} catch (SQLException e1) {
 			
 			e1.printStackTrace();
 		}
+		
+		try {
+			List<Booking> bookings = new ArrayList<>();
+			
+			getBookingIdsByDate.setString(1, date.toString());
+			ResultSet rs = getBookingIdsByDate.executeQuery();
+			
+			while(rs.next()) {
+				int id = rs.getInt(1);
+				
+				getBookingById.setInt(1, id);
+				ResultSet rs2 = getBookingById.executeQuery();
+				rs2.next();
+				
+				int bookingId = rs2.getInt("bookingId");
+				double totalPrice = rs2.getDouble("totalPrice");
+				LocalDateTime creationDate = LocalDateTime.parse((rs2.getString("creationDate")));
+				int amountOfPeople = rs2.getInt("amountOfPeople");
+				int customerId = rs2.getInt("customerId");
+				int menuId = rs2.getInt("menuId");
+				
+				getAllCustomerInfo.setInt(1, customerId);
+				ResultSet rsC = getAllCustomerInfo.executeQuery();
+				rsC.next();
+				String name = rsC.getString("firstName") + " " + rsC.getString("lastName");
+				
+				int zipCode = rsC.getInt("zipCode");
+				getZipcodeCity.setInt(1, zipCode);
+				ResultSet rsZC = getZipcodeCity.executeQuery();
+				rsZC.next();
+				
+				Customer customer = new Customer(customerId, name, rsC.getString("phone"), rsC.getString("email"), rsC.getString("address"), zipCode, rsZC.getString("zipcodeCity"), rsC.getString("country"), LocalDate.parse((rsC.getString("dateOFBirth"))));
 
-		List<Booking> bookings = new ArrayList<>();
+				getAllCateringInfo.setInt(1, menuId);
+				ResultSet rsCI = getAllCateringInfo.executeQuery();
+				String label = rsCI.getString("foodName");
+				EnumMenu enumMenu = EnumMenu.valueOfLabel(label);
+				
+				CateringMenu cateringMenu = new CateringMenu(enumMenu, rsCI.getDouble("price"));
+				
+				Booking booking = new Booking(customer, cateringMenu, amountOfPeople, bookingId, totalPrice, creationDate);
+			    bookings.add(booking);
+				
+		      }
+			return bookings;
+		}
+		catch (SQLException e) {
+			throw new DataAccessException(e, "Could not execute");
+		}
+			
+
 		
-		BookingTimeDBIF bkTDB = new BookingTimeDB();
-		ResultSet rs = bkTDB.getBookingIdsByDate(date);
-		
-		while(rs.next()) {
 			
 			
 		}
-		
-	}
 	
 }
-
