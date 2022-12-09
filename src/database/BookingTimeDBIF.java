@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
+
+import model.Booking;
 import model.BookingTime;
 import model.EventType.EnumType;
 
@@ -15,5 +17,9 @@ public interface BookingTimeDBIF {
 	public List<BookingTime> getBookedTimeslots(int day, int month, int year) throws DataAccessException;
 
 	public boolean checkTimeslot(EnumType type, LocalDateTime startTime, LocalDateTime finishTime);
+	
+	public List<Booking> findBookingTimeByBookingId(List<Booking> bookings) throws DataAccessException;
+	
+	public boolean updateBookingTime(Booking booking) throws DataAccessException;
 	
 }
