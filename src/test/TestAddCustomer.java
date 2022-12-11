@@ -1,14 +1,10 @@
 package test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,30 +13,25 @@ import org.junit.jupiter.api.Test;
 import controller.BookingCtrl;
 import database.DBConnection;
 import database.DataAccessException;
-import model.Customer;
 import model.PatternCheck;
-import ui.CreateBookingMenu;
 
 class TestAddCustomer {
 
 	static DBConnection con;
-	static CreateBookingMenu cbm;
 	static BookingCtrl bc;
 	static PatternCheck pc;
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		con = DBConnection.getInstance();
-		cbm = new CreateBookingMenu();
-		bc = new BookingCtrl();
-		pc = new PatternCheck();
+		con = DBConnection.getInstance(); //calls database, used to find customers
+		bc = new BookingCtrl(); //where the magic happens
+		pc = new PatternCheck(); //checks the input patterns, used in gui
 		
 	}
 
 	@AfterEach
 	void tearDown() throws Exception {
 		con = null;
-		cbm = null;
 		bc = null;
 		pc = null;
 	}
@@ -49,43 +40,54 @@ class TestAddCustomer {
 	 * 1.1
 	 */
 	@Test
-	void testValidCustomerValidInput() throws DataAccessException {
+	void testCustomerFoundWithValidPhoneNumberInput() throws DataAccessException {
+		//arrange
 		bc.createBooking();
-		assertTrue(pc.checkPhoneNo("14354678")); //checks to see if phone number is valid
-		bc.addCustomer("14354678"); //finds and adds a customer with that pattern
-		assertEquals("14354678", bc.getBooking().getCustomer().getPhoneNo()); //checks to see if they're equal
+		//act
+		String phoneNo = "14354678"; //sets the phone number so we easily can change it
+		//assert
+		assertTrue(pc.checkPhoneNo(phoneNo)); //checks if the string pattern is valid - we expect it to be true or else stop the test
+		//act
+		bc.addCustomer(phoneNo); //finds and adds a customer with that phone number
+		//assert
+		assertEquals(phoneNo, bc.getBooking().getCustomer().getPhoneNo()); //checks to see if input number is equal to the phone number of the customer we have added
 	}
 	
 	/*
 	 * 1.2
 	 */
 	@Test 
-	void testNoCustomerValidInput() throws DataAccessException {
+	void testNoCustomerFoundWithValidPhoneNumberInput() throws DataAccessException {
+		//arrange
 		bc.createBooking();
-		assertTrue(pc.checkPhoneNo("+4590332222")); //checks if pattern is valid
-		bc.addCustomer("+4590332222"); //finds and adds TODO addCustomer should maybe throw something
-		assertThrows(NullPointerException.class, () -> bc.getBooking().getCustomer().getPhoneNo()); //we expect an exception to be thrown because customer with that number does not exist
-		System.out.println("testNoCustomerValidInput() throws exception because Customer is " + bc.getBooking().getCustomer()); //shows us the customer
+		//act
+		String phoneNo = "+4590332222";
+		//assert
+		assertTrue(pc.checkPhoneNo(phoneNo));
+		//act
+		bc.addCustomer(phoneNo); 
+		//assert
+		assertThrows(NullPointerException.class, () -> bc.getBooking().getCustomer().getPhoneNo()); //we expect an exception to be thrown because a customer with that number does not exist
+		System.out.println("testNoCustomerFoundWithValidPhoneNumberInput() throws exception because Customer is " + bc.getBooking().getCustomer()); //shows us the customer - could also be assertNull
 	}
 	
 	/*
 	 * 1.3
 	 */
 	@Test
-	void testAddCustomer() throws DataAccessException {
+	void testInvalidPhoneNumberInput() throws DataAccessException {
+		//arrange
 		bc.createBooking();
-		assertNull(bc.addCustomer("wasd"));
-		assertEquals("Bjarne Riis", bc.addCustomer("99999999").getName());
-	}
-	
-	@Test
-	void testValidPattern(String phoneInput) {
-		assertTrue(pc.checkPhoneNo(phoneInput));
-	}
-	
-	@Test //kan blive kaldt fra andre moteder
-	void testInvalidPattern(String phoneInput) {
-		assertTrue(pc.checkPhoneNo(phoneInput));
+		//act
+		String phoneNo1 = "wasdwasd", phoneNo2 = "+45 12001200", phoneNo3 = "+99999999"; //some examples
+		//assert
+		assertFalse(pc.checkPhoneNo(phoneNo1)); //as before - this time we expect them to be false
+		assertFalse(pc.checkPhoneNo(phoneNo2)); 
+		assertFalse(pc.checkPhoneNo(phoneNo3));
+		//act
+		bc.addCustomer(phoneNo3); //we try to add one to the current booking - since all are false any of them would "work"
+		//we know Bjarne Riis has the number 99999999 but since phoneNo3 isnt a valid sequence nothing is added
+		assertEquals("Bjarne Riis", bc.getBooking().getCustomer().getName());
 	}
 
 }
