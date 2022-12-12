@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
@@ -92,12 +93,16 @@ public class UpdateBookingMenu extends JFrame {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate date = LocalDate.parse(txtSearchDate.getText(), formatter);
 		TimeSlotDialogUpdate dialog = new TimeSlotDialogUpdate(bookingCtrl, date);
+		int bookingID = dialog.showDialog();
 		try {
 			//pseudo
-			editorPane.setHit = bookingCtrl.findBookingByDate(date);
-			bookingCtrl.findBookingTimeById(dialog.showDialog())
+//			editorPane.setHit = bookingCtrl.findBookingByDate(date);
+//			bookingCtrl.findBookingTimeById(dialog.showDialog())
 		}
-		getBooking = dialog.showdialog();
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+//		getBooking = dialog.showdialog();
 		
 		
 		//pseudo
