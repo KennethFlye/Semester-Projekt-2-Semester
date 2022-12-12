@@ -169,10 +169,8 @@ public class BookingCtrl {
 			return newBooking;
 		}
 		
-	public List<BookingTime> findBookingTimeById(List<Booking> l) {
-		bookingTimeCtrl.findBookingTimeVyIDd(list);
-		
-		
+	public List<BookingTime> findBookingTimeById(List<Booking> list) {
+		bookingTimeCtrl.findBookingTimeById(list);
 		
 		List<BookingTime> times = new ArrayList<>();
 		for (Booking i : list) {
@@ -183,19 +181,16 @@ public class BookingCtrl {
 	}
 	
 	
-	public List<Booking> findBookingByDate(LocalDateTime date) {
+	public List<Booking> findBookingByDate(LocalDate date) {
 		bookingDatabase.findBookingByDate(date);
 	}
-	
-	public Booking findBookingsById(int bookingId) {
-		bookingDatabase.findBookingsByid(bookingId);
-	}
+
 	public Boolean updateBooking(Booking booking) {
 		bookingDatabase.updateBooking(booking); 
 	}
-	public Boolean updateBooking(Booking booking) {
+	
+	public Boolean updateBookingTime(Booking booking) {
 		bookingTimeDatabase.updateBookingTime(booking);
-		
 	}
 
 
