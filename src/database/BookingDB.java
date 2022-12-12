@@ -19,7 +19,7 @@ public class BookingDB implements BookingDBIF {
 	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
 	private PreparedStatement insertBookingPSNoFood;
 	
-	private static final String GETBOOKINGIDSBYDATEQ = "SELECT bookingId FROM BookingTime WHERE convert(varchar(25), BookingTime.startTime, 126) LIKE '?%'";
+	private static final String GETBOOKINGIDSBYDATEQ = "SELECT bookingId FROM BookingTime WHERE convert(varchar(25), BookingTime.startTime, 126) LIKE ?";
 	private PreparedStatement getBookingIdsByDate;
 
 	private static final String GETBOOKINGBYIDQ = "SELECT * FROM Booking WHERE bookingId = ?";
@@ -122,7 +122,7 @@ public class BookingDB implements BookingDBIF {
 		try {
 			List<Booking> bookings = new ArrayList<>();
 			
-			getBookingIdsByDate.setString(1, date.toString());
+			getBookingIdsByDate.setString(1, (date.toString() + "%"));
 			ResultSet rs = getBookingIdsByDate.executeQuery();
 			
 			while(rs.next()) {
@@ -134,7 +134,7 @@ public class BookingDB implements BookingDBIF {
 				
 				int bookingId = rs2.getInt("bookingId");
 				double totalPrice = rs2.getDouble("totalPrice");
-				LocalDateTime creationDate = LocalDateTime.parse((rs2.getString("creationDate")));
+				LocalDateTime creationDate = LocalDateTime.parse(rs2.getString("creationDate") + "%");
 				int amountOfPeople = rs2.getInt("amountOfPeople");
 				int customerId = rs2.getInt("customerId");
 				int menuId = rs2.getInt("menuId");
