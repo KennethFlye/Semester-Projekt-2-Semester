@@ -93,7 +93,7 @@ public class UpdateBookingMenu extends JFrame {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate date = LocalDate.parse(txtSearchDate.getText(), formatter);
 		TimeSlotDialogUpdate dialog = new TimeSlotDialogUpdate(bookingCtrl, date);
-		LocalDateTime starttime = dialog.showDialog();
+		int bookingID = dialog.showDialog();
 		try {
 			//pseudo
 //			editorPane.setHit = bookingCtrl.findBookingByDate(date);

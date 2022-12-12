@@ -25,14 +25,10 @@ public class BackgroundWorkerFinishBooking extends SwingWorker<Void, Void>{
 	@Override
 	protected Void doInBackground() throws DataAccessException {
 		
-		try {
-			receipt = bookingCtrl.finishBooking();
-			Receipt receiptDialog = new Receipt(receipt);
-			receiptDialog.setVisible(true);
-			ui.dispose();
-		} catch (SQLException e) {
-			throw new DataAccessException(e, "Could not run in bg");
-		}
+		receipt = bookingCtrl.finishBooking();
+		Receipt receiptDialog = new Receipt(receipt);
+		receiptDialog.setVisible(true);
+		ui.dispose();
 		
 		return null;
 	}

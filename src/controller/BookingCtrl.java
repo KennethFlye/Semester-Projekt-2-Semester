@@ -45,6 +45,7 @@ public class BookingCtrl {
 		bookingDatabase = new BookingDB();
 		eventTypeCtrl = new EventTypeCtrl();
 		bt=null;
+		bookingTimeCtrl = new BookingTimeCtrl();
 	}
 	
 	

@@ -1,39 +1,37 @@
 package ui;
 
-import javax.swing.JDialog;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.BookingCtrl;
 import database.DataAccessException;
+import model.Booking;
 import model.BookingTime;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTable;
 
 public class TimeSlotDialogUpdate extends JDialog {
 	private final JComponent contentPanel = new JPanel();
 	private JTextField txtDialogDate;
 	private LocalDate date;
 	private BookingCtrl bookingCtrl;
-	private JTable tableGokarts;
-	private JTable tableEvents;
+	private JTable tableBookings;
 	private DefaultTableModel dtmodel;
-	private String[] columnNames = {"Event type", "Start Tid", "Slut Tid"};
-	private LocalDateTime selectedStarttime;
+	private String[] columnNames = {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Menu", "Total"};
+	private int selectedID;
 	
 	public TimeSlotDialogUpdate(BookingCtrl bookingCtrl, LocalDate date) {
 		super((java.awt.Frame) null, true);
@@ -59,39 +57,35 @@ public class TimeSlotDialogUpdate extends JDialog {
 		
 		btnDialogSearch.addActionListener((e) -> handleSearchClick());
 		
-		JPanel panel = new JPanel();
-		getContentPane().add(panel, BorderLayout.SOUTH);
+		JPanel panelBot = new JPanel();
+		getContentPane().add(panelBot, BorderLayout.SOUTH);
 		
 		JButton btnDiaAccept = new JButton("Godkend");
-		panel.add(btnDiaAccept);
+		panelBot.add(btnDiaAccept);
 		
 		btnDiaAccept.addActionListener((e) -> handleAcceptClick());
 		
 		JButton btnDiaCancel = new JButton("Annuller");
-		panel.add(btnDiaCancel);
+		panelBot.add(btnDiaCancel);
 		
 		btnDiaCancel.addActionListener((e) -> handleCancelClick());
 		
-		JSplitPane splitPane = new JSplitPane();
-		getContentPane().add(splitPane, BorderLayout.CENTER);
+		JPanel panelMid = new JPanel();
+		getContentPane().add(panelMid, BorderLayout.CENTER);
 		
-		tableGokarts = new JTable();
-		splitPane.setLeftComponent(tableGokarts);
+		tableBookings = new JTable();
+		panelMid.add(tableBookings);
 		
-		tableEvents = new JTable();
-		splitPane.setRightComponent(tableEvents);
-		
-		dtmodel = new DefaultTableModel(0,0); //TODO maybe make 2 of them
+		dtmodel = new DefaultTableModel(0,0);
 		dtmodel.setColumnIdentifiers(columnNames);
 		
-		tableGokarts.setModel(dtmodel);
-		tableEvents.setModel(dtmodel);
+		tableBookings.setModel(dtmodel);
 		
 		this.bookingCtrl = bookingCtrl;
 		this.date = date;
 		txtDialogDate.setText(date.toString());
 		
-		dtmodel.addRow(new Object[] {"Event Type", "Start Time", "Finish Time"});
+		dtmodel.addRow(new Object[] {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Menu", "Total"});
 		
 		handleSearchClick();
 	}
@@ -99,35 +93,28 @@ public class TimeSlotDialogUpdate extends JDialog {
 
 	private void handleSearchClick() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDateTime searchDate = LocalDateTime.parse(txtDialogDate.getText(), formatter);
+		LocalDate searchDate = LocalDate.parse(txtDialogDate.getText(), formatter);
 		
-		List<BookingTime> bookedTimes = null;
-		
-		int year = searchDate.getYear();
-		int month = searchDate.getMonthValue();
-		int day = searchDate.getDayOfMonth();
+		List<Booking> bookings = null;
 		
 		try {
-			bookedTimes = bookingCtrl.findBookedTimeslots(year, month, day);
+			bookings = bookingCtrl.findBookingsByDate(searchDate);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
 
 		
 		//Loop over alle tider der bliver returneret
-		for (BookingTime element : bookedTimes) {
-			if(element.getEventType().getEnumType().getLocation()==1) {
-				dtmodel.addRow(new Object[] {element.getEventType().getEnumType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
-			}
-			else if(element.getEventType().getEnumType().getLocation()==2) {
-				dtmodel.addRow(new Object[] {element.getEventType().getEnumType().getLabel(), element.getStartTime().toString(), element.getFinishTime().toString()});
-			}
+		for (Booking element : bookings) { 
+			dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
+					element.getTimeslots().get(0).getEventType(), element.getTimeslots().get(0).getStartTime(), element.getTimeslots().get(0).getFinishTime(),
+					element.getCatering().getEnumMenu().getLabel(), element.getTotal()});
 		}
 	}
 	
 	private void handleAcceptClick() {
-		int rowIndex = tableEvents.getSelectedRow(); //TODO make possible with two tables?
-		selectedStarttime = (LocalDateTime) tableEvents.getValueAt(rowIndex, 1);
+		int rowIndex = tableBookings.getSelectedRow();
+		selectedID = (int) tableBookings.getValueAt(rowIndex, 0);
 		this.dispose();
 	}
 	
@@ -135,9 +122,9 @@ public class TimeSlotDialogUpdate extends JDialog {
 		this.dispose();
 	}
 	
-	public LocalDateTime showDialog() {
+	public int showDialog() {
 		setVisible(true);
-		return selectedStarttime;
+		return selectedID;
 	}
 
 }
