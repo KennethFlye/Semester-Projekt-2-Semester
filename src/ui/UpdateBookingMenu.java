@@ -1,57 +1,62 @@
 package ui;
 
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.BoxLayout;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.JButton;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JList;
-import javax.swing.JTable;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import controller.BookingCtrl;
+import database.DataAccessException;
 
 public class UpdateBookingMenu extends JFrame {
 	private JTextField txtSearchDate;
-	private JTable table;
-	public UpdateBookingMenu() {
-		getContentPane().setLayout(new BorderLayout(0, 0));
+	private BookingCtrl bookingCtrl;
+	private JPanel contentPane;
+	private JEditorPane editorPane;
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					UpdateBookingMenu frame = new UpdateBookingMenu();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public UpdateBookingMenu() throws DataAccessException {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 600, 600);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
 		JPanel topPanel = new JPanel();
 		getContentPane().add(topPanel, BorderLayout.NORTH);
-		GridBagLayout gbl_topPanel = new GridBagLayout();
-		gbl_topPanel.columnWidths = new int[]{0, 45, 45, 261, 0, 85, 0};
-		gbl_topPanel.rowHeights = new int[]{0, 21, 0};
-		gbl_topPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_topPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		topPanel.setLayout(gbl_topPanel);
+		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblSearchDate = new JLabel("S\u00F8g dato");
-		GridBagConstraints gbc_lblSearchDate = new GridBagConstraints();
-		gbc_lblSearchDate.anchor = GridBagConstraints.EAST;
-		gbc_lblSearchDate.insets = new Insets(0, 0, 0, 5);
-		gbc_lblSearchDate.gridx = 2;
-		gbc_lblSearchDate.gridy = 1;
-		topPanel.add(lblSearchDate, gbc_lblSearchDate);
+		JLabel lblSearchDate = new JLabel("S\u00F8g dato (yyyy-mm-dd)");
+		topPanel.add(lblSearchDate);
 		
 		txtSearchDate = new JTextField();
-		GridBagConstraints gbc_txtSearchDate = new GridBagConstraints();
-		gbc_txtSearchDate.insets = new Insets(0, 0, 0, 5);
-		gbc_txtSearchDate.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtSearchDate.gridx = 3;
-		gbc_txtSearchDate.gridy = 1;
-		topPanel.add(txtSearchDate, gbc_txtSearchDate);
+		topPanel.add(txtSearchDate);
 		txtSearchDate.setColumns(10);
 		
 		JButton btnSearchDate = new JButton("S\u00F8g");
-		GridBagConstraints gbc_btnSearchDate = new GridBagConstraints();
-		gbc_btnSearchDate.insets = new Insets(0, 0, 0, 5);
-		gbc_btnSearchDate.anchor = GridBagConstraints.WEST;
-		gbc_btnSearchDate.gridx = 4;
-		gbc_btnSearchDate.gridy = 1;
-		topPanel.add(btnSearchDate, gbc_btnSearchDate);
+		topPanel.add(btnSearchDate);
 		
 		btnSearchDate.addActionListener((e) -> handleSearchDateClick());
 		
@@ -66,19 +71,51 @@ public class UpdateBookingMenu extends JFrame {
 		JButton btnCancel = new JButton("Annuller");
 		bottomPanel.add(btnCancel);
 		
+		JPanel Middlepanel = new JPanel();
+		getContentPane().add(Middlepanel, BorderLayout.CENTER);
+		
+		editorPane = new JEditorPane();
+		Middlepanel.add(editorPane);
+		
 		btnCancel.addActionListener((e) -> handleCancelClick());
 		
-		table = new JTable();
-		getContentPane().add(table, BorderLayout.CENTER);
+		
+		try {
+			bookingCtrl = new BookingCtrl();
+		}
+		catch(DataAccessException e) {
+			throw new DataAccessException(e, UpdateBookingMenu.class.getName() + " could not instantiate bookingctrl");
+		}
 	}
 	
-	
 	private void handleSearchDateClick() {
-		//TODO implement
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(txtSearchDate.getText(), formatter);
+		TimeSlotDialogUpdate dialog = new TimeSlotDialogUpdate(bookingCtrl, date);
+		try {
+			//pseudo
+			editorPane.setHit = bookingCtrl.findBookingByDate(date);
+			bookingCtrl.findBookingTimeById(dialog.showDialog())
+		}
+		getBooking = dialog.showdialog();
+		
+		
+		//pseudo
+		//click one to add to updatebookingmenu table
+		//make writeable
+		//accept btn saves to db
+		
+		
 	}
 	
 	private void handleAcceptClick() {
-		//TODO implement - get the swingworker
+		try {
+			//TODO implement - get the swingworker
+			bookingCtrl.updateBooking(null);
+			bookingCtrl.updateBookingTime(null);
+		} catch (Exception e) {
+		}
+		//maybe make it more like the receipt with individual rows to edit = easier to translate to query
 	}
 	
 	private void handleCancelClick() {
