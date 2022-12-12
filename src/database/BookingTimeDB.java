@@ -210,17 +210,3 @@ public class BookingTimeDB implements BookingTimeDBIF {
 
 		}
 		
-		
-	
-	
-		
-
-
-		
-		
-		
-		
-		
-	
-
-		

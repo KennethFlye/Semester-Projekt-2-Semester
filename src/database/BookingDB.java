@@ -34,7 +34,7 @@ public class BookingDB implements BookingDBIF {
 	private static final String GETALLCATERINGINFOQ = "SELECT * FROM CateringMenu WHERE menuId = ?";
 	private PreparedStatement getAllCateringInfo;
 	
-	private static final String UPDATEBOOKINGQ = "UPDATE Booking SET totalPrice = ?, creationDate = ?, amountOfPeople = ?, isPaid = ?, customerId = ?, employeeId = ?, menuId = ? WHERE Booking.bookingId = ?";
+	private static final String UPDATEBOOKINGQ = "UPDATE Booking SET totalPrice = ?, amountOfPeople = ?, isPaid = ?, customerId = ?, menuId = ? WHERE Booking.bookingId = ?";
     private PreparedStatement updateBooking;
 	
 
@@ -188,12 +188,11 @@ public class BookingDB implements BookingDBIF {
 		
 		try {
 			updateBooking.setDouble(1, booking.getTotal());
-			updateBooking.setDate(2, Date.valueOf(booking.getCreationDate().toLocalDate()));
-			updateBooking.setInt(3, booking.getAmountOfPeople());
-			updateBooking.setBoolean(4, booking.isPaid());
-			updateBooking.setInt(5, booking.getCustomer().getContactId());
-			updateBooking.setInt(6, booking.getCatering().getId());
-			updateBooking.setInt(7, booking.getBookingId());
+			updateBooking.setInt(2, booking.getAmountOfPeople());
+			updateBooking.setBoolean(3, booking.isPaid());
+			updateBooking.setInt(4, booking.getCustomer().getContactId());
+			updateBooking.setInt(5, booking.getCatering().getId());
+			updateBooking.setInt(6, booking.getBookingId());
 
 			updateBooking.executeUpdate();
 
