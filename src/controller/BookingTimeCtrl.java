@@ -16,8 +16,8 @@ public class BookingTimeCtrl {
 		bookingTimeDB = new BookingTimeDB();
 	}
 	
-	public List<Booking> findBookingTimeByBookingId(List<Booking> bookings) throws DataAccessException{
-		return bookingTimeDB.findBookingTimeByBookingId(bookings);
+	public void addBookingTimesToBookings(List<Booking> bookings) throws DataAccessException{
+		bookingTimeDB.addBookingTimesToBooking(bookings);
 	}
 	
 	public Boolean updateBookingTime(Booking booking) throws DataAccessException {
