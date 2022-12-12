@@ -16,18 +16,8 @@ public class BookingTimeCtrl {
 		bookingTimeDB = new BookingTimeDB();
 	}
 	
-<<<<<<< Updated upstream
 	public void addBookingTimesToBookings(List<Booking> bookings) throws DataAccessException{
 		bookingTimeDB.addBookingTimesToBooking(bookings);
-=======
-<<<<<<< HEAD
-	public List<Booking> addBookingTimesToBookings(List<Booking> bookings) throws DataAccessException{
-		return bookingTimeDB.findBookingTimeByBookingId(bookings);
-=======
-	public void addBookingTimesToBookings(List<Booking> bookings) throws DataAccessException{
-		bookingTimeDB.addBookingTimesToBooking(bookings);
->>>>>>> 2897065492618a052d0d1bb8bce016e42734491b
->>>>>>> Stashed changes
 	}
 	
 	public Boolean updateBookingTime(Booking booking) throws DataAccessException {
