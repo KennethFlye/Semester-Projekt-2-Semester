@@ -31,9 +31,12 @@ public class BookingDB implements BookingDBIF {
 	private static final String GETZIPCODECITYQ = "SELECT zipcodeCity FROM ZipcodeCity WHERE zipcode = ?";
 	private PreparedStatement getZipcodeCity;
 
-	private static final String GETALLCATERINGINFO = "SELECT * FROM CateringMenu WHERE menuId = ?";
+	private static final String GETALLCATERINGINFOQ = "SELECT * FROM CateringMenu WHERE menuId = ?";
 	private PreparedStatement getAllCateringInfo;
-
+	
+	private static final String UPDATEBOOKINGQ = "UPDATE Booking SET totalPrice = ?, creationDate = ?, amountOfPeople = ?, isPaid = ?, customerId = ?, employeeId = ?, menuId = ? WHERE Booking.bookingId = ?";
+    private PreparedStatement updateBooking;
+	
 
 	//Method mainly for making the transaction
 	@Override
@@ -108,7 +111,7 @@ public class BookingDB implements BookingDBIF {
 			getBookingIdsByDate = connection.prepareStatement(GETBOOKINGIDSBYDATEQ);
 			getAllCustomerInfo = connection.prepareStatement(GETALLCUSTOMERINFOQ);
 			getZipcodeCity = connection.prepareStatement(GETZIPCODECITYQ);
-			getAllCateringInfo = connection.prepareStatement(GETALLCATERINGINFO);
+			getAllCateringInfo = connection.prepareStatement(GETALLCATERINGINFOQ);
 
 
 		} catch (SQLException e1) {
@@ -167,11 +170,39 @@ public class BookingDB implements BookingDBIF {
 		catch (SQLException e) {
 			throw new DataAccessException(e, "Could not execute");
 		}
-			
+					
+	}
 
-		
-			
-			
+	@Override
+	public boolean updateBooking(Booking booking) throws DataAccessException {
+		Connection connection;
+		connection = getDBConnection().getConnection();
+		try {
+			//UPDATE Booking SET totalPrice = ?, creationDate = ?, amountOfPeople = ?, isPaid = ?, customerId = ?, menuId = ? WHERE Booking.bookingId = ?
+			updateBooking = connection.prepareStatement(UPDATEBOOKINGQ);
+	
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
+		try {
+			updateBooking.setDouble(1, booking.getTotal());
+			updateBooking.setDate(2, Date.valueOf(booking.getCreationDate().toLocalDate()));
+			updateBooking.setInt(3, booking.getAmountOfPeople());
+			updateBooking.setBoolean(4, booking.isPaid());
+			updateBooking.setInt(5, booking.getCustomer().getContactId());
+			updateBooking.setInt(6, booking.getCatering().getId());
+			updateBooking.setInt(7, booking.getBookingId());
+
+			updateBooking.executeUpdate();
+
+		}
+		catch (SQLException e) {
+			throw new DataAccessException(e, "Error during update");
+		}
+		
+		return true;
+	}
 	
 }

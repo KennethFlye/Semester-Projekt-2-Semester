@@ -157,10 +157,10 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			for(int i = 0; i < bookingTimes.size(); i++) {
 				BookingTime currentBookingTime = bookingTimes.get(i);
 				try {
-					updateBookingTime.setTimestamp(0, Timestamp.valueOf(currentBookingTime.getStartTime()));
-					updateBookingTime.setTimestamp(1, Timestamp.valueOf(currentBookingTime.getFinishTime()));
-					updateBookingTime.setInt(2, booking.getBookingId());
-					updateBookingTime.setString(3, currentBookingTime.getEventType().getEnumType().getLabel());
+					updateBookingTime.setTimestamp(1, Timestamp.valueOf(currentBookingTime.getStartTime()));
+					updateBookingTime.setTimestamp(2, Timestamp.valueOf(currentBookingTime.getFinishTime()));
+					updateBookingTime.setInt(3, booking.getBookingId());
+					updateBookingTime.setString(4, currentBookingTime.getEventType().getEnumType().getLabel());
 					
 					updateBookingTime.executeUpdate();
 					
