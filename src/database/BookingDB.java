@@ -103,7 +103,7 @@ public class BookingDB implements BookingDBIF {
 	}
 	
 	@Override
-	public List<Booking> findBookingByDate(LocalDate date) throws DataAccessException{
+	public List<Booking> findBookingsByDate(LocalDate date) throws DataAccessException{
 		Connection connection;
 		connection = getDBConnection().getConnection();
 		try {
@@ -174,7 +174,7 @@ public class BookingDB implements BookingDBIF {
 	}
 
 	@Override
-	public boolean updateBooking(Booking booking) throws DataAccessException {
+	public boolean updateBooking(Booking booking) throws DataAccessException{
 		Connection connection;
 		connection = getDBConnection().getConnection();
 		try {
