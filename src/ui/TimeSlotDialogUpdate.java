@@ -93,6 +93,7 @@ public class TimeSlotDialogUpdate extends JDialog {
 		
 		dtmodel.addRow(new Object[] {"Event Type", "Start Time", "Finish Time"});
 		
+		handleSearchClick();
 	}
 
 
