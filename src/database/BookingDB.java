@@ -19,7 +19,7 @@ public class BookingDB implements BookingDBIF {
 	private static final String INSERTBOOKING_Q_NOFOOD = "INSERT INTO Booking (totalPrice, creationDate, amountOfPeople, isPaid, customerId) VALUES (?, ?, ?, ?, ?); SELECT IDENT_CURRENT( 'Booking' );";
 	private PreparedStatement insertBookingPSNoFood;
 	
-	private static final String GETBOOKINGIDSBYDATEQ = "SELECT bookingId FROM BookingTime WHERE BookingTime.startTime LIKE '?%'";
+	private static final String GETBOOKINGIDSBYDATEQ = "SELECT bookingId FROM BookingTime WHERE convert(varchar(25), BookingTime.startTime, 126) LIKE '?%'";
 	private PreparedStatement getBookingIdsByDate;
 
 	private static final String GETBOOKINGBYIDQ = "SELECT * FROM Booking WHERE bookingId = ?";
@@ -122,7 +122,7 @@ public class BookingDB implements BookingDBIF {
 		try {
 			List<Booking> bookings = new ArrayList<>();
 			
-			getBookingIdsByDate.setDate(1, Date.valueOf(date));
+			getBookingIdsByDate.setString(1, date.toString());
 			ResultSet rs = getBookingIdsByDate.executeQuery();
 			
 			while(rs.next()) {
@@ -168,6 +168,7 @@ public class BookingDB implements BookingDBIF {
 			return bookings;
 		}
 		catch (SQLException e) {
+			e.printStackTrace();
 			throw new DataAccessException(e, "Could not execute");
 		}
 					
