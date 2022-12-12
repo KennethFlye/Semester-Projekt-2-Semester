@@ -205,7 +205,6 @@ public class TimeSlotWindowGokart extends JDialog {
 	}
 
 	private void handleOkClickedEvent() {
-		// TODO Implement Send Data Til Tidligere Vindue
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		timeStart = LocalDateTime.parse(textFieldStartTime.getText(), formatter);

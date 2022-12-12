@@ -601,7 +601,7 @@ public class CreateBookingMenu extends JFrame {
 		try {
 			peopleAdded = bookingCtrl.addAmountOfPeople(Integer.parseInt(textFieldAmountOfPeople.getText()));
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "Input skal v�re et tal");
+			JOptionPane.showMessageDialog(null, "Input skal v�re et tal");
 		} catch (DataAccessException e) {
 			JOptionPane.showMessageDialog(null,  e.getMessage());
 		}
@@ -641,7 +641,6 @@ public class CreateBookingMenu extends JFrame {
 	}
 
 	private void handleTimeSlotEventGokart() {
-		
 		if(peopleAdded) {
 			String eventLabel = (String)comboBoxRaceType.getSelectedItem();
 			
@@ -649,17 +648,13 @@ public class CreateBookingMenu extends JFrame {
 			startTimeGokart = dialog.showDialog();
 			
 			if(startTimeGokart != null) {
-				
 				finishTimeGokart = startTimeGokart.plusMinutes(EnumType.valueOfLabel(eventLabel).getLength());
-				
-				
 				
 				try {
 					finishTimeGokart = bookingCtrl.addTimeslot(eventLabel, startTimeGokart, finishTimeGokart);
 					
 					textFieldTimeSlotGokart.setText(startTimeGokart.toString() + " /-/ " + finishTimeGokart.toString());
 				} catch (DataAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -667,10 +662,6 @@ public class CreateBookingMenu extends JFrame {
 		else {
 			JOptionPane.showMessageDialog(null, "Personer skal være tilføjet til ordren");
 		}
-		
-		
-		
-		
 	}
 
 
@@ -681,15 +672,11 @@ public class CreateBookingMenu extends JFrame {
 	}
 
 	private void handleAcceptBookingEvent() {
-		// TODO Implement finishBooking();
-		
 		BackgroundWorkerFinishBooking backgroundWorker = new BackgroundWorkerFinishBooking(bookingCtrl, this);
 		
 		backgroundWorker.execute();
 		
 		JOptionPane.showMessageDialog(null, "Uploader til database");
-		
-		//this.dispose(); flyttet til tråden
 	}
 
 	private void handleResetCustomerEvent() {
