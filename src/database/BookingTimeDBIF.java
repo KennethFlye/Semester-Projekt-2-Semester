@@ -18,8 +18,8 @@ public interface BookingTimeDBIF {
 
 	public boolean checkTimeslot(EnumType type, LocalDateTime startTime, LocalDateTime finishTime);
 	
-	public List<Booking> findBookingTimeByBookingId(List<Booking> bookings) throws DataAccessException;
-	
 	public boolean updateBookingTime(Booking booking) throws DataAccessException;
+
+	void addBookingTimesToBooking(List<Booking> bookings) throws DataAccessException;
 	
 }

@@ -175,7 +175,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 		}
 
 		@Override
-		public List<Booking> findBookingTimeByBookingId(List<Booking> bookings) throws DataAccessException {
+		public void addBookingTimesToBooking(List<Booking> bookings) throws DataAccessException {
 			ResultSet rs;
 			
 			
@@ -183,7 +183,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 				Booking currentBooking = bookings.get(i);
 				
 				try {
-					getEventTypeBookingTimeByBookingId.setInt(0, currentBooking.getBookingId());
+					getEventTypeBookingTimeByBookingId.setInt(1, currentBooking.getBookingId());
 					
 					rs = getEventTypeBookingTimeByBookingId.executeQuery();
 					
@@ -204,8 +204,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 					throw new DataAccessException(e, "Could not get EventType and BookingTime from Database");
 				}
 			}
-			
-			return bookings;
+
 		}
 
 

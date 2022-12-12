@@ -30,9 +30,10 @@ public class BookingCtrl {
 	private GokartCtrl gokartCtrl;
 	private CateringCtrl cateringCtrl;
 	private EventTypeCtrl eventTypeCtrl;
-	private BookingTimeCrtl bookingTimeCtrl;
+	private BookingTimeCtrl bookingTimeCtrl;
 	private BookingDBIF bookingDatabase;
 	private BookingTime bt;
+	private List<Booking> bookings;
 	
 	//Constructor/init -----------------------------------------------------------------------------------------------
 	public BookingCtrl() throws DataAccessException {
@@ -168,29 +169,48 @@ public class BookingCtrl {
 		public Booking getBooking() {
 			return newBooking;
 		}
+	
+	
+	public List<Booking> findBookingsByDate(LocalDate date) throws DataAccessException {
 		
-	public List<BookingTime> findBookingTimeById(List<Booking> list) {
-		bookingTimeCtrl.findBookingTimeById(list);
-		
-		List<BookingTime> times = new ArrayList<>();
-		for (Booking i : list) {
-			list.add(i);
-		}
-		return times;
+		bookings = bookingDatabase.findBookingsByDate(date);
+		addBookingTimesToBooking(bookings);
+		return bookings;
+	}
+	
+	public void addBookingTimesToBooking(List<Booking> list) throws DataAccessException {
+		bookingTimeCtrl.addBookingTimesToBookings(list);
 		
 	}
 	
-	
-	public List<Booking> findBookingByDate(LocalDate date) {
-		bookingDatabase.findBookingByDate(date);
+	public Booking selectBooking(int bookingId) {
+        boolean found = false;
+        int i = 0;
+        while(!found && i<bookings.size()) {
+        	if(bookings.get(i).getBookingId() == bookingId) {
+        		found = true;
+        	}
+        	else {
+        		i++;
+        	}
+        }
+        if (found) {
+        	return bookings.get(i);
+        }
+        else {
+        	return null;
+        }
+		
 	}
 
-	public Boolean updateBooking(Booking booking) {
+	public Boolean updateBooking(Booking booking) throws DataAccessException {
 		bookingDatabase.updateBooking(booking); 
+		updateBookingTime(booking);
+		return true;
 	}
 	
-	public Boolean updateBookingTime(Booking booking) {
-		bookingTimeDatabase.updateBookingTime(booking);
+	public Boolean updateBookingTime(Booking booking) throws DataAccessException {
+		return bookingTimeDatabase.updateBookingTime(booking);
 	}
 
 
