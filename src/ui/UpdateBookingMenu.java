@@ -90,6 +90,7 @@ public class UpdateBookingMenu extends JFrame {
 	}
 	
 	private void handleSearchDateClick() {
+		//TODO make date string foolproof
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate date = LocalDate.parse(txtSearchDate.getText(), formatter);
 		TimeSlotDialogUpdate dialog = new TimeSlotDialogUpdate(bookingCtrl, date);
