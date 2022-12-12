@@ -99,6 +99,7 @@ public class BookingDB implements BookingDBIF {
 				
 	}
 	
+	@Override
 	public List<Booking> findBookingByDate(LocalDate date) throws DataAccessException{
 		Connection connection;
 		connection = getDBConnection().getConnection();
@@ -118,7 +119,7 @@ public class BookingDB implements BookingDBIF {
 		try {
 			List<Booking> bookings = new ArrayList<>();
 			
-			getBookingIdsByDate.setString(1, date.toString());
+			getBookingIdsByDate.setDate(1, Date.valueOf(date));
 			ResultSet rs = getBookingIdsByDate.executeQuery();
 			
 			while(rs.next()) {
@@ -155,7 +156,10 @@ public class BookingDB implements BookingDBIF {
 				CateringMenu cateringMenu = new CateringMenu(enumMenu, rsCI.getDouble("price"));
 				
 				Booking booking = new Booking(customer, cateringMenu, amountOfPeople, bookingId, totalPrice, creationDate);
-			    bookings.add(booking);
+			    if(!bookings.contains(booking)) {
+			    	bookings.add(booking);
+			    	
+			    }
 				
 		      }
 			return bookings;
