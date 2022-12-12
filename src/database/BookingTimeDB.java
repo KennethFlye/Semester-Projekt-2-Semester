@@ -25,12 +25,11 @@ import model.EventType.EnumType;
 public class BookingTimeDB implements BookingTimeDBIF {
 	
 	private static final String INSERTBOOKINGTIME_Q = "INSERT INTO BookingTime (eventType, bookingId, startTime, finishTime) VALUES (?, ?, ?, ?);";
-	private static final String GETBOOKINGTIMESBYDATE_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime LIKE '?%'";
-	private static final String GETBOOKINGTIME_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime between ? and ?";
+	private static final String GETBOOKINGTIMESBYDATE_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime between ? and ?";
 	private static final String GET_EVENTTYPE_BOOKINGTIME_BY_BOOKINGID_JOIN_TABLE_Q = "Select * FROM EventType, BookingTime Where BookingTime.eventType = EventType.type and BookingTime.bookingId = ?";
 	private static final String UPDATE_BOOKINGTIME_Q = "UPDATE BookingTime SET startTime = ?, finishTime = ? WHERE BookingTime.bookingId = ? AND BookingTime.eventType = ?" ;
 	
-	private PreparedStatement insertBookingTime,getBookingTimesByDate,getBookingTime, getEventTypeBookingTimeByBookingId, updateBookingTime;
+	private PreparedStatement insertBookingTime,getBookingTimesByDate,getEventTypeBookingTimeByBookingId, updateBookingTime;
 	
 	private List<EnumType> usesEventHall = new ArrayList<>();
 	private List<EnumType> usesGokartTrack = new ArrayList<>();
@@ -45,9 +44,8 @@ public class BookingTimeDB implements BookingTimeDBIF {
 		usesGokartTrack.add(EnumType.LE_MANS_1_HOUR);
 		
 		try {
-			getBookingTimesByDate = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIME_Q);
+			getBookingTimesByDate = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIMESBYDATE_Q);
 			insertBookingTime = DBConnection.getInstance().getConnection().prepareStatement(INSERTBOOKINGTIME_Q);
-			getBookingTime = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIMESBYDATE_Q); 
 			getEventTypeBookingTimeByBookingId = DBConnection.getInstance().getConnection().prepareStatement(GET_EVENTTYPE_BOOKINGTIME_BY_BOOKINGID_JOIN_TABLE_Q);
 			updateBookingTime = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_BOOKINGTIME_Q);
 			
