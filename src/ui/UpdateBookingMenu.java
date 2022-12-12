@@ -1,41 +1,54 @@
 package ui;
 
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import controller.BookingCtrl;
 import database.DataAccessException;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import javax.swing.JList;
-import javax.swing.JTable;
-import java.awt.FlowLayout;
-import javax.swing.JEditorPane;
-
 public class UpdateBookingMenu extends JFrame {
 	private JTextField txtSearchDate;
 	private BookingCtrl bookingCtrl;
+	private JPanel contentPane;
+	private JEditorPane editorPane;
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					UpdateBookingMenu frame = new UpdateBookingMenu();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	
 	public UpdateBookingMenu() throws DataAccessException {
-		getContentPane().setLayout(new BorderLayout(0, 0));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 600, 600);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
 		JPanel topPanel = new JPanel();
 		getContentPane().add(topPanel, BorderLayout.NORTH);
 		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblSearchDate = new JLabel("S\u00F8g dato");
+		JLabel lblSearchDate = new JLabel("S\u00F8g dato (yyyy-mm-dd)");
 		topPanel.add(lblSearchDate);
 		
 		txtSearchDate = new JTextField();
@@ -58,8 +71,11 @@ public class UpdateBookingMenu extends JFrame {
 		JButton btnCancel = new JButton("Annuller");
 		bottomPanel.add(btnCancel);
 		
-		JEditorPane editorPane = new JEditorPane();
-		getContentPane().add(editorPane, BorderLayout.CENTER);
+		JPanel Middlepanel = new JPanel();
+		getContentPane().add(Middlepanel, BorderLayout.CENTER);
+		
+		editorPane = new JEditorPane();
+		Middlepanel.add(editorPane);
 		
 		btnCancel.addActionListener((e) -> handleCancelClick());
 		
@@ -72,28 +88,19 @@ public class UpdateBookingMenu extends JFrame {
 		}
 	}
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UpdateBookingMenu frame = new UpdateBookingMenu();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
 	private void handleSearchDateClick() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime date = LocalDateTime.parse(txtSearchDate.getText(), formatter);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(txtSearchDate.getText(), formatter);
 		TimeSlotDialogUpdate dialog = new TimeSlotDialogUpdate(bookingCtrl, date);
+		try {
+			//pseudo
+			editorPane.setHit = bookingCtrl.findBookingByDate(date);
+			bookingCtrl.findBookingTimeById(dialog.showDialog())
+		}
+		getBooking = dialog.showdialog();
+		
 		
 		//pseudo
-		//open dialog
-		//add check timeslots to an array
-		//for each in array, print to dialog tables
 		//click one to add to updatebookingmenu table
 		//make writeable
 		//accept btn saves to db
@@ -102,7 +109,13 @@ public class UpdateBookingMenu extends JFrame {
 	}
 	
 	private void handleAcceptClick() {
-		//TODO implement - get the swingworker
+		try {
+			//TODO implement - get the swingworker
+			bookingCtrl.updateBooking(null);
+			bookingCtrl.updateBookingTime(null);
+		} catch (Exception e) {
+		}
+		//maybe make it more like the receipt with individual rows to edit = easier to translate to query
 	}
 	
 	private void handleCancelClick() {

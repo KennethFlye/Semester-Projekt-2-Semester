@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.BookingCtrl;
@@ -19,26 +20,34 @@ import database.DataAccessException;
 import model.BookingTime;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
 public class TimeSlotDialogUpdate extends JDialog {
+	private final JComponent contentPanel = new JPanel();
 	private JTextField txtDialogDate;
-	private LocalDateTime date;
+	private LocalDate date;
 	private BookingCtrl bookingCtrl;
 	private JTable tableGokarts;
 	private JTable tableEvents;
 	private DefaultTableModel dtmodel;
-	private String[] columnNames = {"0"};
+	private String[] columnNames = {"Event type", "Start Tid", "Slut Tid"};
+	private LocalDateTime selectedStarttime;
 	
-	public TimeSlotDialogUpdate(BookingCtrl bookingCtrl, LocalDateTime date) {
-		getContentPane().setLayout(new BorderLayout(0, 0));
+	public TimeSlotDialogUpdate(BookingCtrl bookingCtrl, LocalDate date) {
+		super((java.awt.Frame) null, true);
+		setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+		setBounds(100, 100, 600, 300);
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelTop = new JPanel();
 		getContentPane().add(panelTop, BorderLayout.NORTH);
 		panelTop.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblDate = new JLabel("Dato");
+		JLabel lblDate = new JLabel("Dato (yyyy-mm-dd)");
 		panelTop.add(lblDate);
 		
 		txtDialogDate = new JTextField();
@@ -72,7 +81,7 @@ public class TimeSlotDialogUpdate extends JDialog {
 		tableEvents = new JTable();
 		splitPane.setRightComponent(tableEvents);
 		
-		dtmodel = new DefaultTableModel(0,0);
+		dtmodel = new DefaultTableModel(0,0); //TODO maybe make 2 of them
 		dtmodel.setColumnIdentifiers(columnNames);
 		
 		tableGokarts.setModel(dtmodel);
@@ -82,12 +91,14 @@ public class TimeSlotDialogUpdate extends JDialog {
 		this.date = date;
 		txtDialogDate.setText(date.toString());
 		
+		dtmodel.addRow(new Object[] {"Event Type", "Start Time", "Finish Time"});
+		
 	}
 
 
 	private void handleSearchClick() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate searchDate = LocalDate.parse(txtDialogDate.getText(), formatter);
+		LocalDateTime searchDate = LocalDateTime.parse(txtDialogDate.getText(), formatter);
 		
 		List<BookingTime> bookedTimes = null;
 		
@@ -114,11 +125,18 @@ public class TimeSlotDialogUpdate extends JDialog {
 	}
 	
 	private void handleAcceptClick() {
-		//TODO make it
+		int rowIndex = tableEvents.getSelectedRow(); //TODO make possible with two tables?
+		selectedStarttime = (LocalDateTime) tableEvents.getValueAt(rowIndex, 1);
+		this.dispose();
 	}
 	
 	private void handleCancelClick() {
 		this.dispose();
+	}
+	
+	public LocalDateTime showDialog() {
+		setVisible(true);
+		return selectedStarttime;
 	}
 
 }

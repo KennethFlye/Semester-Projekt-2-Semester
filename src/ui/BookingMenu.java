@@ -7,6 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import database.DataAccessException;
+
 import javax.swing.JToggleButton;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -68,7 +71,13 @@ public class BookingMenu extends JFrame {
 		JButton btnUpdateBooking = new JButton("Opdater Booking");
 		centerPanel1.add(btnUpdateBooking);
 		
-		btnUpdateBooking.addActionListener((e) -> handleUpdateBookingEvent());
+		btnUpdateBooking.addActionListener((e) -> {
+			try {
+				handleUpdateBookingEvent();
+			} catch (DataAccessException e1) {
+				e1.printStackTrace(); //TODO change?
+			}
+		});
 		
 		JButton btnShowCalendar = new JButton("Vis Kalender");
 		centerPanel1.add(btnShowCalendar);
@@ -77,15 +86,9 @@ public class BookingMenu extends JFrame {
 		
 	}
 
-	private void handleUpdateBookingEvent() {
-		
-//		flyt et niveau ned:
-//		BackgroundWorker bgw = new BackgroundWorker(createBookingMenu);
-//		
-//		bgw.execute(); //run the updatebooking list window in bg
-		
-		//TODO open dialog to find the requested booking
-		
+	private void handleUpdateBookingEvent() throws DataAccessException {
+		updateBookingMenu = new UpdateBookingMenu(); //throws exception because everything happens via the database
+		updateBookingMenu.setVisible(true);
 	}
 
 	private void handleShowCalenderClick() {
