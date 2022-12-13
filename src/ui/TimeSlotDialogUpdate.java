@@ -49,7 +49,7 @@ public class TimeSlotDialogUpdate extends JDialog {
 		
 		txtDialogDate = new JTextField();
 		panelTop.add(txtDialogDate);
-		txtDialogDate.setColumns(10);
+		txtDialogDate.setColumns(20);
 		
 		JButton btnDialogSearch = new JButton("S\u00F8g");
 		panelTop.add(btnDialogSearch);
@@ -118,7 +118,8 @@ public class TimeSlotDialogUpdate extends JDialog {
 						element.getTotal()});
 			}
 			
-			if(dtmodel.getRowCount()<2) {
+			if(dtmodel.getRowCount()<=1) {
+				//since we add a row with column names to the table, the tablecount should always be at least 1
 				JOptionPane.showMessageDialog(null, "Der findes ingen bookings på denne dag.");
 			}
 		}
