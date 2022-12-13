@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import controller.BookingCtrl;
 import database.DataAccessException;
 import model.Booking;
+import model.BookingTime;
 import model.PatternCheck;
 
 public class TimeSlotDialogUpdate extends JDialog {
@@ -109,13 +110,14 @@ public class TimeSlotDialogUpdate extends JDialog {
 				e.printStackTrace();
 			}
 
-			
-			//Loop over alle tider der bliver returneret
+			//Loop over alle bookings der bliver returneret - TODO prints a booking twice (because of the for loop?)
 			for (Booking element : bookings) { 
-				dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
-						element.getTimeslots().get(0).getEventType().getEnumType().getLabel(), 
-						element.getTimeslots().get(0).getStartTime(), element.getTimeslots().get(0).getFinishTime(),
-						element.getTotal()});
+				for(int i=0; i<element.getTimeslots().size(); i++) {
+					dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
+							element.getTimeslots().get(i).getEventType().getEnumType().getLabel(), 
+							element.getTimeslots().get(i).getStartTime(), element.getTimeslots().get(i).getFinishTime(),
+							element.getTotal()});
+				}
 			}
 			
 			if(dtmodel.getRowCount()<=1) {
