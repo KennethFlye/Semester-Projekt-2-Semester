@@ -333,6 +333,7 @@ public class UpdateBookingMenu extends JFrame {
 			public void focusLost(FocusEvent e) {
 				try {
 					bookingCtrl.addAmountOfPeople(Integer.parseInt(txtAmountOfPeople.getText()));
+					updateGokartTime();
 				} catch (NumberFormatException | DataAccessException e1) {
 					e1.printStackTrace();
 				}
@@ -344,12 +345,7 @@ public class UpdateBookingMenu extends JFrame {
 		
 		txtGokartStartTime.addFocusListener(new FocusListener() {
 		    public void focusLost(FocusEvent e) {
-		        try {
-					LocalDateTime finishTime = bookingCtrl.addTimeslot(comboBoxGokartType.getSelectedItem().toString(), LocalDateTime.parse(txtGokartStartTime.getText()), LocalDateTime.parse(txtGokartEndTime.getText()));
-					txtGokartEndTime.setText(finishTime.toString());
-				} catch (DataAccessException e1) {
-					e1.printStackTrace();
-				}
+		        updateGokartTime();
 		    }
 
 		    public void focusGained(FocusEvent e) {
@@ -359,18 +355,31 @@ public class UpdateBookingMenu extends JFrame {
 		
 		txtStartTimeEventHall.addFocusListener(new FocusListener() {
 			public void focusLost(FocusEvent e) {
-				try {
-					LocalDateTime finishTime = bookingCtrl.addTimeslot(comboBoxEventHallType.getSelectedItem().toString(), LocalDateTime.parse(txtStartTimeEventHall.getText()), LocalDateTime.parse(txtEndTimeEventHall.getText()).plusMinutes(EnumType.valueOfLabel(comboBoxEventHallType.getSelectedItem().toString()).getLength()));
-					txtEndTimeEventHall.setText(finishTime.toString());
-				} catch (NumberFormatException | DataAccessException e1) {
-					e1.printStackTrace();
-				}
+				updateEventTime();
 			}
 			public void focusGained(FocusEvent e) {
 				
 			}
 		});
 		
+	}
+	
+	private void updateGokartTime() {
+		try {
+			LocalDateTime finishTime = bookingCtrl.addTimeslot(comboBoxGokartType.getSelectedItem().toString(), LocalDateTime.parse(txtGokartStartTime.getText()), LocalDateTime.parse(txtGokartEndTime.getText()));
+			txtGokartEndTime.setText(finishTime.toString());
+		} catch (DataAccessException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	private void updateEventTime() {
+		try {
+			LocalDateTime finishTime = bookingCtrl.addTimeslot(comboBoxEventHallType.getSelectedItem().toString(), LocalDateTime.parse(txtStartTimeEventHall.getText()), LocalDateTime.parse(txtEndTimeEventHall.getText()).plusMinutes(EnumType.valueOfLabel(comboBoxEventHallType.getSelectedItem().toString()).getLength()));
+			txtEndTimeEventHall.setText(finishTime.toString());
+		} catch (NumberFormatException | DataAccessException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	private void handleSearchDateClick() {
