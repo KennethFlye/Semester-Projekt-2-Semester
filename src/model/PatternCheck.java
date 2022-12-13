@@ -14,22 +14,31 @@ public class PatternCheck {
 		Matcher m = pattern.matcher(check);
 		
 		return m.find();
-		
-		
 	}
 	
-	public boolean checkSignedInteger(String check) {
+	public boolean checkDateString(String check) {
 		
-		String signedIntegerPattern = "^(\\+|-)[0-9]+$";
+		String dateStringPattern = "^[0-9]{4}(\\-)[0-9]{2}(\\-)[0-9]{2}$";
 		
-		Pattern pattern = Pattern.compile(signedIntegerPattern);
+		Pattern pattern = Pattern.compile(dateStringPattern);
 		
 		Matcher m = pattern.matcher(check);
 		
-		return m.find(); 
-		
-		
+		return m.find();
 	}
+	
+//	public boolean checkSignedInteger(String check) {
+//		
+//		String signedIntegerPattern = "^(\\+|-)[0-9]+$";
+//		
+//		Pattern pattern = Pattern.compile(signedIntegerPattern);
+//		
+//		Matcher m = pattern.matcher(check);
+//		
+//		return m.find(); 
+//		
+//		
+//	}
 	
 	public boolean checkAASequence(String check) {
 		

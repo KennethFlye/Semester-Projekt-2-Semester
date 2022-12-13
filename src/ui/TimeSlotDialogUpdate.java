@@ -3,7 +3,6 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -11,8 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -21,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import controller.BookingCtrl;
 import database.DataAccessException;
 import model.Booking;
-import model.BookingTime;
+import model.PatternCheck;
 
 public class TimeSlotDialogUpdate extends JDialog {
 	private final JComponent contentPanel = new JPanel();
@@ -30,7 +29,7 @@ public class TimeSlotDialogUpdate extends JDialog {
 	private BookingCtrl bookingCtrl;
 	private JTable tableBookings;
 	private DefaultTableModel dtmodel;
-	private String[] columnNames = {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Menu", "Total"};
+	private String[] columnNames = {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Total"};
 	private int selectedID;
 	
 	public TimeSlotDialogUpdate(BookingCtrl bookingCtrl, LocalDate date) {
@@ -50,7 +49,7 @@ public class TimeSlotDialogUpdate extends JDialog {
 		
 		txtDialogDate = new JTextField();
 		panelTop.add(txtDialogDate);
-		txtDialogDate.setColumns(10);
+		txtDialogDate.setColumns(20);
 		
 		JButton btnDialogSearch = new JButton("S\u00F8g");
 		panelTop.add(btnDialogSearch);
@@ -80,35 +79,49 @@ public class TimeSlotDialogUpdate extends JDialog {
 		dtmodel.setColumnIdentifiers(columnNames);
 		
 		tableBookings.setModel(dtmodel);
+		tableBookings.getColumnModel().getColumn(3).setMinWidth(100);
+		tableBookings.getColumnModel().getColumn(4).setMinWidth(100);
 		
 		this.bookingCtrl = bookingCtrl;
 		this.date = date;
 		txtDialogDate.setText(date.toString());
 		
-		dtmodel.addRow(new Object[] {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Menu", "Total"});
+		dtmodel.addRow(new Object[] {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Total"});
 		
 		handleSearchClick();
 	}
 
 
 	private void handleSearchClick() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate searchDate = LocalDate.parse(txtDialogDate.getText(), formatter);
-		
-		List<Booking> bookings = null;
-		
-		try {
-			bookings = bookingCtrl.findBookingsByDate(searchDate);
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+		PatternCheck patternCheck = new PatternCheck();
+		if(!patternCheck.checkDateString(txtDialogDate.getText())) {
+			txtDialogDate.setText("dato format inkorrekt");
 		}
+		else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate searchDate = LocalDate.parse(txtDialogDate.getText(), formatter);
+			
+			List<Booking> bookings = null;
+			
+			try {
+				bookings = bookingCtrl.findBookingsByDate(searchDate);
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			}
 
-		
-		//Loop over alle tider der bliver returneret
-		for (Booking element : bookings) { 
-			dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
-					element.getTimeslots().get(0).getEventType(), element.getTimeslots().get(0).getStartTime(), element.getTimeslots().get(0).getFinishTime(),
-					element.getCatering().getEnumMenu().getLabel(), element.getTotal()});
+			
+			//Loop over alle tider der bliver returneret
+			for (Booking element : bookings) { 
+				dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
+						element.getTimeslots().get(0).getEventType().getEnumType().getLabel(), 
+						element.getTimeslots().get(0).getStartTime(), element.getTimeslots().get(0).getFinishTime(),
+						element.getTotal()});
+			}
+			
+			if(dtmodel.getRowCount()<=1) {
+				//since we add a row with column names to the table, the tablecount should always be at least 1
+				JOptionPane.showMessageDialog(null, "Der findes ingen bookings på denne dag.");
+			}
 		}
 	}
 	
