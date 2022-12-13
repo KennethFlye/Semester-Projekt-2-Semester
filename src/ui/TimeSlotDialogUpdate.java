@@ -123,14 +123,20 @@ public class TimeSlotDialogUpdate extends JDialog {
 			if(dtmodel.getRowCount()<=1) {
 				//since we add a row with column names to the table, the tablecount should always be at least 1
 				JOptionPane.showMessageDialog(null, "Der findes ingen bookings på denne dag.");
+				txtDialogDate.setText("søg en ny dato");
 			}
 		}
 	}
 	
 	private void handleAcceptClick() {
-		int rowIndex = tableBookings.getSelectedRow();
-		selectedID = (int) tableBookings.getValueAt(rowIndex, 0);
-		this.dispose();
+		if(tableBookings.getSelectedRow()==-1) {
+			JOptionPane.showMessageDialog(null, "Du skal først vælge en booking.");
+		}
+		else {
+			int rowIndex = tableBookings.getSelectedRow();
+			selectedID = (int) tableBookings.getValueAt(rowIndex, 0);
+			this.dispose();
+		}
 	}
 	
 	private void handleCancelClick() {
