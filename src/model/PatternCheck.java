@@ -18,7 +18,9 @@ public class PatternCheck {
 	
 	public boolean checkDateString(String check) {
 		
-		String dateStringPattern = "^[0-9]{4}(\\-)[0-9]{2}(\\-)[0-9]{2}$";
+		//yyyy-mm-dd = year must have each char between 0-9, month must have first char between 0-1 and 
+			//second char between 0-9 to be able to make fx june=07 and december=12, day follows the same principle
+		String dateStringPattern = "^[0-9]{4}(\\-)([01][0-9])(\\-)([0-3][0-9])$";
 		
 		Pattern pattern = Pattern.compile(dateStringPattern);
 		
