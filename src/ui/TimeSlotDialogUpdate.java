@@ -3,7 +3,6 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -11,8 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -21,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import controller.BookingCtrl;
 import database.DataAccessException;
 import model.Booking;
-import model.BookingTime;
+import model.PatternCheck;
 
 public class TimeSlotDialogUpdate extends JDialog {
 	private final JComponent contentPanel = new JPanel();
@@ -87,7 +86,13 @@ public class TimeSlotDialogUpdate extends JDialog {
 		
 		dtmodel.addRow(new Object[] {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Menu", "Total"});
 		
-		handleSearchClick();
+		PatternCheck patternCheck = new PatternCheck();
+		if(patternCheck.checkDateString(txtDialogDate.getText())) {
+			handleSearchClick();
+		}
+		else {
+			txtDialogDate.setText("dato format inkorrekt");
+		}
 	}
 
 
@@ -107,8 +112,12 @@ public class TimeSlotDialogUpdate extends JDialog {
 		//Loop over alle tider der bliver returneret
 		for (Booking element : bookings) { 
 			dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
-					element.getTimeslots().get(0).getEventType(), element.getTimeslots().get(0).getStartTime(), element.getTimeslots().get(0).getFinishTime(),
+					element.getTimeslots().get(0).getEventType().getEnumType().getLabel(), element.getTimeslots().get(0).getStartTime(), element.getTimeslots().get(0).getFinishTime(),
 					element.getCatering().getEnumMenu().getLabel(), element.getTotal()});
+		}
+		
+		if(dtmodel.getRowCount()<1) {
+			JOptionPane.showMessageDialog(null, "Der findes ingen bookings på denne dag.");
 		}
 	}
 	
