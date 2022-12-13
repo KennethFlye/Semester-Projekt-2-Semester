@@ -29,7 +29,7 @@ public class TimeSlotDialogUpdate extends JDialog {
 	private BookingCtrl bookingCtrl;
 	private JTable tableBookings;
 	private DefaultTableModel dtmodel;
-	private String[] columnNames = {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Menu", "Total"};
+	private String[] columnNames = {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Total"};
 	private int selectedID;
 	
 	public TimeSlotDialogUpdate(BookingCtrl bookingCtrl, LocalDate date) {
@@ -79,45 +79,48 @@ public class TimeSlotDialogUpdate extends JDialog {
 		dtmodel.setColumnIdentifiers(columnNames);
 		
 		tableBookings.setModel(dtmodel);
+		tableBookings.getColumnModel().getColumn(3).setMinWidth(100);
+		tableBookings.getColumnModel().getColumn(4).setMinWidth(100);
 		
 		this.bookingCtrl = bookingCtrl;
 		this.date = date;
 		txtDialogDate.setText(date.toString());
 		
-		dtmodel.addRow(new Object[] {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Menu", "Total"});
+		dtmodel.addRow(new Object[] {"ID", "Kunde", "Eventtype", "Starttid", "Sluttid", "Total"});
 		
-		PatternCheck patternCheck = new PatternCheck();
-		if(patternCheck.checkDateString(txtDialogDate.getText())) {
-			handleSearchClick();
-		}
-		else {
-			txtDialogDate.setText("dato format inkorrekt");
-		}
+		handleSearchClick();
 	}
 
 
 	private void handleSearchClick() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate searchDate = LocalDate.parse(txtDialogDate.getText(), formatter);
-		
-		List<Booking> bookings = null;
-		
-		try {
-			bookings = bookingCtrl.findBookingsByDate(searchDate);
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+		PatternCheck patternCheck = new PatternCheck();
+		if(!patternCheck.checkDateString(txtDialogDate.getText())) {
+			txtDialogDate.setText("dato format inkorrekt");
 		}
+		else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate searchDate = LocalDate.parse(txtDialogDate.getText(), formatter);
+			
+			List<Booking> bookings = null;
+			
+			try {
+				bookings = bookingCtrl.findBookingsByDate(searchDate);
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			}
 
-		
-		//Loop over alle tider der bliver returneret
-		for (Booking element : bookings) { 
-			dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
-					element.getTimeslots().get(0).getEventType().getEnumType().getLabel(), element.getTimeslots().get(0).getStartTime(), element.getTimeslots().get(0).getFinishTime(),
-					element.getCatering().getEnumMenu().getLabel(), element.getTotal()});
-		}
-		
-		if(dtmodel.getRowCount()<1) {
-			JOptionPane.showMessageDialog(null, "Der findes ingen bookings på denne dag.");
+			
+			//Loop over alle tider der bliver returneret
+			for (Booking element : bookings) { 
+				dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
+						element.getTimeslots().get(0).getEventType().getEnumType().getLabel(), 
+						element.getTimeslots().get(0).getStartTime(), element.getTimeslots().get(0).getFinishTime(),
+						element.getTotal()});
+			}
+			
+			if(dtmodel.getRowCount()<2) {
+				JOptionPane.showMessageDialog(null, "Der findes ingen bookings på denne dag.");
+			}
 		}
 	}
 	
