@@ -150,7 +150,13 @@ public class BookingDB implements BookingDBIF {
 				ResultSet rsZC = getZipcodeCity.executeQuery();
 				rsZC.next();
 				
-				Customer customer = new Customer(customerId, name, rsC.getString("phone"), rsC.getString("email"), rsC.getString("address"), zipCode, rsZC.getString("zipcodeCity"), rsC.getString("country"), LocalDate.parse((rsC.getString("dateOFBirth"))));
+				Customer customer;
+				if(rsC.getString("email")==null || rsC.getString("address")==null || rsC.getString("dateOFBirth")==null) {
+					customer = new Customer(customerId, name, rsC.getString("phone"));
+				}
+				else {
+					customer = new Customer(customerId, name, rsC.getString("phone"), rsC.getString("email"), rsC.getString("address"), zipCode, rsZC.getString("zipcodeCity"), rsC.getString("country"), LocalDate.parse((rsC.getString("dateOFBirth"))));
+				}
 
 				getAllCateringInfo.setInt(1, menuId);
 				ResultSet rsCI = getAllCateringInfo.executeQuery();
