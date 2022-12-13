@@ -230,8 +230,13 @@ public class BookingCtrl {
 	}
 
 	public Boolean updateBooking() throws DataAccessException {
+		newBooking.calculateTotalPrice();
 		bookingDatabase.updateBooking(newBooking); 
 		updateBookingTime(newBooking);
+		ArrayList<String> receipt = getReceipt();
+		for (String element : receipt) {
+			System.out.println(element);
+		}
 		return true;
 	}
 	
