@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
 import model.Booking;
@@ -16,10 +17,13 @@ public interface BookingTimeDBIF {
 
 	public List<BookingTime> getBookedTimeslots(int day, int month, int year) throws DataAccessException;
 
-	public boolean checkTimeslot(EnumType type, LocalDateTime startTime, LocalDateTime finishTime);
 	
 	public boolean updateBookingTime(Booking booking) throws DataAccessException;
 
 	void addBookingTimesToBooking(List<Booking> bookings) throws DataAccessException;
+
+	/**Returns true if the spot is clear, returns false if the spot is taken
+	 * @throws SQLException */
+	boolean checkTimeslot(EnumType type, LocalDateTime startTime, LocalDateTime finishTime, int bookingId) throws SQLException;
 	
 }

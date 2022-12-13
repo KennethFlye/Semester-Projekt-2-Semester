@@ -28,9 +28,10 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	private static final String GETBOOKINGTIMESBYDATE_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime between ? and ?";
 	private static final String GETBOOKINGTIMESBYDATEWITHOUTSPECIFICBOOKING_Q = GETBOOKINGTIMESBYDATE_Q + " and BookingTime.bookingId != ?";
 	private static final String GET_EVENTTYPE_BOOKINGTIME_BY_BOOKINGID_JOIN_TABLE_Q = "Select * FROM EventType, BookingTime Where BookingTime.eventType = EventType.type and BookingTime.bookingId = ?";
+	private static final String GETBOOKINGTIMEBOOKINGIDQ = "SELECT bookingId FROM BookingTime WHERE BookingTime.eventType = ? and BookingTime.startTime = ? and BookingTime.finishTime = ?";
 	private static final String UPDATE_BOOKINGTIME_Q = "UPDATE BookingTime SET startTime = ?, finishTime = ? WHERE BookingTime.bookingId = ? AND BookingTime.eventType = ?" ;
 	
-	private PreparedStatement insertBookingTime,getBookingTimesByDate,getEventTypeBookingTimeByBookingId, updateBookingTime;
+	private PreparedStatement insertBookingTime,getBookingTimesByDate,getEventTypeBookingTimeByBookingId, getBookingTimeBookingId, updateBookingTime;
 	
 	private List<EnumType> usesEventHall = new ArrayList<>();
 	private List<EnumType> usesGokartTrack = new ArrayList<>();
@@ -49,6 +50,8 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			insertBookingTime = DBConnection.getInstance().getConnection().prepareStatement(INSERTBOOKINGTIME_Q);
 			getEventTypeBookingTimeByBookingId = DBConnection.getInstance().getConnection().prepareStatement(GET_EVENTTYPE_BOOKINGTIME_BY_BOOKINGID_JOIN_TABLE_Q);
 			updateBookingTime = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_BOOKINGTIME_Q);
+			getBookingTimeBookingId = DBConnection.getInstance().getConnection().prepareStatement(GETBOOKINGTIMEBOOKINGIDQ);
+
 			
 		} catch (SQLException e) {
 			throw new DataAccessException(e, "Could not prepare statement");
@@ -114,8 +117,9 @@ public class BookingTimeDB implements BookingTimeDBIF {
 
 			
 		@Override
-		/**Returns true if the spot is clear, returns false if the spot is taken*/
-		public boolean checkTimeslot(EnumType type, LocalDateTime startTime, LocalDateTime finishTime) {
+		/**Returns true if the spot is clear, returns false if the spot is taken
+		 * @throws SQLException */
+		public boolean checkTimeslot(EnumType type, LocalDateTime startTime, LocalDateTime finishTime, int bookingId) throws SQLException {
 			List<BookingTime> btList = null;
 			try {
 				btList = getBookedTimeslots(startTime.getYear(), startTime.getMonth().getValue(), startTime.getDayOfMonth());
@@ -127,25 +131,32 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			for (int i = 0; i < btList.size(); i++) {
 				boolean inFront = false, inFront2 = false;
 				ZoneOffset zo = ZoneOffset.systemDefault().getRules().getOffset(Instant.now());
-				long timeA = btList.get(i).getStartTime().toEpochSecond(zo);
-				long timeB = btList.get(i).getFinishTime().toEpochSecond(zo);
-				long checkedTimeA = startTime.toEpochSecond(zo);
-				long checkedTimeB = finishTime.toEpochSecond(zo);
 				
-				if(timeA<checkedTimeA||timeA<checkedTimeB)
-					inFront = true;
-				
-				if(timeB<checkedTimeA)
-					inFront2 = true;
-				
-				if(inFront!=inFront2) {
-					EnumType checkedType = btList.get(i).getEventType().getEnumType();
-					if(usesEventHall.contains(type) && usesEventHall.contains(checkedType)
-							|| usesGokartTrack.contains(type) && usesGokartTrack.contains(checkedType))
-					returnBool = false;
+				if(!checkForSameBooking(btList.get(i), bookingId)) {
+					
+					long timeA = btList.get(i).getStartTime().toEpochSecond(zo);
+					long timeB = btList.get(i).getFinishTime().toEpochSecond(zo);
+					long checkedTimeA = startTime.toEpochSecond(zo);
+					long checkedTimeB = finishTime.toEpochSecond(zo);
+					
+					if(timeA<checkedTimeA||timeA<checkedTimeB)
+						inFront = true;
+					
+					if(timeB<checkedTimeA)
+						inFront2 = true;
+					
+					if(inFront!=inFront2) {
+						EnumType checkedType = btList.get(i).getEventType().getEnumType();
+						if(usesEventHall.contains(type) && usesEventHall.contains(checkedType)
+								|| usesGokartTrack.contains(type) && usesGokartTrack.contains(checkedType))
+						returnBool = false;
+					}
+						
 				}
+					
 			}
-			return returnBool;			
+			return returnBool;	
+						
 		}
 
 		@Override
@@ -205,7 +216,23 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			}
 
 		}
+		
+		public boolean checkForSameBooking(BookingTime bt, int id) throws SQLException {
+			if (id <= 0) {
+				return false;
+			}
+			else{
+				getBookingTimeBookingId.setString(1, bt.getEventType().getEnumType().getLabel());
+				getBookingTimeBookingId.setTimestamp(2, Timestamp.valueOf(bt.getStartTime()));
+				getBookingTimeBookingId.setTimestamp(3, Timestamp.valueOf(bt.getFinishTime()));
+				ResultSet rs = getBookingTimeBookingId.executeQuery();
+				rs.next();
+				return (rs.getInt(1) == id);
+				
+		}
 
 
 		}
+		
+}
 		

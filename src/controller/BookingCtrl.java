@@ -58,9 +58,10 @@ public class BookingCtrl {
 		return bookingTimeDatabase.getBookedTimeslots(year, month, day);
 	}
 	
-	/**Returns true if there are no bookings in the given timespan*/
-	public boolean checkTimeslot(EnumType type, LocalDateTime startTime,LocalDateTime finishTime) {
-		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime);
+	/**Returns true if there are no bookings in the given timespan
+	 * @throws SQLException */
+	public boolean checkTimeslot(EnumType type, LocalDateTime startTime,LocalDateTime finishTime, int bookingId) throws SQLException {
+		return bookingTimeDatabase.checkTimeslot(type, startTime, finishTime, bookingId);
 	}
 	
 	public int calculateGroups(EventType et, LocalDateTime startTime, LocalDateTime finishTime , double amount) throws DataAccessException {
@@ -93,9 +94,17 @@ public class BookingCtrl {
 		int amountOfGroups = calculateGroups(et, startTime, finishTime, amount) ;
     
 		bt = new BookingTime(et, startTime, amountOfGroups); //set as field value, can be used for checking if timeslot requirements are met
-		if (!checkTimeslot(et.getEnumType(), bt.getStartTime(), bt.getFinishTime())) {
-			Exception e = new Exception();
-			throw new DataAccessException(e, "Booking would overlap with other booking!");
+		try {
+			if (!checkTimeslot(et.getEnumType(), bt.getStartTime(), bt.getFinishTime(), newBooking.getBookingId())) {
+				Exception e = new Exception();
+				throw new DataAccessException(e, "Booking would overlap with other booking!");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		newBooking.addTimeslot(bt); 
 		return bt.getFinishTime();
