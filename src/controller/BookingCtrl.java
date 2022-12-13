@@ -1,24 +1,21 @@
 package controller;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import model.CateringMenu;
-import model.Customer;
-import model.EventType;
-import model.EventType.EnumType;
-import model.Booking;
-import model.BookingTime;
 import database.BookingDB;
 import database.BookingDBIF;
 import database.BookingTimeDB;
 import database.BookingTimeDBIF;
 import database.DataAccessException;
+import model.Booking;
+import model.BookingTime;
+import model.Customer;
+import model.EventType;
+import model.EventType.EnumType;
 
 public class BookingCtrl {
 	
@@ -123,11 +120,30 @@ public class BookingCtrl {
 	}
 	
 	public ArrayList<String> finishBooking() throws DataAccessException {
-		newBooking.calculateTotalPrice();
-		int currentId = bookingDatabase.insertBooking(newBooking);
-		//int currentId = bookingDatabase.getCurrentId();
-		bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
-		return getReceipt();
+		try {
+			//starttransaction sets autocommit to false, which means nothing will be committed before we tell it to
+			bookingDatabase.getDBConnection().startTransaction(); //since dbconnection is a singleton, it doesnt matter which db class we call it from
+			
+			newBooking.calculateTotalPrice();
+			int currentId = bookingDatabase.insertBooking(newBooking);
+			//int currentId = bookingDatabase.getCurrentId();
+			bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
+			
+			//committransaction inserts everything in the database so far, unless there are problems - sets autocommit to true again
+			bookingDatabase.getDBConnection().commitTransaction();
+			
+			return getReceipt();
+			
+		} catch (SQLException e) {
+			try {
+				bookingDatabase.getDBConnection().rollbackTransaction();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				throw new DataAccessException(e1, "Could not rollback transaction");
+			}
+			e.printStackTrace();
+			throw new DataAccessException(e, "Could not commit transaction");
+		}
 		
 	}
 	
@@ -166,7 +182,7 @@ public class BookingCtrl {
 		return receipt;
 	}
 	
-	//Only for testing purposes - returns current booking
+	//getBooking() only for testing purposes - returns current booking
 		public Booking getBooking() {
 			return newBooking;
 		}
