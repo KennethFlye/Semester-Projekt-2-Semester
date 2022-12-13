@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -20,6 +21,7 @@ import controller.BookingCtrl;
 import database.DataAccessException;
 import model.Booking;
 import model.BookingTime;
+import model.PatternCheck;
 import model.CateringMenu.EnumMenu;
 import model.EventType.EnumType;
 
@@ -383,36 +385,24 @@ public class UpdateBookingMenu extends JFrame {
 	}
 	
 	private void handleSearchDateClick() {
-		//TODO make date string foolproof
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate date = LocalDate.parse(txtSearchDate.getText(), formatter);
-		TimeSlotDialogUpdate dialog = new TimeSlotDialogUpdate(bookingCtrl, date);
-		int bookingID = dialog.showDialog();
-		Booking foundBooking = bookingCtrl.selectBooking(bookingID);
-		
-		if(foundBooking == null) {
-			//Føj
+		PatternCheck patternCheck = new PatternCheck();
+		if(!patternCheck.checkDateString(txtSearchDate.getText())) {
+			txtSearchDate.setText("dato format inkorrekt");
 		}
 		else {
-			addBookingToWindow(foundBooking);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate date = LocalDate.parse(txtSearchDate.getText(), formatter);
+			TimeSlotDialogUpdate dialog = new TimeSlotDialogUpdate(bookingCtrl, date);
+			int bookingID = dialog.showDialog();
+			Booking foundBooking = bookingCtrl.selectBooking(bookingID);
+			
+			if(foundBooking == null) {
+				JOptionPane.showMessageDialog(null, "Der blev ikke hentet nogen booking.");
+			}
+			else {
+				addBookingToWindow(foundBooking);
+			}
 		}
-		
-		try {
-			//pseudo
-//			editorPane.setHit = bookingCtrl.findBookingByDate(date);
-//			bookingCtrl.findBookingTimeById(dialog.showDialog())
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-//		getBooking = dialog.showdialog();
-		
-		
-		//pseudo
-		//click one to add to updatebookingmenu table
-		//make writeable
-		//accept btn saves to db
-		
 		
 	}
 	
@@ -420,8 +410,8 @@ public class UpdateBookingMenu extends JFrame {
 		try {
 			updateBookingValues();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		//maybe make it more like the receipt with individual rows to edit = easier to translate to query
 	}
 	
 	private void handleCancelClick() {
