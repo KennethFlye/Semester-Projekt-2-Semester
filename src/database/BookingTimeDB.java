@@ -26,6 +26,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 	
 	private static final String INSERTBOOKINGTIME_Q = "INSERT INTO BookingTime (eventType, bookingId, startTime, finishTime) VALUES (?, ?, ?, ?);";
 	private static final String GETBOOKINGTIMESBYDATE_Q = "SELECT * FROM BookingTime WHERE BookingTime.startTime between ? and ?";
+	private static final String GETBOOKINGTIMESBYDATEWITHOUTSPECIFICBOOKING_Q = GETBOOKINGTIMESBYDATE_Q + " and BookingTime.bookingId != ?";
 	private static final String GET_EVENTTYPE_BOOKINGTIME_BY_BOOKINGID_JOIN_TABLE_Q = "Select * FROM EventType, BookingTime Where BookingTime.eventType = EventType.type and BookingTime.bookingId = ?";
 	private static final String UPDATE_BOOKINGTIME_Q = "UPDATE BookingTime SET startTime = ?, finishTime = ? WHERE BookingTime.bookingId = ? AND BookingTime.eventType = ?" ;
 	

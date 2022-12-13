@@ -26,6 +26,9 @@ import model.EventType.EnumType;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 
@@ -46,6 +49,7 @@ public class UpdateBookingMenu extends JFrame {
 	private String[] raceTypes = {EnumType.FORMULA_1.getLabel(), EnumType.LARGE_FORMULA_1.getLabel(), EnumType.LE_MANS_1_HOUR.getLabel()};
 	private String[] eventLength = {EnumType.EVENT_HALL_1_HOUR.getLabel(), EnumType.EVENT_HALL_1_AND_HALF_HOUR.getLabel(), EnumType.EVENT_HALL_2_HOURS.getLabel()};
 	private String[] foodTypes = {EnumMenu.CHICKEN.getLabel(), EnumMenu.EGGS.getLabel(), EnumMenu.FRIKADEL.getLabel()};
+
 
 	
 	public static void main(String[] args) {
@@ -100,9 +104,9 @@ public class UpdateBookingMenu extends JFrame {
 		getContentPane().add(Middlepanel, BorderLayout.CENTER);
 		GridBagLayout gbl_Middlepanel = new GridBagLayout();
 		gbl_Middlepanel.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_Middlepanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_Middlepanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_Middlepanel.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_Middlepanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_Middlepanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		Middlepanel.setLayout(gbl_Middlepanel);
 		
 		lblCustomerName = new JLabel("Kunde Navn");
@@ -141,12 +145,29 @@ public class UpdateBookingMenu extends JFrame {
 		Middlepanel.add(txtEmployeeName, gbc_txtEmployeeName);
 		txtEmployeeName.setColumns(10);
 		
+		lblAmountOfPeople = new JLabel("Antal personer");
+		GridBagConstraints gbc_lblAmountOfPeople = new GridBagConstraints();
+		gbc_lblAmountOfPeople.anchor = GridBagConstraints.EAST;
+		gbc_lblAmountOfPeople.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAmountOfPeople.gridx = 1;
+		gbc_lblAmountOfPeople.gridy = 2;
+		Middlepanel.add(lblAmountOfPeople, gbc_lblAmountOfPeople);
+		
+		txtAmountOfPeople = new JTextField();
+		GridBagConstraints gbc_txtAmountOfPeople = new GridBagConstraints();
+		gbc_txtAmountOfPeople.insets = new Insets(0, 0, 5, 0);
+		gbc_txtAmountOfPeople.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtAmountOfPeople.gridx = 2;
+		gbc_txtAmountOfPeople.gridy = 2;
+		Middlepanel.add(txtAmountOfPeople, gbc_txtAmountOfPeople);
+		txtAmountOfPeople.setColumns(10);
+		
 		lblGokartType = new JLabel("Gokart");
 		GridBagConstraints gbc_lblGokartType = new GridBagConstraints();
 		gbc_lblGokartType.anchor = GridBagConstraints.EAST;
 		gbc_lblGokartType.insets = new Insets(0, 0, 5, 5);
 		gbc_lblGokartType.gridx = 1;
-		gbc_lblGokartType.gridy = 2;
+		gbc_lblGokartType.gridy = 3;
 		Middlepanel.add(lblGokartType, gbc_lblGokartType);
 		
 		comboBoxGokartType = new JComboBox(raceTypes);
@@ -154,7 +175,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_comboBoxGokartType.insets = new Insets(0, 0, 5, 0);
 		gbc_comboBoxGokartType.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxGokartType.gridx = 2;
-		gbc_comboBoxGokartType.gridy = 2;
+		gbc_comboBoxGokartType.gridy = 3;
 		Middlepanel.add(comboBoxGokartType, gbc_comboBoxGokartType);
 		
 		lblStartTimeGokart = new JLabel("Starttid");
@@ -162,7 +183,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_lblStartTimeGokart.anchor = GridBagConstraints.EAST;
 		gbc_lblStartTimeGokart.insets = new Insets(0, 0, 5, 5);
 		gbc_lblStartTimeGokart.gridx = 1;
-		gbc_lblStartTimeGokart.gridy = 3;
+		gbc_lblStartTimeGokart.gridy = 4;
 		Middlepanel.add(lblStartTimeGokart, gbc_lblStartTimeGokart);
 		
 		txtGokartStartTime = new JTextField();
@@ -170,7 +191,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_txtGokartStartTime.insets = new Insets(0, 0, 5, 0);
 		gbc_txtGokartStartTime.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtGokartStartTime.gridx = 2;
-		gbc_txtGokartStartTime.gridy = 3;
+		gbc_txtGokartStartTime.gridy = 4;
 		Middlepanel.add(txtGokartStartTime, gbc_txtGokartStartTime);
 		txtGokartStartTime.setColumns(10);
 		
@@ -179,15 +200,16 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_lblEndTimeGokart.anchor = GridBagConstraints.EAST;
 		gbc_lblEndTimeGokart.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEndTimeGokart.gridx = 1;
-		gbc_lblEndTimeGokart.gridy = 4;
+		gbc_lblEndTimeGokart.gridy = 5;
 		Middlepanel.add(lblEndTimeGokart, gbc_lblEndTimeGokart);
 		
 		txtGokartEndTime = new JTextField();
+		txtGokartEndTime.setEditable(false);
 		GridBagConstraints gbc_txtGokartEndTime = new GridBagConstraints();
 		gbc_txtGokartEndTime.insets = new Insets(0, 0, 5, 0);
 		gbc_txtGokartEndTime.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtGokartEndTime.gridx = 2;
-		gbc_txtGokartEndTime.gridy = 4;
+		gbc_txtGokartEndTime.gridy = 5;
 		Middlepanel.add(txtGokartEndTime, gbc_txtGokartEndTime);
 		txtGokartEndTime.setColumns(10);
 		
@@ -196,7 +218,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_lblEventHallType.anchor = GridBagConstraints.EAST;
 		gbc_lblEventHallType.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEventHallType.gridx = 1;
-		gbc_lblEventHallType.gridy = 5;
+		gbc_lblEventHallType.gridy = 6;
 		Middlepanel.add(lblEventHallType, gbc_lblEventHallType);
 		
 		comboBoxEventHallType = new JComboBox(eventLength);
@@ -204,7 +226,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_comboBoxEventHallType.insets = new Insets(0, 0, 5, 0);
 		gbc_comboBoxEventHallType.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxEventHallType.gridx = 2;
-		gbc_comboBoxEventHallType.gridy = 5;
+		gbc_comboBoxEventHallType.gridy = 6;
 		Middlepanel.add(comboBoxEventHallType, gbc_comboBoxEventHallType);
 		
 		lblStartTimeEventHall = new JLabel("Starttid");
@@ -212,7 +234,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_lblEventHallStartTime.anchor = GridBagConstraints.EAST;
 		gbc_lblEventHallStartTime.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEventHallStartTime.gridx = 1;
-		gbc_lblEventHallStartTime.gridy = 6;
+		gbc_lblEventHallStartTime.gridy = 7;
 		Middlepanel.add(lblStartTimeEventHall, gbc_lblEventHallStartTime);
 		
 		txtStartTimeEventHall = new JTextField();
@@ -220,7 +242,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_txtEventHallStartTime.insets = new Insets(0, 0, 5, 0);
 		gbc_txtEventHallStartTime.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtEventHallStartTime.gridx = 2;
-		gbc_txtEventHallStartTime.gridy = 6;
+		gbc_txtEventHallStartTime.gridy = 7;
 		Middlepanel.add(txtStartTimeEventHall, gbc_txtEventHallStartTime);
 		txtStartTimeEventHall.setColumns(10);
 		
@@ -229,34 +251,18 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_lblEventHallEndTime.anchor = GridBagConstraints.EAST;
 		gbc_lblEventHallEndTime.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEventHallEndTime.gridx = 1;
-		gbc_lblEventHallEndTime.gridy = 7;
+		gbc_lblEventHallEndTime.gridy = 8;
 		Middlepanel.add(lblEndTimeEventHall, gbc_lblEventHallEndTime);
 		
 		txtEndTimeEventHall = new JTextField();
+		txtEndTimeEventHall.setEditable(false);
 		GridBagConstraints gbc_txtEventHallEndTime = new GridBagConstraints();
 		gbc_txtEventHallEndTime.insets = new Insets(0, 0, 5, 0);
 		gbc_txtEventHallEndTime.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtEventHallEndTime.gridx = 2;
-		gbc_txtEventHallEndTime.gridy = 7;
+		gbc_txtEventHallEndTime.gridy = 8;
 		Middlepanel.add(txtEndTimeEventHall, gbc_txtEventHallEndTime);
 		txtEndTimeEventHall.setColumns(10);
-		
-		lblAmountOfPeople = new JLabel("Antal personer");
-		GridBagConstraints gbc_lblAmountOfPeople = new GridBagConstraints();
-		gbc_lblAmountOfPeople.anchor = GridBagConstraints.EAST;
-		gbc_lblAmountOfPeople.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAmountOfPeople.gridx = 1;
-		gbc_lblAmountOfPeople.gridy = 8;
-		Middlepanel.add(lblAmountOfPeople, gbc_lblAmountOfPeople);
-		
-		txtAmountOfPeople = new JTextField();
-		GridBagConstraints gbc_txtAmountOfPeople = new GridBagConstraints();
-		gbc_txtAmountOfPeople.insets = new Insets(0, 0, 5, 0);
-		gbc_txtAmountOfPeople.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtAmountOfPeople.gridx = 2;
-		gbc_txtAmountOfPeople.gridy = 8;
-		Middlepanel.add(txtAmountOfPeople, gbc_txtAmountOfPeople);
-		txtAmountOfPeople.setColumns(10);
 		
 		lblMenuType = new JLabel("Menu");
 		GridBagConstraints gbc_lblMenuType = new GridBagConstraints();
@@ -294,13 +300,14 @@ public class UpdateBookingMenu extends JFrame {
 		
 		lblIsPaid = new JLabel("Er betalt");
 		GridBagConstraints gbc_lblIsPaid = new GridBagConstraints();
-		gbc_lblIsPaid.insets = new Insets(0, 0, 0, 5);
+		gbc_lblIsPaid.insets = new Insets(0, 0, 5, 5);
 		gbc_lblIsPaid.gridx = 1;
 		gbc_lblIsPaid.gridy = 11;
 		Middlepanel.add(lblIsPaid, gbc_lblIsPaid);
 		
 		rdbtnIsPaid = new JRadioButton("");
 		GridBagConstraints gbc_rdbtnIsPaid = new GridBagConstraints();
+		gbc_rdbtnIsPaid.insets = new Insets(0, 0, 5, 0);
 		gbc_rdbtnIsPaid.gridx = 2;
 		gbc_rdbtnIsPaid.gridy = 11;
 		Middlepanel.add(rdbtnIsPaid, gbc_rdbtnIsPaid);
@@ -318,6 +325,52 @@ public class UpdateBookingMenu extends JFrame {
 		catch(DataAccessException e) {
 			throw new DataAccessException(e, UpdateBookingMenu.class.getName() + " could not instantiate bookingctrl");
 		}
+		
+		
+		
+		//FocusListener
+		txtAmountOfPeople.addFocusListener(new FocusListener() {
+			public void focusLost(FocusEvent e) {
+				try {
+					bookingCtrl.addAmountOfPeople(Integer.parseInt(txtAmountOfPeople.getText()));
+				} catch (NumberFormatException | DataAccessException e1) {
+					e1.printStackTrace();
+				}
+			}
+			public void focusGained(FocusEvent e) {
+				
+			}
+		});
+		
+		txtGokartStartTime.addFocusListener(new FocusListener() {
+		    public void focusLost(FocusEvent e) {
+		        try {
+					LocalDateTime finishTime = bookingCtrl.addTimeslot(comboBoxGokartType.getSelectedItem().toString(), LocalDateTime.parse(txtGokartStartTime.getText()), LocalDateTime.parse(txtGokartEndTime.getText()));
+					txtGokartEndTime.setText(finishTime.toString());
+				} catch (DataAccessException e1) {
+					e1.printStackTrace();
+				}
+		    }
+
+		    public void focusGained(FocusEvent e) {
+		        System.out.println("I fokus");
+		    }
+		});
+		
+		txtStartTimeEventHall.addFocusListener(new FocusListener() {
+			public void focusLost(FocusEvent e) {
+				try {
+					LocalDateTime finishTime = bookingCtrl.addTimeslot(comboBoxEventHallType.getSelectedItem().toString(), LocalDateTime.parse(txtStartTimeEventHall.getText()), LocalDateTime.parse(txtEndTimeEventHall.getText()).plusMinutes(EnumType.valueOfLabel(comboBoxEventHallType.getSelectedItem().toString()).getLength()));
+					txtEndTimeEventHall.setText(finishTime.toString());
+				} catch (NumberFormatException | DataAccessException e1) {
+					e1.printStackTrace();
+				}
+			}
+			public void focusGained(FocusEvent e) {
+				
+			}
+		});
+		
 	}
 	
 	private void handleSearchDateClick() {
@@ -356,9 +409,7 @@ public class UpdateBookingMenu extends JFrame {
 	
 	private void handleAcceptClick() {
 		try {
-			//TODO implement - get the swingworker
-			bookingCtrl.updateBooking(null);
-			bookingCtrl.updateBookingTime(null);
+			updateBookingValues();
 		} catch (Exception e) {
 		}
 		//maybe make it more like the receipt with individual rows to edit = easier to translate to query
@@ -449,6 +500,22 @@ public class UpdateBookingMenu extends JFrame {
 				txtEndTimeEventHall.setText(currentBookingTime.getFinishTime().toString());
 			}
 		}
+	}
+	
+	private void updateBookingValues() {
+		if(comboBoxMenuType.isVisible()) {
+			try {
+				bookingCtrl.addCateringMenu(EnumMenu.valueOfLabel(comboBoxMenuType.getSelectedItem().toString()).getId());
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			bookingCtrl.updateBooking();
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

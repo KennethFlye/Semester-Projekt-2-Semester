@@ -196,7 +196,8 @@ public class BookingCtrl {
         	}
         }
         if (found) {
-        	return bookings.get(i);
+        	newBooking = bookings.get(i);
+        	return newBooking;
         }
         else {
         	return null;
@@ -204,9 +205,9 @@ public class BookingCtrl {
 		
 	}
 
-	public Boolean updateBooking(Booking booking) throws DataAccessException {
-		bookingDatabase.updateBooking(booking); 
-		updateBookingTime(booking);
+	public Boolean updateBooking() throws DataAccessException {
+		bookingDatabase.updateBooking(newBooking); 
+		updateBookingTime(newBooking);
 		return true;
 	}
 	
