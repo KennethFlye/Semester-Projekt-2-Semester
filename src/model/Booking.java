@@ -24,6 +24,7 @@ public class Booking {
 		creationDate = LocalDate.now();
 		isPaid = false;
 		totalPrice = 0;
+		bookingID = 0;
 	}
 	
 	public Booking(Customer customer, CateringMenu cateringMenu, int amountOfPeople, int bookingID, double totalPrice, LocalDate creationDate) {
