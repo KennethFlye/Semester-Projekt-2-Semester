@@ -20,6 +20,8 @@ import controller.BookingCtrl;
 import database.DataAccessException;
 import model.Booking;
 import model.BookingTime;
+import model.CateringMenu.EnumMenu;
+import model.EventType.EnumType;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -40,6 +42,10 @@ public class UpdateBookingMenu extends JFrame {
 	lblEventHallType, lblStartTimeEventHall, lblEndTimeGokart, lblStartTimeGokart, lblGokartType, lblEmployeeName, lblCustomerName;
 	
 	private JComboBox comboBoxMenuType, comboBoxEventHallType, comboBoxGokartType;
+	
+	private String[] raceTypes = {EnumType.FORMULA_1.getLabel(), EnumType.LARGE_FORMULA_1.getLabel(), EnumType.LE_MANS_1_HOUR.getLabel()};
+	private String[] eventLength = {EnumType.EVENT_HALL_1_HOUR.getLabel(), EnumType.EVENT_HALL_1_AND_HALF_HOUR.getLabel(), EnumType.EVENT_HALL_2_HOURS.getLabel()};
+	private String[] foodTypes = {EnumMenu.CHICKEN.getLabel(), EnumMenu.EGGS.getLabel(), EnumMenu.FRIKADEL.getLabel()};
 
 	
 	public static void main(String[] args) {
@@ -143,7 +149,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_lblGokartType.gridy = 2;
 		Middlepanel.add(lblGokartType, gbc_lblGokartType);
 		
-		comboBoxGokartType = new JComboBox();
+		comboBoxGokartType = new JComboBox(raceTypes);
 		GridBagConstraints gbc_comboBoxGokartType = new GridBagConstraints();
 		gbc_comboBoxGokartType.insets = new Insets(0, 0, 5, 0);
 		gbc_comboBoxGokartType.fill = GridBagConstraints.HORIZONTAL;
@@ -193,7 +199,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_lblEventHallType.gridy = 5;
 		Middlepanel.add(lblEventHallType, gbc_lblEventHallType);
 		
-		comboBoxEventHallType = new JComboBox();
+		comboBoxEventHallType = new JComboBox(eventLength);
 		GridBagConstraints gbc_comboBoxEventHallType = new GridBagConstraints();
 		gbc_comboBoxEventHallType.insets = new Insets(0, 0, 5, 0);
 		gbc_comboBoxEventHallType.fill = GridBagConstraints.HORIZONTAL;
@@ -260,7 +266,7 @@ public class UpdateBookingMenu extends JFrame {
 		gbc_lblMenuType.gridy = 9;
 		Middlepanel.add(lblMenuType, gbc_lblMenuType);
 		
-		comboBoxMenuType = new JComboBox();
+		comboBoxMenuType = new JComboBox(foodTypes);
 		GridBagConstraints gbc_comboBoxMenuType = new GridBagConstraints();
 		gbc_comboBoxMenuType.insets = new Insets(0, 0, 5, 0);
 		gbc_comboBoxMenuType.fill = GridBagConstraints.HORIZONTAL;
@@ -301,7 +307,10 @@ public class UpdateBookingMenu extends JFrame {
 		
 		btnCancel.addActionListener((e) -> handleCancelClick());
 		
-		setVisibilityAllBoxes(false);
+		setVisibilityOtherBoxes(false);
+		setVisibilityGokartBoxes(false);
+		setVisibilityEventBoxes(false);
+		setVisibilityMenuBoxes(false);
 		
 		try {
 			bookingCtrl = new BookingCtrl();
@@ -317,6 +326,14 @@ public class UpdateBookingMenu extends JFrame {
 		LocalDate date = LocalDate.parse(txtSearchDate.getText(), formatter);
 		TimeSlotDialogUpdate dialog = new TimeSlotDialogUpdate(bookingCtrl, date);
 		int bookingID = dialog.showDialog();
+		Booking foundBooking = bookingCtrl.selectBooking(bookingID);
+		
+		if(foundBooking == null) {
+			//Føj
+		}
+		else {
+			addBookingToWindow(foundBooking);
+		}
 		
 		try {
 			//pseudo
@@ -351,7 +368,7 @@ public class UpdateBookingMenu extends JFrame {
 		this.dispose();
 	}
 	
-	private void setVisibilityAllBoxes(boolean visibility) {
+	private void setVisibilityOtherBoxes(boolean visibility) {
 		lblCustomerName.setVisible(visibility);
 		txtCustomerName.setVisible(visibility);
 		
@@ -361,17 +378,16 @@ public class UpdateBookingMenu extends JFrame {
 		lblAmountOfPeople.setVisible(visibility);
 		txtAmountOfPeople.setVisible(visibility);
 		
-		lblMenuType.setVisible(visibility);
-		comboBoxMenuType.setVisible(visibility);
-		
 		lblTotalPrice.setVisible(visibility);
 		txtTotalPrice.setVisible(visibility);
 		
 		lblIsPaid.setVisible(visibility);
 		rdbtnIsPaid.setVisible(visibility);
-		
-		setVisibilityEventBoxes(visibility);
-		setVisibilityGokartBoxes(visibility);
+	}
+	
+	private void setVisibilityMenuBoxes(boolean visibility) {
+		lblMenuType.setVisible(visibility);
+		comboBoxMenuType.setVisible(visibility);
 	}
 	
 	private void setVisibilityEventBoxes(boolean visibility) {
@@ -397,16 +413,41 @@ public class UpdateBookingMenu extends JFrame {
 	}
 	
 	private void addBookingToWindow(Booking booking) {
-		setVisibilityAllBoxes(true);
+		setVisibilityOtherBoxes(true);
+		
+		txtCustomerName.setText(booking.getCustomer().getName());
+		txtEmployeeName.setText("Chef");
+		txtAmountOfPeople.setText(String.valueOf(booking.getAmountOfPeople()));
+		txtTotalPrice.setText(String.valueOf(booking.getTotal()));
+		
+		if(booking.isPaid()) {
+			rdbtnIsPaid.setSelected(true);
+		}
+		else {
+			rdbtnIsPaid.setSelected(false);
+		}
+		
+		if(booking.hasCateringMenu()) {
+			setVisibilityMenuBoxes(true);
+			comboBoxMenuType.setSelectedItem(booking.getCatering().getEnumMenu().getLabel());
+		}
 		
 		List<BookingTime> bookingTimes = booking.getTimeslots();
 		for(int i = 0; i < bookingTimes.size(); i++) {
 			BookingTime currentBookingTime = bookingTimes.get(i);
 			int location = currentBookingTime.getEventType().getEnumType().getLocation();
 			if(location == 1) {
-				
+				setVisibilityGokartBoxes(true);
+				comboBoxGokartType.setSelectedItem(currentBookingTime.getEventType().getEnumType().getLabel());
+				txtGokartStartTime.setText(currentBookingTime.getStartTime().toString());
+				txtGokartEndTime.setText(currentBookingTime.getFinishTime().toString());
 			}
-			else if()
+			else if(location == 2) {
+				setVisibilityEventBoxes(true);
+				comboBoxEventHallType.setSelectedItem(currentBookingTime.getEventType().getEnumType().getLabel());
+				txtStartTimeEventHall.setText(currentBookingTime.getStartTime().toString());
+				txtEndTimeEventHall.setText(currentBookingTime.getFinishTime().toString());
+			}
 		}
 	}
 
