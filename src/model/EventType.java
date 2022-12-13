@@ -15,9 +15,9 @@ public class EventType {
 		public final long lenght;
 		public final int location;
 		
-		private EnumType(String label, long lenght, int location) {
+		private EnumType(String label, long length, int location) {
 			this.label = label;
-			this.lenght = lenght;
+			this.lenght = length;
 			this.location = location;
 		}
 		

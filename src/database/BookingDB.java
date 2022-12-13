@@ -69,7 +69,7 @@ public class BookingDB implements BookingDBIF {
 			ps.setFloat(1, (float) newBooking.getTotal());
 			
 			//Creation date
-			ps.setDate(2, Date.valueOf(newBooking.getCreationDate().toLocalDate()));
+			ps.setDate(2, Date.valueOf(newBooking.getCreationDate()));
 			
 			//Amount of people
 			ps.setInt(3, newBooking.getAmountOfPeople());
@@ -134,7 +134,8 @@ public class BookingDB implements BookingDBIF {
 				
 				int bookingId = rs2.getInt("bookingId");
 				double totalPrice = rs2.getDouble("totalPrice");
-				LocalDateTime creationDate = LocalDateTime.parse(rs2.getString("creationDate") + "%");
+				LocalDate creationDate = rs2.getDate("creationDate").toLocalDate();
+				//LocalDateTime creationDate = LocalDateTime.parse(rs2.getString("creationDate"));
 				int amountOfPeople = rs2.getInt("amountOfPeople");
 				int customerId = rs2.getInt("customerId");
 				int menuId = rs2.getInt("menuId");
@@ -153,6 +154,7 @@ public class BookingDB implements BookingDBIF {
 
 				getAllCateringInfo.setInt(1, menuId);
 				ResultSet rsCI = getAllCateringInfo.executeQuery();
+				rsCI.next();
 				String label = rsCI.getString("foodName");
 				EnumMenu enumMenu = EnumMenu.valueOfLabel(label);
 				

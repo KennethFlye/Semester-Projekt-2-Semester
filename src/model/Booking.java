@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public class Booking {
 	private Customer customer;
 	private ArrayList<BookingTime> bookingTimeslots;
-	private LocalDateTime creationDate;
+	private LocalDate creationDate;
 	private CateringMenu cateringMenu;
 	private Boolean isPaid;
 	private int amountOfPeople, bookingID;
@@ -20,12 +21,12 @@ public class Booking {
 	public Booking() {
 		System.out.println(this + " created");
 		bookingTimeslots = new ArrayList<>();
-		creationDate = LocalDateTime.now();
+		creationDate = LocalDate.now();
 		isPaid = false;
 		totalPrice = 0;
 	}
 	
-	public Booking(Customer customer, CateringMenu cateringMenu, int amountOfPeople, int bookingID, double totalPrice, LocalDateTime creationDate) {
+	public Booking(Customer customer, CateringMenu cateringMenu, int amountOfPeople, int bookingID, double totalPrice, LocalDate creationDate) {
 		this.customer = customer;
 		this.cateringMenu = cateringMenu;
 		this.amountOfPeople = amountOfPeople;
@@ -75,7 +76,7 @@ public class Booking {
 		return cateringMenu;
 	}
 
-	public LocalDateTime getCreationDate() {
+	public LocalDate getCreationDate() {
 		return creationDate;
 	}
 
