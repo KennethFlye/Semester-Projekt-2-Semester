@@ -405,6 +405,7 @@ public class UpdateBookingMenu extends JFrame {
 	
 	private void handleAcceptClick() {
 		try {
+			//TODO swingworker doInBackground?
 			updateBookingValues();
 		} catch (Exception e) {
 			e.printStackTrace();
