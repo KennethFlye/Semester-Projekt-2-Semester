@@ -3,17 +3,23 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -21,18 +27,9 @@ import controller.BookingCtrl;
 import database.DataAccessException;
 import model.Booking;
 import model.BookingTime;
-import model.PatternCheck;
 import model.CateringMenu.EnumMenu;
 import model.EventType.EnumType;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
-import javax.swing.JComboBox;
-import javax.swing.JRadioButton;
+import model.PatternCheck;
 
 public class UpdateBookingMenu extends JFrame {
 	private JTextField txtSearchDate;
