@@ -137,8 +137,22 @@ public class BookingCtrl {
 			//int currentId = bookingDatabase.getCurrentId();
 			bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
 			
-			//committransaction inserts everything in the database so far, unless there are problems - sets autocommit to true again
-			bookingDatabase.getDBConnection().commitTransaction();
+			ArrayList<BookingTime> timeSlots = newBooking.getTimeslots();
+			boolean failed = false;
+			
+			for(int i = 0; i < timeSlots.size(); i++) {
+				BookingTime currentTimeSlot = timeSlots.get(i);
+				if(!bookingTimeDatabase.checkTimeslot(currentTimeSlot.getEventType().getEnumType(), currentTimeSlot.getStartTime(), currentTimeSlot.getFinishTime(), newBooking.getBookingId())) {
+					bookingDatabase.getDBConnection().rollbackTransaction();
+					failed = true;
+				}
+			}
+			
+			if(!failed) {
+				//committransaction inserts everything in the database so far, unless there are problems - sets autocommit to true again
+				bookingDatabase.getDBConnection().commitTransaction();
+			}
+			
 			
 			return getReceipt();
 			
@@ -243,6 +257,18 @@ public class BookingCtrl {
 	public Boolean updateBookingTime(Booking booking) throws DataAccessException {
 		return bookingTimeDatabase.updateBookingTime(booking);
 	}
+	
+	public void clearLocationTimeSlot(int locationId) {
+		ArrayList<BookingTime> timeSlots = newBooking.getTimeslots();
+		for(int i = 0; i < timeSlots.size(); i++) {
+			BookingTime currentTimeSlot = timeSlots.get(i);
+			if(currentTimeSlot.getEventType().getEnumType().getLocation() == locationId) {
+				timeSlots.remove(currentTimeSlot);
+			}
+		}
+		newBooking.setTimeSlots(timeSlots);
+	}
+	
 
 
 	

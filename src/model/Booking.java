@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**	
@@ -103,6 +104,10 @@ public class Booking {
 	
 	public ArrayList<BookingTime> getTimeslots(){
 		return bookingTimeslots; //Returns a list of timeslot(s)
+	}
+	
+	public void setTimeSlots(ArrayList<BookingTime> timeSlots) {
+		this.bookingTimeslots = timeSlots;
 	}
 	
 	public int getBookingId() {

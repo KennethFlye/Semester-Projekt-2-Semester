@@ -364,6 +364,7 @@ public class UpdateBookingMenu extends JFrame {
 	}
 	
 	private void updateGokartTime() {
+		bookingCtrl.clearLocationTimeSlot(1);
 		try {
 			LocalDateTime finishTime = bookingCtrl.addTimeslot(comboBoxGokartType.getSelectedItem().toString(), LocalDateTime.parse(txtGokartStartTime.getText()), LocalDateTime.parse(txtGokartEndTime.getText()));
 			txtGokartEndTime.setText(finishTime.toString());
@@ -373,6 +374,7 @@ public class UpdateBookingMenu extends JFrame {
 	}
 	
 	private void updateEventTime() {
+		bookingCtrl.clearLocationTimeSlot(2);
 		try {
 			LocalDateTime finishTime = bookingCtrl.addTimeslot(comboBoxEventHallType.getSelectedItem().toString(), LocalDateTime.parse(txtStartTimeEventHall.getText()), LocalDateTime.parse(txtEndTimeEventHall.getText()).plusMinutes(EnumType.valueOfLabel(comboBoxEventHallType.getSelectedItem().toString()).getLength()));
 			txtEndTimeEventHall.setText(finishTime.toString());
