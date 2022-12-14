@@ -133,24 +133,31 @@ public class BookingCtrl {
 			bookingDatabase.getDBConnection().startTransaction(); //since dbconnection is a singleton, it doesnt matter which db class we call it from
 			
 			newBooking.calculateTotalPrice();
+			
+			
+			
 			int currentId = bookingDatabase.insertBooking(newBooking);
 			//int currentId = bookingDatabase.getCurrentId();
-			bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
 			
 			ArrayList<BookingTime> timeSlots = newBooking.getTimeslots();
 			boolean failed = false;
 			
 			for(int i = 0; i < timeSlots.size(); i++) {
 				BookingTime currentTimeSlot = timeSlots.get(i);
-				if(bookingTimeDatabase.checkTimeslot(currentTimeSlot.getEventType().getEnumType(), currentTimeSlot.getStartTime(), currentTimeSlot.getFinishTime(), newBooking.getBookingId())) {
+				if(!bookingTimeDatabase.checkTimeslot(currentTimeSlot.getEventType().getEnumType(), currentTimeSlot.getStartTime(), currentTimeSlot.getFinishTime(), newBooking.getBookingId())) {
 					bookingDatabase.getDBConnection().rollbackTransaction();
 					System.out.println("Jeg er her");
 					failed = true;
 				}
 			}
 			
+			
+			
+			
+			
 			if(!failed) {
 				//committransaction inserts everything in the database so far, unless there are problems - sets autocommit to true again
+				bookingTimeDatabase.insertBookingTime(newBooking.getTimeslots(), currentId);
 				bookingDatabase.getDBConnection().commitTransaction();
 			}
 			
