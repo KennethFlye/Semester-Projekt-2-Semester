@@ -142,8 +142,9 @@ public class BookingCtrl {
 			
 			for(int i = 0; i < timeSlots.size(); i++) {
 				BookingTime currentTimeSlot = timeSlots.get(i);
-				if(!bookingTimeDatabase.checkTimeslot(currentTimeSlot.getEventType().getEnumType(), currentTimeSlot.getStartTime(), currentTimeSlot.getFinishTime(), newBooking.getBookingId())) {
+				if(bookingTimeDatabase.checkTimeslot(currentTimeSlot.getEventType().getEnumType(), currentTimeSlot.getStartTime(), currentTimeSlot.getFinishTime(), newBooking.getBookingId())) {
 					bookingDatabase.getDBConnection().rollbackTransaction();
+					System.out.println("Jeg er her");
 					failed = true;
 				}
 			}
