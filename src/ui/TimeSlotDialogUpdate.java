@@ -3,6 +3,7 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -20,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 import controller.BookingCtrl;
 import database.DataAccessException;
 import model.Booking;
-import model.BookingTime;
 import model.PatternCheck;
 
 public class TimeSlotDialogUpdate extends JDialog {
@@ -110,21 +110,37 @@ public class TimeSlotDialogUpdate extends JDialog {
 				e.printStackTrace();
 			}
 
-			//Loop over alle bookings der bliver returneret - TODO prints a booking twice (because of the for loop?)
-			for (Booking element : bookings) { 
+			//Loop over alle bookings der bliver returneret - TODO printer stadig dobbelt
+			printBookingsToTable(bookings);
+		}
+			
+		if(dtmodel.getRowCount()<=1) {
+			//since we add a row with column names to the table, the tablecount should always be at least 1
+			JOptionPane.showMessageDialog(null, "Der findes ingen bookings på denne dag.");
+			txtDialogDate.setText("søg en ny dato");
+		}
+	}
+	
+	private void printBookingsToTable(List<Booking> bookings) {
+		for (Booking element : bookings) { 
+			String event = "";
+			String startTime = "";
+			String finishTime = "";
+			if(element.getTimeslots().size()==2) {
+				event = "Gokart + Hal";
 				for(int i=0; i<element.getTimeslots().size(); i++) {
-					dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
-							element.getTimeslots().get(i).getEventType().getEnumType().getLabel(), 
-							element.getTimeslots().get(i).getStartTime(), element.getTimeslots().get(i).getFinishTime(),
-							element.getTotal()});
+					//TODO få den til at printe en ting mellem de to tider?
+					startTime += (element.getTimeslots().get(i).getStartTime().getHour() + ":" + element.getTimeslots().get(i).getStartTime().getMinute() + "  ");
+					finishTime += (element.getTimeslots().get(i).getFinishTime().getHour() + ":" + element.getTimeslots().get(i).getFinishTime().getMinute() + "  ");
 				}
 			}
-			
-			if(dtmodel.getRowCount()<=1) {
-				//since we add a row with column names to the table, the tablecount should always be at least 1
-				JOptionPane.showMessageDialog(null, "Der findes ingen bookings på denne dag.");
-				txtDialogDate.setText("søg en ny dato");
+			else {
+				event = element.getTimeslots().get(0).getEventType().getEnumType().getLabel();
+				startTime = element.getTimeslots().get(0).getStartTime().toString();
+				finishTime = element.getTimeslots().get(0).getFinishTime().toString();
 			}
+		dtmodel.addRow(new Object[] {element.getBookingId(), element.getCustomer().getName(), 
+						event, startTime, finishTime, element.getTotal()});
 		}
 	}
 	
