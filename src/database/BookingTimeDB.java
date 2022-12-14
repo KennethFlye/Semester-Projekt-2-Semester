@@ -102,7 +102,7 @@ public class BookingTimeDB implements BookingTimeDBIF {
 		
 		private BookingTime buildObject(ResultSet rs) throws SQLException {
 			EventType tempEvent = new EventType(EnumType.valueOfLabel(rs.getString("eventType")));
-			BookingTime bt = new BookingTime(tempEvent, rs.getTimestamp("startTime").toLocalDateTime(), 1);
+			BookingTime bt = new BookingTime(tempEvent, rs.getTimestamp("startTime").toLocalDateTime(), rs.getTimestamp("finishTime").toLocalDateTime());
 			return bt;
 		}
 	
@@ -131,28 +131,30 @@ public class BookingTimeDB implements BookingTimeDBIF {
 			for (int i = 0; i < btList.size(); i++) {
 				boolean inFront = false, inFront2 = false;
 				ZoneOffset zo = ZoneOffset.systemDefault().getRules().getOffset(Instant.now());
+					if(!checkForSameBooking(btList.get(i), bookingId)) {
+						
+						long timeA = btList.get(i).getStartTime().toEpochSecond(zo);
+						long timeB = btList.get(i).getFinishTime().toEpochSecond(zo);
+						long checkedTimeA = startTime.toEpochSecond(zo);
+						long checkedTimeB = finishTime.toEpochSecond(zo);
+						
+						if(timeA<checkedTimeA||timeA<checkedTimeB)
+							inFront = true;
+						
+						if(timeB<checkedTimeA)
+							inFront2 = true;
+						
+						if(inFront!=inFront2) {
+							EnumType checkedType = btList.get(i).getEventType().getEnumType();
+							if(usesEventHall.contains(type) && usesEventHall.contains(checkedType)
+									|| usesGokartTrack.contains(type) && usesGokartTrack.contains(checkedType))
+							returnBool = false;
+				}
 				
-				if(!checkForSameBooking(btList.get(i), bookingId)) {
-					
-					long timeA = btList.get(i).getStartTime().toEpochSecond(zo);
-					long timeB = btList.get(i).getFinishTime().toEpochSecond(zo);
-					long checkedTimeA = startTime.toEpochSecond(zo);
-					long checkedTimeB = finishTime.toEpochSecond(zo);
-					
-					if(timeA<checkedTimeA||timeA<checkedTimeB)
-						inFront = true;
-					
-					if(timeB<checkedTimeA)
-						inFront2 = true;
-					
-					if(inFront!=inFront2) {
-						EnumType checkedType = btList.get(i).getEventType().getEnumType();
-						if(usesEventHall.contains(type) && usesEventHall.contains(checkedType)
-								|| usesGokartTrack.contains(type) && usesGokartTrack.contains(checkedType))
-						returnBool = false;
 					}
 						
-				}
+				
+				
 					
 			}
 			return returnBool;	

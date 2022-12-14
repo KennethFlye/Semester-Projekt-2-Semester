@@ -102,13 +102,12 @@ public class BookingCtrl {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DataAccessException(e, "Something went wrong");
 		}
 		newBooking.addTimeslot(bt); 
 		return bt.getFinishTime();
 	}
+	
 	
 	public Customer addCustomer(String phoneNo) throws DataAccessException {
 		return newBooking.addCustomer(customerCtrl.findCustomer(phoneNo));
@@ -231,8 +230,13 @@ public class BookingCtrl {
 	}
 
 	public Boolean updateBooking() throws DataAccessException {
+		newBooking.calculateTotalPrice();
 		bookingDatabase.updateBooking(newBooking); 
 		updateBookingTime(newBooking);
+		ArrayList<String> receipt = getReceipt();
+		for (String element : receipt) {
+			System.out.println(element);
+		}
 		return true;
 	}
 	
