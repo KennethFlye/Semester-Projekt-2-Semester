@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -29,8 +30,14 @@ class TestFinishBooking {
 	void setUp() throws Exception {
 		con = DBConnection.getInstance();
 		bc = new BookingCtrl();
-		d = LocalDateTime.of(2022, 11, 28, 7, 0);
-		rec = new ArrayList<>(); //create an empty receipt;
+		d = LocalDateTime.of(2022, 12, 24, 7, 0); 
+//		d.plusHours(1); // make date increment before each test
+//		rec = new ArrayList<>(); //create an empty receipt alternately create a happy days receipt to compare with
+	}
+	
+	@BeforeAll
+	void makeTestReceipt() throws Exception {
+		rec = bc.finishBooking(); //the alt approach
 	}
 
 	@AfterEach
@@ -38,8 +45,8 @@ class TestFinishBooking {
 		con = null;
 		bc = null;
 		d = null;
-		rec = null;
 	}
+	
 
 	/*
 	 * Happy days 5.1
