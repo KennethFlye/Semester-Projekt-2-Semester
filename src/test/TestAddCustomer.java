@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterEach;
@@ -46,11 +47,13 @@ class TestAddCustomer {
 		//act
 		String phoneNo = "14354678"; //sets the phone number so we easily can change it
 		//assert
-		assertTrue(pc.checkPhoneNo(phoneNo)); //checks if the string pattern is valid - we expect it to be true or else stop the test
+		assertTrue(pc.checkPhoneNo(phoneNo)); //checks if the string pattern is valid - 
+												//we expect it to be true or else stop the test
 		//act
 		bc.addCustomer(phoneNo); //finds and adds a customer with that phone number
 		//assert
-		assertEquals(phoneNo, bc.getBooking().getCustomer().getPhoneNo()); //checks to see if input number is equal to the phone number of the customer we have added
+		assertEquals(phoneNo, bc.getBooking().getCustomer().getPhoneNo()); 
+		//^checks to see if input number is equal to the phone number of the customer we have added
 	}
 	
 	/*
@@ -87,7 +90,7 @@ class TestAddCustomer {
 		//act
 		bc.addCustomer(phoneNo3); //we try to add one to the current booking - since all are false any of them would "work"
 		//we know Bjarne Riis has the number 99999999 but since phoneNo3 isnt a valid sequence nothing is added
-		assertEquals("Bjarne Riis", bc.getBooking().getCustomer().getName());
+		assertThrows(NullPointerException.class, () -> bc.getBooking().getCustomer().getName());
 	}
 
 }
