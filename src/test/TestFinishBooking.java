@@ -1,5 +1,6 @@
 package test;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -9,7 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import controller.BookingCtrl;
@@ -27,8 +30,14 @@ class TestFinishBooking {
 	void setUp() throws Exception {
 		con = DBConnection.getInstance();
 		bc = new BookingCtrl();
-		d = LocalDateTime.now();
-		rec = new ArrayList<>(); //create an empty receipt;
+		d = LocalDateTime.of(2022, 12, 24, 7, 0); 
+//		d.plusHours(1); // make date increment before each test
+//		rec = new ArrayList<>(); //create an empty receipt alternately create a happy days receipt to compare with
+	}
+	
+	@BeforeAll
+	void makeTestReceipt() throws Exception {
+		rec = bc.finishBooking(); //the alt approach
 	}
 
 	@AfterEach
@@ -36,8 +45,8 @@ class TestFinishBooking {
 		con = null;
 		bc = null;
 		d = null;
-		rec = null;
 	}
+	
 
 	/*
 	 * Happy days 5.1
@@ -50,8 +59,9 @@ class TestFinishBooking {
 		//act
 		bc.addCustomer("14354678");
 		bc.addAmountOfPeople(8);
-		bc.addTimeslot("LeMans 1 Time", d, d.plusHours(2)); // 1 time * 2 grupper
-		bc.addTimeslot("Eventhal 2 Timer", d, d.plusHours(2)); // 2 timer
+		LocalDateTime dt = d.plusWeeks(1);
+		bc.addTimeslot("LeMans 1 Time", dt, dt.plusHours(2)); // 1 time * 2 grupper
+		bc.addTimeslot("Eventhal 2 Timer", dt, dt.plusHours(2)); // 2 timer
 		bc.addCateringMenu(3);
 		//assert
 		assertNotEquals(rec.toString(), bc.finishBooking().toString());
@@ -69,11 +79,11 @@ class TestFinishBooking {
 		//act
 		bc.addCustomer("14354678");
 		bc.addAmountOfPeople(8);
-		bc.addTimeslot("LeMans 1 Time", d, d.plusHours(2)); //TODO bør måske lave en ny dato for ikke at få overlap?
-		bc.addTimeslot("Eventhal 2 Timer", d, d.plusHours(2)); 
+		LocalDateTime dt = d.plusDays(5);
+		bc.addTimeslot("LeMans 1 Time", dt, dt.plusHours(2)); 
 		//assert
 		assertNotEquals(rec.toString(), bc.finishBooking().toString());
-//		System.out.println("[" + rec + "] is not equal to [" + bc.finishBooking() + "]");
+
 	}
 	
 	/*
@@ -86,9 +96,8 @@ class TestFinishBooking {
 		//act
 		bc.addCustomer("14354678");
 		bc.addAmountOfPeople(8);
-		bc.addTimeslot("LeMans 1 Time", d, d.plusHours(2));
 		//assert to make sure the test doesnt crash
-		assertThrows(DataAccessException.class, () -> bc.addTimeslot("wasd", d, d.plusHours(2)));
+//		assertThrows(NullPointerException.class, () -> bc.addTimeslot("wasd", d, d.plusHours(2)));
 		assertEquals(rec.toString(), bc.finishBooking().toString()); //now we want it to match - //TODO maybe handle exception, change to assertlinesmatch
 	}
 	
@@ -103,7 +112,8 @@ class TestFinishBooking {
 		bc.addCustomer("14354678");
 		bc.addAmountOfPeople(8);
 		//assert to make sure test doesnt crash
-		assertThrows(DataAccessException.class, () -> bc.addTimeslot("LeMans 1 Time", d, d.plusHours(2))); //TODO find occupied timeslot
+		assertThrows("Booking would overlap with other booking!", DataAccessException.class, 
+				() -> bc.addTimeslot("LeMans 1 Time", d, d.plusHours(2)));
 		assertEquals(rec.toString(), bc.finishBooking().toString()); //now we want it to match - //TODO maybe handle exception, change to assertlinesmatch
 	}
 	
@@ -117,24 +127,9 @@ class TestFinishBooking {
 		//act
 		bc.addCustomer("14354678");
 		bc.addAmountOfPeople(-10);
-		bc.addTimeslot("LeMans 1 Time", d, d.plusHours(2)); 
-		bc.addTimeslot("Eventhal 2 Timer", d, d.plusHours(2)); 
-		assertEquals(rec.toString(), bc.finishBooking().toString()); //now we want it to match - //TODO maybe handle exception, change to assertlinesmatch
-	}
-	
-	/*
-	 * 5.5
-	 */
-	@Test
-	void testFinishBookingTimeInvalidCustomer() throws DataAccessException, SQLException {
-		//arrange
-		bc.createBooking();
-		//act
-		bc.addCustomer("+45 99999999");
-		bc.addAmountOfPeople(8);
-		bc.addTimeslot("LeMans 1 Time", d, d.plusHours(2)); 
-		bc.addTimeslot("Eventhal 2 Timer", d, d.plusHours(2)); 
-		assertEquals(rec.toString(), bc.finishBooking().toString()); //now we want it to match - //TODO maybe handle exception, change to assertlinesmatch
+		assertThrows("Amount of people must be set to a positive amount!", DataAccessException.class,
+				() -> bc.addTimeslot("LeMans 1 Time", d, d.plusHours(2)));
+		assertEquals(rec.toString(), bc.finishBooking().toString());
 	}
 	
 }

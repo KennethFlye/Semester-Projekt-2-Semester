@@ -2,7 +2,6 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 
@@ -13,9 +12,7 @@ import org.junit.jupiter.api.Test;
 import controller.BookingCtrl;
 import database.DBConnection;
 import database.DataAccessException;
-import model.Booking;
 import model.BookingTime;
-import model.Customer;
 import model.EventType;
 import model.EventType.EnumType;
 
@@ -37,7 +34,7 @@ class TestAddTimeSlot {
 
 		con = DBConnection.getInstance();
 		bc = new BookingCtrl();
-		d = LocalDateTime.of(2022, 02, 01, 14, 30);	
+		d = LocalDateTime.of(2022, 11, 28, 9, 30);	
 		eg = new EventType(EnumType.LE_MANS_1_HOUR); //EG Event Gokart
 		ee = new EventType(EnumType.EVENT_HALL_1_HOUR); //EE Event Eventhal
 	
@@ -63,12 +60,13 @@ class TestAddTimeSlot {
 		//Arrange
 		bc.createBooking();
 		bc.addAmountOfPeople(6);
-		LocalDateTime dt = d.plusDays(1);
+		LocalDateTime dt = d.plusDays(1); //gokart kolliderer ikke med noget kl 9:30 dagen efter
 		BookingTime bt = new BookingTime(eg, dt, 1);
 		//Act
 		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
 		//Assert
 		assertEquals(dt.plusMinutes((eg.getEnumType()).getLength()),bc.getBooking().getTimeslots().get(0).getFinishTime());
+		//asserts that the booking has been added
 	}
 	
 	/*
@@ -80,8 +78,9 @@ class TestAddTimeSlot {
 		bc.createBooking();
 		//act
 		bc.addAmountOfPeople(6);
-		BookingTime bt = new BookingTime(ee, d, 1); //eventtype eventhall
-		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
+		BookingTime bt = new BookingTime(eg, d, 1);
+		bc.addTimeslot(ee.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
+		//tries to add a timeslot with another eventtype in the same time period
 		//assert
 		assertEquals(d, bt.getStartTime()); //test starttime
 		assertEquals(d.plusHours(1), bt.getFinishTime()); //test finishtime
@@ -96,11 +95,10 @@ class TestAddTimeSlot {
 		bc.createBooking();
 		//act
 		bc.addAmountOfPeople(6);
-//		LocalDateTime dt = ;
 		BookingTime bt = new BookingTime(eg, d, 1);
-		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
 		//assert
-//		assertThrows("Booking would overlap with other booking!", DataAccessException.class, () -> addtimeslot) TODO cleanup, maybe throws instead of equals?
+		assertThrows(DataAccessException.class, () -> bc.addTimeslot(
+				eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime()));
 		assertEquals(d, bt.getStartTime()); //test starttime
 		assertEquals(d.plusHours(1), bt.getFinishTime()); //test finishtime
 	}
@@ -116,12 +114,8 @@ class TestAddTimeSlot {
 		LocalDateTime dt = d.minusMinutes(30);
 		BookingTime bt = new BookingTime(eg, dt, 1);
 		//Act
-		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
-		//Assert
-		//assertEquals(dt.plusMinutes((ee.getEnumType().getLength()*1)),bc.getBooking().getTimeslots().get(0).getFinishTime());	
-		
-		assertEquals(dt.plusMinutes((eg.getEnumType().getLength()*1)),bt.getFinishTime());	
-
+		assertThrows("Booking would overlap with other booking!", DataAccessException.class,
+				() -> bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime()));
 	}
 	
 	/*
@@ -131,14 +125,13 @@ class TestAddTimeSlot {
 	void testStarttimeOverlapSameEventType() throws DataAccessException {
 		//Arrange
 		bc.createBooking();
+		//Act
 		bc.addAmountOfPeople(6);
 		LocalDateTime dt = d.plusMinutes(30);
 		BookingTime bt = new BookingTime(eg, dt, 1);
-		//Act
-		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
 		//Assert
-		
-		assertEquals(dt.plusMinutes(eg.getEnumType().getLength()),bc.getBooking().getTimeslots().get(0).getFinishTime());
+		assertThrows("Booking would overlap with other booking!", DataAccessException.class,
+				() -> bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime()));
 	}
 	
 	/*
@@ -146,45 +139,11 @@ class TestAddTimeSlot {
 	 */
 	@Test
 	void testInternalOverlapSameEventType() throws DataAccessException {
-		//Arrange
 		bc.createBooking();
 		bc.addAmountOfPeople(9);
 		LocalDateTime dt = d.plusMinutes(30);
-		BookingTime bt = new BookingTime(eg, dt, 2); //eg eller ee??????
-		//Act
-		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
-		//Assert
-		assertEquals(dt.plusMinutes((eg.getEnumType().getLength()*1)),bc.getBooking().getTimeslots().get(0).getFinishTime());
-		
+		BookingTime bt = new BookingTime(eg, dt, 3);
+		assertThrows("Booking would overlap with other booking!", DataAccessException.class, 
+				() -> bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime()));
 	}
-	
-	
-	//TODO remove these?
-	@Test
-	void testStartOverlapDifferentType() throws DataAccessException {
-		//Arrange
-		bc.createBooking();
-		bc.addAmountOfPeople(6);
-		LocalDateTime dt = d.plusMinutes(30);
-		BookingTime bt = new BookingTime(eg, dt, 1);
-		//Act
-		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
-		//Assert
-		assertEquals(dt.plusMinutes((eg.getEnumType().getLength())*1),bc.getBooking().getTimeslots().get(0).getFinishTime());
-		
-	}
-	@Test
-	void testFinishOverlapDifferentType() throws DataAccessException {
-		//Arrange
-		bc.createBooking();
-		bc.addAmountOfPeople(6);
-		LocalDateTime dt = d.minusMinutes(30);
-		BookingTime bt = new BookingTime(eg, dt, 1);
-		//Act
-		bc.addTimeslot(eg.getEnumType().label, bt.getStartTime(), bt.getFinishTime());
-		//Assert
-		assertEquals(dt.plusMinutes((eg.getEnumType().getLength()*1)),bc.getBooking().getTimeslots().get(0).getFinishTime());
-		
-	}
-	
 }
