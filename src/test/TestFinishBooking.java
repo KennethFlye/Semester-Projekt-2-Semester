@@ -32,13 +32,13 @@ class TestFinishBooking {
 		bc = new BookingCtrl();
 		d = LocalDateTime.of(2022, 12, 24, 7, 0); 
 //		d.plusHours(1); // make date increment before each test
-//		rec = new ArrayList<>(); //create an empty receipt alternately create a happy days receipt to compare with
+		rec = new ArrayList<>(); //create an empty receipt alternately create a happy days receipt to compare with
 	}
 	
-	@BeforeAll
-	void makeTestReceipt() throws Exception {
-		rec = bc.finishBooking(); //the alt approach
-	}
+//	@BeforeAll
+//	void makeTestReceipt() throws Exception {
+//		rec = bc.finishBooking(); //the alt approach
+//	}
 
 	@AfterEach
 	void tearDown() throws Exception {
